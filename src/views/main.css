@@ -3,6 +3,7 @@ body {
     font-family: 'Poppins', sans-serif;
     margin: 0;
     color: var(--neutral-10, #486284);
+    width: 100%;
 }
 
 * {
@@ -12,7 +13,6 @@ body {
 
 header {
     display: flex;
-    height: 72px;
     padding: 8px 100px;
     justify-content: space-between;
     align-items: center;
@@ -26,18 +26,21 @@ header>nav {
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 20px 0px;
     gap: 48px;
 }
 
 header>nav a {
-    font-size: 14px;
+    font-size: 0.9em;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
 }
 
 span {
     color: var(--neutral-10, #486284);
     text-align: center;
-    font-family: Poppins;
-    font-size: 16px;
+    font-size: 1em;
     font-style: normal;
     font-weight: 400;
     line-height: 24px;
@@ -54,8 +57,9 @@ span {
     border: none;
     color: white;
     font-weight: bold;
-    font-size: 14px;
+    font-size: 1em;
     background: linear-gradient(180deg, #5033A4 0%, rgba(51, 16, 152, 0.65) 96.87%, rgba(80, 51, 164, 0.00) 100%);
+    cursor: pointer;
 }
 
 .avatar {
@@ -67,6 +71,37 @@ span {
     background-position: center;
 }
 
+span.logo {
+    font-size: 1.3em;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 24px;
+    letter-spacing: 0.15px;
+}
+
+.main-input {
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1 0 0;
+    border-radius: 100px;
+    background: #FFF;
+    border: 0px;
+    box-shadow: 0px 3px 40.21px 0px rgba(0, 0, 0, 0.08);
+    color: #265BD7;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9em;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.main-input:focus,
+.main-input:focus-visible {
+    outline: none;
+}
+
 .flex-center {
     display: flex;
     justify-content: center;
@@ -75,4 +110,9 @@ span {
 
 .gap-5 {
     gap: 5px;
+}
+
+hr {
+    width: 100%;
+    border-top: 1px solid rgb(235, 235, 235);
 }

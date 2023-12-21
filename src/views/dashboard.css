@@ -84,22 +84,7 @@ main section.welcome>div {
 }
 
 .search-label>input {
-    padding: 16px;
     padding-left: calc(1em + 30px + 8px);
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex: 1 0 0;
-    border-radius: 100px;
-    background: #FFF;
-    border: 0px;
-    box-shadow: 0px 3px 40.21px 0px rgba(0, 0, 0, 0.08);
-    color: #265BD7;
-    font-family: 'Poppins', sans-serif;
-    font-size: 15px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
 }
 
 .search-predefined span {
@@ -203,11 +188,6 @@ main section.welcome>div {
     font-style: normal;
     font-weight: 700;
     line-height: 110%;
-}
-
-.announcement-data hr {
-    width: 100%;
-    border-top: 1px solid rgb(235, 235, 235);
 }
 
 .announcement-price {

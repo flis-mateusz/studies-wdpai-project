@@ -1,0 +1,112 @@
+body {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    height: 100%;
+    display: flex;
+}
+
+.welcome-image {
+    background: url("assets/login.jpg");
+    background-size: cover;
+    background-position: center;
+    width: 60%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-element {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-width: max-content;
+    width: 40%;
+    transition-duration: 100ms;
+}
+
+.login-element>div {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 30px;
+    min-width: 380px;
+}
+
+.login-element>div>span:first-child {
+    font-size: 1.5em;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.login-element form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+}
+
+form input,
+form div {
+    width: 100% !important;
+}
+
+form>div {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+form>div>label {
+    font-size: 0.9em;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+span.incentive {
+    color: #5033A4;
+    font-style: normal;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+span.forgot-password {
+    text-align: right;
+    font-size: 90%;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 520px) {
+    header {
+        justify-content: center;
+        padding: 0;
+    }
+    header .logo {
+        display: none;
+    }
+    .welcome-image {
+        display: none;
+    }
+    .login-element {
+        min-width: unset;
+        width: 100%;
+    }
+    .login-element>div {
+        min-width: 100%;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    nav {
+        flex-direction: column;
+        gap: 5px !important;
+    }
+}
