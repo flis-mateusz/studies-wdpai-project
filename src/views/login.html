@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="header.css">
     <link rel="stylesheet" href="login.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,9 +18,15 @@
     <header>
         <span class="logo">ZwierzakSzukaDomu</span>
         <nav>
-            <a href="/">Strona główna</a>
-            <a>O nas</a>
-            <a>Kontakt</a>
+            <div class="submenu">
+                <a>O nas</a>
+                <a>Kontakt</a>
+            </div>
+            <div class="menu-dropdown">
+                <input class="menu-btn" type="checkbox" id="menu-btn" />
+                <label class="menu-icon" for="menu-btn"><span class="navicon"></span></label>
+                <a>Strona główna</a>
+            </div>
         </nav>
     </header>
     <main>
@@ -59,8 +66,8 @@
                         <input type="text" class="main-input" id="login-email">
                     </div>
                     <div>
-                        <label for="login-email">Wprowadź hasło</label>
-                        <input type="password" class="main-input" id="login-password">
+                        <label for="login-reemail">Wprowadź hasło</label>
+                        <input type="password" class="main-input" id="login-reemail">
                     </div>
                     <div>
                         <label for="login-email">Powtórz hasło</label>
