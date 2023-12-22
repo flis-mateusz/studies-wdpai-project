@@ -9,23 +9,46 @@ header {
     z-index: 1;
 }
 
-header>nav,
+header>nav {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 45px;
+}
+
 header>nav>div.submenu {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    gap: 48px;
-}
-
-header:not(:has(>div, >button, >span)) {
-    justify-content: right;
-}
-
-header>nav>div.submenu {
+    gap: 45px;
+    width: 100%;
     overflow: hidden;
 }
 
-header>nav a {
+header>nav>div.submenu i {
+    font-size: 3em;
+}
+
+header>nav>div.submenu>div {
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    gap: 45px;
+}
+
+header>nav>div.submenu:has(>div:only-child) {
+    justify-content: flex-end;
+}
+
+header:not(:has(>div, >button, >span, >a)) {
+    justify-content: right;
+}
+
+header>nav>div.submenu>div>a:has(.link-text)>.link-text {
+    display: none;
+}
+
+header a {
     font-size: 0.9em;
     cursor: pointer;
     text-decoration: none;
@@ -37,6 +60,7 @@ header>nav>div:last-child {
     justify-content: space-between;
     align-items: center;
     height: 58px;
+    min-width: max-content;
 }
 
 header>nav>div:last-child a.icon {
@@ -202,14 +226,43 @@ header .menu-button:checked~.menu-icon .navicon:after {
         display: flex !important;
     }
 
-    header nav .submenu {
+    header>nav>div.submenu {
         width: 100%;
         display: flex;
         flex-direction: column;
         align-items: flex-start !important;
         justify-content: flex-start;
-        transition-duration: 500ms;
+        transition-duration: 250ms;
         gap: 15px !important;
+    }
+
+    header>nav>div.submenu>div {
+        width: 100%;
+        flex-direction: column;
+        gap: 15px !important;
+    }
+
+    /*This selector targets any .link-text element that is a direct child of a link (a) within div.submenu, 
+    but only if the link contains an element with the .link-text class.*/
+    header>nav>div.submenu>div>a:has(.link-text)>.link-text {
+        display: flex;
+    }
+
+    /*This rule applies to links that are the first child within a div in div.submenu, but only if the div is not the only child in submenu. 
+    It hides links that do not contain an element with the .link-text class.*/
+    header>nav>div.submenu>div:first-child:not(:only-child)>a:not(:has(.link-text)) {
+        display: none;
+    }
+
+    /*This selector targets the first child div within div.submenu, 
+    but only if it's not the only child and does not contain an element with the .link-text class, hiding it.*/
+    header>nav>div.submenu>div:first-child:not(:only-child):not(:has(.link-text)) {
+        display: none;
+    }
+
+    /*This rule hides all children elements of a link within div.submenu that contains a .link-text element, except for the .link-text element itself.*/
+    header>nav>div.submenu>div>a:has(.link-text)>*:not(.link-text) {
+        display: none;
     }
 
     header>nav>div:last-child {
@@ -218,13 +271,14 @@ header .menu-button:checked~.menu-icon .navicon:after {
     }
 
     header nav:has(.menu-button:checked) .submenu {
-        max-height: 120px;
+        max-height: 150px;
         padding-top: 0px;
         padding-bottom: 10px;
     }
 
-    header nav > .menu-dropdown > a:last-child{
+    header nav>.menu-dropdown>a:last-child {
         text-align: right !important;
+        width: max-content !important;
     }
 
     header nav a {
