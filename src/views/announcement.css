@@ -2,6 +2,11 @@ main {
     gap: 10px;
 }
 
+main>section {
+    background: none;
+    box-shadow: none;
+}
+
 .announcement-header {
     display: flex;
     justify-content: space-between;
@@ -51,7 +56,7 @@ main {
     padding: 20px;
     height: max-content;
     position: sticky;
-    top: 0;
+    top: 5px;
     max-width: 420px;
 }
 
@@ -73,24 +78,6 @@ main {
 
 .about-user .name {
     font-size: 1.5em;
-}
-
-.about-user .avatar {
-    padding: 50px;
-    border-radius: 50%;
-    width: 100%;
-    height: unset !important;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    max-width: 250px;
-}
-
-.about-user .avatar::before {
-    content: '';
-    float: left;
-    padding-top: 100%;
 }
 
 .about-user .user-basic {
@@ -116,6 +103,7 @@ main {
 
 .about-user,
 .about-pet {
+    flex: 1 0 0;
     border-radius: 12px;
     background: #FFF;
     border-radius: 20px;
@@ -230,9 +218,11 @@ main {
     }
 
     .about-user {
-        position: unset;
+        position: sticky;
+        top: 80px;
         padding: 15px;
         max-width: unset;
+        gap: 10px;
     }
 
     .announcement-header {
@@ -290,6 +280,7 @@ main {
 @media screen and (max-width: 1000px) {
     .about-user>div.inline {
         flex-direction: column;
+        gap: 3px;
     }
 
     .about-user .name {

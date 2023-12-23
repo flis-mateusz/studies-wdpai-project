@@ -1,0 +1,228 @@
+main {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 20px;
+    position: relative;
+}
+
+.sidenav,
+.sidenav>div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.sidenav {
+    padding: 15px;
+    width: 30%;
+    gap: 30px;
+    position: relative;
+    transition-duration: 300ms;
+    z-index: 1;
+}
+
+.sidenav>div {
+    width: 100%;
+}
+
+.sidenav>div>div {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    width: 100%;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.sidenav>div>div>span {
+    text-align: left;
+}
+
+.sidenav>div>div.active {
+    background: #F6F3FF;
+}
+
+.sidenav>div>span {
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+}
+
+.sidenav>div>.main-button {
+    width: 100%;
+}
+
+.panel {
+    width: 70%;
+    padding: 30px;
+}
+
+.panel>form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.panel .basic-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.basic-info>div {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    flex: 1 0 0;
+}
+
+.basic-info .avatar {
+    max-width: 166px;
+    cursor: pointer;
+}
+
+.basic-info .avatar div {
+    position: absolute;
+    display: none;
+    width: calc(100% + 2px);
+    height: calc(100% + 2px);
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    font-size: 5em;
+    z-index: 1;
+    background: rgb(255 255 255 / 80%);
+}
+
+.basic-info .avatar div i {
+    font-size: 1em;
+}
+
+.basic-info .avatar:hover div {
+    display: flex;
+}
+
+.basic-info input[type="text"] {
+    width: 50%;
+}
+
+.panel>form input:not([type="submit"]) {
+    width: 300px;
+}
+
+.panel>form input[type="submit"] {
+    font-weight: normal;
+    width: 100px;
+}
+
+.panel>form>div:last-child {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.nav-expander {
+    position: absolute;
+    display: none !important;
+    right: -50px;
+    top: 0px;
+    z-index: 2;
+    align-items: flex-end !important;
+    box-shadow: 0px 3.5px 40px 0px rgba(0, 0, 0, 0.08);
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.sidenav .menu-button {
+    display: none;
+}
+
+.nav-expander .menu-icon {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 60px !important;
+    height: 50px;
+    user-select: none;
+    cursor: pointer;
+}
+
+.nav-expander,
+.nav-expander .menu-icon,
+.nav-expander i {
+    transition-duration: 200ms;
+}
+
+@media screen and (max-width: 1100px) {
+    header {
+        padding: 15px 20px !important;
+    }
+
+    main {
+        padding: 15px 20px !important;
+    }
+}
+
+@media screen and (max-width: 850px) {
+    .panel {
+        margin-top: 60px;
+        width: 100%;
+    }
+
+    .sidenav {
+        transform: translateX(calc(-100% - 15px));
+        position: absolute;
+        width: calc(100% - 30px);
+        left: 15px;
+    }
+
+    .nav-expander {
+        display: flex !important;
+    }
+
+    .sidenav:has(#sidenav-button:checked) {
+        transform: translateX(0);
+        padding-top: 60px;
+    }
+
+    .sidenav:has(#sidenav-button:checked) .nav-expander {
+        left: 0;
+        top: 10px;
+        box-shadow: none;
+    }
+
+    .sidenav:has(#sidenav-button:checked) .nav-expander label {
+        width: 100% !important;
+        justify-content: flex-start;
+        padding: 20px;
+    }
+
+    .sidenav:has(#sidenav-button:checked) .nav-expander i {
+        transform: rotate(180deg);
+    }
+
+    body:has(#sidenav-button:checked) main>.panel {
+        display: none;
+    }
+
+    body:has(#sidenav-button:checked) header {
+        position: unset !important;
+    }
+
+    .panel>form input:not([type="submit"]) {
+        width: 100%;
+        height: unset;
+    }
+
+    .panel .basic-info {
+        flex-direction: column-reverse;
+    }
+
+    .panel .basic-info>div {
+        width: 100%;
+    }
+}
