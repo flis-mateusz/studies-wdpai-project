@@ -1,3 +1,8 @@
+main>section {
+    background: unset;
+    box-shadow: none;
+}
+
 main section.welcome {
     display: flex;
     align-items: center;

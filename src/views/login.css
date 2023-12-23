@@ -12,6 +12,11 @@ main {
     gap: 0px !important;
 }
 
+main>section {
+    background: unset;
+    box-shadow: none;
+}
+
 .welcome-image {
     background: url("assets/login.jpg");
     background-size: cover;
