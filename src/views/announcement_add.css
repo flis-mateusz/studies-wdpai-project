@@ -1,0 +1,222 @@
+form {
+    max-width: 850px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+form>section {
+    background: #FFF;
+    box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.08);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 10px;
+    padding: 20px;
+}
+
+section>div {
+    display: flex;
+    align-self: stretch;
+}
+
+section>div .main-input {
+    border-radius: 15px;
+    padding: 12px 20px;
+    box-shadow: 0px 3px 20px 0px rgba(0, 0, 0, 0.08);
+}
+
+
+section>div.field,
+section>div.field>div {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+section>div.field>div:first-child {
+    font-size: 1.1em;
+}
+
+section>div.field>.info {
+    font-size: 0.8em;
+}
+
+section div.tip {
+    flex-direction: row !important;
+    align-items: center;
+    gap: 10px;
+    background-color: #efeaff;
+    padding: 8px 15px;
+    border-radius: 10px;
+}
+
+section div.tip span {
+    font-size: 0.9em;
+    text-align: left;
+}
+
+.characteristics {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 10px;
+    max-height: 500px;
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+.characteristics>div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.characteristics div input {
+    display: none;
+}
+
+div.checkboxes {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    display: none;
+    gap: 5px;
+}
+
+.characteristics>div:hover>div.checkboxes {
+    display: flex;
+}
+
+div.checkboxes label {
+    display: flex;
+    overflow: hidden;
+    user-select: none;
+    cursor: pointer;
+    color: white;
+    border-radius: 20px;
+    padding: 2px 10px;
+    font-size: 0.85em;
+    min-width: 45px;
+    justify-content: center;
+}
+
+div.checkboxes label.yes {
+    background-color: #7b7ac9;
+}
+
+div.checkboxes label.no {
+    background-color: #c56a6a;
+}
+
+div.checkboxes label.not-sure {
+    background-color: rgb(230, 230, 230);
+    color: inherit;
+    display: none;
+    order: -1;
+}
+
+div.checkboxes::before {
+    content: ' lub ';
+    font-size: 0.8em;
+    margin-top: 2px;
+}
+
+.characteristics>div>div:first-child {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex: 1 0 0;
+    gap: 5px;
+    font-size: 0.9em;
+    padding: 2px 0px;
+}
+
+
+.characteristics>div>div:first-child::before {
+    font-family: "Material Icons";
+    font-size: 24px;
+}
+
+.characteristics>div:has(input[value="1"]:checked)>div:first-child::before {
+    color: #6361E8;
+    content: "check_circle";
+}
+
+.characteristics>div:has(input[value="-1"]:checked)>div:first-child::before {
+    color: #ca3b3b;
+    content: "remove_circle";
+}
+
+.characteristics>div:has(input[value="0"]:checked)>div:first-child::before {
+    color: #adadad;
+    content: "help_outline";
+}
+
+.characteristics .checkboxes:has(input[value="0"]:checked)>label.yes {
+    order: -1;
+}
+
+div.checkboxes>input[value="1"]:checked~label.yes {
+    display: none;
+}
+
+div.checkboxes>input[value="-1"]:checked~label.no {
+    display: none;
+}
+
+div.checkboxes>input[value="0"]:not(:checked)~label.not-sure {
+    order: -1;
+    display: flex;
+}
+
+@media screen and (max-width: 700px) {
+    .characteristics {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .characteristics>div>div:first-child {
+        font-size: 0.9em;
+    }
+
+    div.checkboxes {
+        display: flex;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .characteristics>div {
+        flex-direction: column;
+    }
+
+    div.checkboxes label, div.checkboxes::before {
+        font-size: 0.8em;
+    }
+
+    div.checkboxes::before {
+        margin-top: 0.5px;
+    }
+
+    .characteristics>div>div {
+        width: 100%;
+    }
+
+    .characteristics>div>div:first-child {
+        font-size: 0.8em;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    section>div.field>.info {
+        text-align: justify;
+    }
+
+    section>div.field>div:first-child {
+        font-size: 1em;
+    }
+}

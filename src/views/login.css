@@ -13,6 +13,7 @@ main {
 }
 
 main>section {
+    border-radius: 0px;
     background: unset;
     box-shadow: none;
 }
