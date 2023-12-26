@@ -1,36 +1,228 @@
-body {
-    margin: 0;
+main>section {
+    background: unset;
+    box-shadow: none;
 }
 
-* {
-    box-sizing: border-box;
-}
-
-nav {
+main section.welcome {
     display: flex;
+    align-items: center;
+    gap: 31px;
+    align-self: stretch;
+}
+
+main section.welcome>div {
+    display: flex;
+    padding: 20px 0px;
+    flex-direction: column;
     justify-content: space-between;
-    padding: 15px;
-    color: white;
-    background-color: black;
+    align-items: flex-start;
+    align-self: stretch;
+    width: 50%;
 }
 
-nav ul {
+main section.welcome>div:first-child {
+    flex: 1 0 0;
+}
+
+.welcome div>span:first-child {
+    font-size: 1.3em;
+}
+
+.highlight {
+    font-size: 2.5em;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 76px;
+    letter-spacing: 0.5px;
+}
+
+.welcome .image {
     display: flex;
-    list-style: none;
-    margin: 0;
-    padding: 0;
+    align-self: stretch;
+    border-radius: 24px;
+    background: url('/public/images/welcome.jpeg');
+    background-size: cover;
+    background-position: center;
+    width: 50%;
+}
+
+.search {
+    display: flex;
+    gap: 20px;
+    align-self: stretch;
+    align-items: stretch;
+}
+
+.search-predefined {
+    display: flex;
+    width: 50%;
+    gap: 13px;
+    justify-content: center;
+    align-items: stretch;
+}
+
+.search-predefined>span>span {
+    color: white
+}
+
+.search-label {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1 0 0;
+}
+
+.search-label>i {
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    transform: translateY(-50%);
+    color: silver;
+}
+
+.search-label>input {
+    padding-left: calc(1em + 30px + 8px);
+}
+
+.search-predefined span {
+    flex: 1 0 0;
+    font-weight: normal;
+}
+
+.announcements {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     gap: 10px;
+    flex: 1 0 0;
+    align-self: stretch;
 }
 
-main {
+.announcements>section {
     display: flex;
-    padding: 15px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    align-self: stretch;
 }
 
-main div:first-child {
-    width: calc(100vw / 3);
+.announcements>section>span {
+    color: #000;
+    font-size: 1em;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
 }
 
-main div:last-child {
-    width: calc(100vw / 3 * 2);
+.search-predefined>span>div {
+    display: none;
+}
+
+main,
+section.welcome,
+.welcome .image {
+    transition-duration: 200ms;
+}
+
+
+@media screen and (max-width: 1020px) {
+    .add-announcement {
+        display: none;
+    }
+
+    header {
+        justify-content: flex-end;
+    }
+
+    .highlight {
+        line-height: normal;
+        font-size: 2em;
+    }
+}
+
+@media screen and (max-width: 840px) {
+    main section.welcome {
+        gap: 0px;
+    }
+
+    .welcome .image {
+        width: 0px;
+    }
+}
+
+
+
+@media screen and (max-width: 620px) {
+    .welcome .highlight {
+        font-size: 1.5em;
+    }
+
+    .welcome .highlight+span {
+        font-size: 0.8em;
+    }
+
+    main section.welcome>div {
+        padding: 10px 0px;
+    }
+
+    .welcome div>span:first-child {
+        font-size: 1em;
+    }
+
+    .welcome>div>div {
+        text-align: justify;
+    }
+
+    .search {
+        flex-direction: column;
+    }
+
+    .search-predefined {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+        flex-shrink: 0;
+        align-items: stretch;
+    }
+
+    .search-predefined>span {
+        width: 25%;
+        display: flex;
+        flex-direction: column;
+        background: none;
+        padding: 0px;
+        flex: unset;
+    }
+
+    .search-predefined>span>span {
+        display: flex;
+        align-items: center;
+        color: #8696BB;
+        font-size: 0.8em;
+    }
+
+    .search-predefined>span>div {
+        background: #FAFAFA;
+        color: white;
+        border-radius: 50%;
+        width: 100%;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .search-predefined>span>div::before {
+        content: '';
+        float: left;
+        padding-top: 100%;
+    }
+}
+
+@media screen and (max-width: 280px) {
+    .search-predefined>span>span {
+        display: none;
+    }
 }

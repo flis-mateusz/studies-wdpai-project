@@ -4,15 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../main.css">
-    <link rel="stylesheet" href="../header.css">
-    <link rel="stylesheet" href="../announcement_add.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,700;1,600&display=swap"
-        rel="stylesheet">
+    <link rel="stylesheet" href="/public/css/main.css">
+    <link rel="stylesheet" href="/public/css/header.css">
+    <link rel="stylesheet" href="/public/css/announcement_add.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <title>Document</title>
+    <title>Dodaj ogłoszenie</title>
 </head>
 
 <body>
@@ -23,7 +19,7 @@
                     <span>Dodaj ogłoszenie</span>
                 </div>
                 <div>
-                    <a>Strona główna</a>
+                    <a href="/">Strona główna</a>
                     <a>O nas</a>
                     <a>Kontakt</a>
                 </div>
@@ -34,11 +30,11 @@
                 <div class="avatar"></div>
                 <div class="menu-dropdown-content">
                     <div>
-                        <a href="#">
+                        <a href="/add_announcement">
                             <i class="material-icons">add_circle_outline</i>
                             <span>Dodaj ogłoszenie</span>
                         </a>
-                        <a href="#">
+                        <a href="/profile">
                             <i class="material-icons">account_circle</i>
                             <span>Mój profil</span>
                         </a>
@@ -72,7 +68,6 @@
                         <input type="text" class="main-input" id="pet-name">
                     </div>
                 </div>
-
                 <div class="field">
                     <div>Wiek</div>
                     <div class="info">Postaraj się oszacować wiek zwierzęcia. Jeśli nie jesteś w stanie tego zrobić,
@@ -82,33 +77,32 @@
                         <input type="text" class="main-input" id="pet-name">
                     </div>
                 </div>
-
             </section>
             <section>
                 <div class="field">
                     <div>Zdjęcie*</div>
                     <div class="info">Dodaj zdjęcie w formacie jpg, jped, png lub gif</div>
-                </div>
-                <div>Przeciągnij lub kliknij aby dodać zdjęcie</div>
-                <div class="tip">
-                    <i class="material-icons">lightbulb_outline</i>
-                    <span>Jakość zdjęcia wpływa na atrakcyjność ogłoszenia</span>
+                    <div>Przeciągnij lub kliknij aby dodać zdjęcie</div>
+                    <div class="tip">
+                        <i class="material-icons">lightbulb_outline</i>
+                        <span>Jakość zdjęcia wpływa na atrakcyjność ogłoszenia</span>
+                    </div>
                 </div>
             </section>
             <section>
                 <div class="field">
                     <div>Typ zwierzęcia*</div>
                     <div class="info">Przykładowo kot, pies, chomik, papuga</div>
-                </div>
-                <div>
-                    <input type="text" class="main-input" id="pet-kind">
+                    <div>
+                        <input type="text" class="main-input" id="pet-kind">
+                    </div>
                 </div>
                 <div class="field">
                     <div>Gatunek</div>
                     <div class="info">Jeśli nie znasz gatunku, pozostaw to pole puste</div>
-                </div>
-                <div>
-                    <input type="text" class="main-input" id="pet-kind">
+                    <div>
+                        <input type="text" class="main-input" id="pet-kind">
+                    </div>
                 </div>
             </section>
             <section>

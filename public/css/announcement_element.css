@@ -17,6 +17,11 @@
     cursor: pointer;
 }
 
+a.announcement, a.announcement div, a.announcement span {
+    text-decoration: none;
+    color: inherit;
+}
+
 .announcement-data {
     display: flex;
     padding: 20px;
@@ -38,7 +43,7 @@
     justify-content: space-between;
     align-items: center;
     align-self: stretch;
-    background: url("assets/1.jfif");
+    background: url("/public/images/1.jfif");
     background-size: cover;
     background-position: center;
 }
@@ -70,7 +75,7 @@
     width: 58px;
     height: 58px;
     border-radius: 58px;
-    background: url("assets/1.jfif");
+    background: url("/public/images/1.jfif");
     background-size: cover;
     background-position: center;
 }

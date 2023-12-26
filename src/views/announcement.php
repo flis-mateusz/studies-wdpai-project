@@ -4,16 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../main.css">
-    <link rel="stylesheet" href="../icons.css">
-    <link rel="stylesheet" href="../header.css">
-    <link rel="stylesheet" href="../announcement.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,700;1,600&display=swap"
-        rel="stylesheet">
+    <link rel="stylesheet" href="/public/css/main.css">
+    <link rel="stylesheet" href="/public/css/icons.css">
+    <link rel="stylesheet" href="/public/css/header.css">
+    <link rel="stylesheet" href="/public/css/announcement.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <title>Document</title>
+    <title>Ogłoszenie</title>
 </head>
 
 <body>
@@ -27,7 +23,7 @@
                     </a>
                 </div>
                 <div>
-                    <a>Strona główna</a>
+                    <a href="/">Strona główna</a>
                     <a>O nas</a>
                     <a>Kontakt</a>
                 </div>
@@ -38,11 +34,11 @@
                 <div class="avatar"></div>
                 <div class="menu-dropdown-content">
                     <div>
-                        <a href="#">
+                        <a href="/add_announcement">
                             <i class="material-icons">add_circle_outline</i>
                             <span>Dodaj ogłoszenie</span>
                         </a>
-                        <a href="#">
+                        <a href="/profile">
                             <i class="material-icons">account_circle</i>
                             <span>Mój profil</span>
                         </a>

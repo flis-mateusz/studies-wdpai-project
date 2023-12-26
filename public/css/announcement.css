@@ -47,6 +47,7 @@ main>section {
     display: flex;
     width: 100%;
     gap: 20px;
+    text-decoration: none;
 }
 
 .about-user {
@@ -133,7 +134,7 @@ main>section {
     width: 100%;
     height: 50vh;
     border-radius: 20px;
-    background: url('assets/2.jpg');
+    background: url('/public/images/2.jpg');
     background-position: center;
     background-size: cover;
 }
