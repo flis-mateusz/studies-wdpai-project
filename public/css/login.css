@@ -10,6 +10,7 @@ main {
     flex-direction: row;
     padding: 0 !important;
     gap: 0px !important;
+    position: relative;
 }
 
 main>section {
@@ -18,11 +19,24 @@ main>section {
     box-shadow: none;
 }
 
+main .login-required {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 10px;
+    background-color: #ffcbcb;
+    color: #2f2f2f;
+    padding: 5px 15px;
+    border-radius: 20px;
+    width: max-content;
+    max-width: 90%;
+}
+
 .welcome-image {
     background: url("/public/images/login.jpg");
     background-size: cover;
     background-position: center;
-    width: 60%;
+    width: 70%;
     height: 100%;
     display: flex;
     justify-content: center;
@@ -30,37 +44,80 @@ main>section {
     transition-duration: 500ms;
 }
 
-.login-element {
+.froms-frame {
+    overflow: hidden;
+    max-width: 600px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    min-width: max-content;
-    width: 40%;
 }
 
-.login-element>div {
+.froms-frame:not(:has(form.submitting)) .custom-loader-container {
+    padding: 0px;
+    max-height: 0px;
+}
+
+.forms-container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    transition-duration: 350ms;
+}
+
+.forms-container.register {
+    transform: translateX(-100%);
+}
+
+.forms-container.forgot-password {
+    transform: translateX(-200%);
+}
+
+.forms-container:has(form.submitting) section:not(:has(form.submitting)) {
+    max-height: 0;
+}
+
+.forms-container>section {
+    min-width: 100%;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    max-height: 650px;
+}
+
+.forms-container>section>div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     gap: 15px;
     padding: 30px;
     width: 380px;
     max-width: 100%;
 }
 
-.login-element>div>span:first-child {
+.forms-container>section>div>span:first-child {
     font-size: 1.5em;
     font-style: normal;
     font-weight: 600;
     line-height: normal;
 }
 
-.login-element form {
+.forms-container>section form {
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 25px;
+    gap: 10px;
+    transition-duration: 250ms;
+    max-height: 500px;
+}
+
+.forms-container>section form.submitting {
+    max-height: 0px;
+    overflow: hidden;
 }
 
 form input,
@@ -69,18 +126,28 @@ form div {
     transition-duration: 250ms;
 }
 
-form>div:has(> input[type="text"]:focus)>label,
-form>div:has(> input[type="password"]:focus)>label {
-    font-weight: bold;
+form input[type="submit"] {
+    margin-top: 10px;
 }
 
-form>div {
+form div.inputs {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+div.inputs>div:has(> input.invalid)>label {
+    color: red;
+}
+
+div.inputs>div {
     display: flex;
     flex-direction: column;
     gap: 3px;
 }
 
-form>div>label {
+div.inputs>div>label {
     font-size: 0.9em;
     font-style: normal;
     font-weight: 500;
@@ -92,6 +159,15 @@ span.incentive {
     font-style: normal;
     font-weight: 500;
     cursor: pointer;
+}
+
+form span.output {
+    font-size: 0.9em;
+    font-weight: normal;
+}
+
+form span.output.error {
+    color: red;
 }
 
 span.forgot-password {
@@ -112,12 +188,19 @@ span.forgot-password {
         width: 0px;
     }
 
-    .login-element {
+    .forms-container {
         min-width: unset;
         width: 100%;
     }
 
-    .login-element > div {
+    .forms-container>section>div {
         padding: 15px;
+        overflow: hidden;
+    }
+}
+
+@media screen and (max-width: 350px) {
+    .custom-loader {
+        transform: scale(0.8);
     }
 }

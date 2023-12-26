@@ -44,7 +44,7 @@
                             <span>Pomoc</span>
                         </a>
                         <hr>
-                        <a href="#">
+                        <a href="/signout">
                             <i class="material-icons">exit_to_app</i>
                             <span>Wyloguj</span>
                         </a>

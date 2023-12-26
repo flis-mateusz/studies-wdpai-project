@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="/public/css/main.css">
     <link rel="stylesheet" href="/public/css/header.css">
     <link rel="stylesheet" href="/public/css/login.css">
+    <link rel="stylesheet" href="/public/css/custom_loader.css">
+    <script type="module" src="/public/js/login_form.js" defer></script>
     <title>Logowanie</title>
 </head>
 
@@ -30,52 +32,104 @@
         </nav>
     </header>
     <main>
+        <?php
+        if (isset($_GET['required'])) {
+            echo '<span class="login-required">Aby przejść dalej musisz się zalogować lub utworzyć konto</span>';
+        }
+        ?>
         <section class="welcome-image"></section>
-        <!-- <section class="login-element">
-            <div>
-                <span>Witaj ponownie</span>
-                <span>Zaloguj się lub utwórz konto za darmo</span>
-                <hr>
-                <form>
+        <section class="froms-frame">
+            <section class="forms-container">
+                <section class="login-section">
                     <div>
-                        <label for="login-email">Wprowadź adres e-mail</label>
-                        <input type="text" class="main-input" id="login-email">
+                        <span>Witaj ponownie</span>
+                        <span>Zaloguj się lub utwórz konto za darmo</span>
+                        <hr>
+                        <form id="login-form">
+                            <div class="inputs">
+                                <div>
+                                    <label for="login-email">Wprowadź adres e-mail</label>
+                                    <input type="email" class="main-input" id="login-email" name="login-email">
+                                </div>
+                                <div>
+                                    <label for="login-email">Wprowadź hasło</label>
+                                    <input type="password" class="main-input" id="login-password" name="login-password">
+                                    <span class="switch-form forgot-password">Zapomniałem/am hasła</span>
+                                </div>
+                            </div>
+                            <span class="output"></span>
+                            <input type="submit" value="Zaloguj" class="main-button">
+                            <span class="incentive switch-form">Zarejestruj się</span>
+                        </form>
                     </div>
+                </section>
+                <section class="register-section">
                     <div>
-                        <label for="login-email">Wprowadź hasło</label>
-                        <input type="password" class="main-input" id="login-password">
-                        <span class="forgot-password">Zapomniałem/am hasła</span>
+                        <span>Rejestracja</span>
+                        <span>Utwórz konto za darmo</span>
+                        <hr>
+                        <form id="register-form">
+                            <div class="inputs">
+                                <div>
+                                    <label for="register-names">Imię i nazwisko</label>
+                                    <input type="text" class="main-input" id="register-names" name="register-names">
+                                </div>
+                                <div>
+                                    <label for="register-email">Wprowadź adres e-mail</label>
+                                    <input type="email" class="main-input" id="register-email" name="register-email">
+                                </div>
+                                <div>
+                                    <label for="register-password">Wprowadź hasło</label>
+                                    <input type="password" class="main-input" id="register-password" name="register-password">
+                                </div>
+                                <div>
+                                    <label for="register-repassword">Powtórz hasło</label>
+                                    <input type="password" class="main-input" id="register-repassword" name="register-repassword">
+                                </div>
+                            </div>
+                            <span class="output"></span>
+                            <input type="submit" value="Zarejestruj się" class="main-button">
+                            <span class="incentive switch-form">Posiadasz konto? Zaloguj się</span>
+                        </form>
                     </div>
-                    <input type="submit" value="Zaloguj" class="main-button">
-                </form>
-                <span class="register">Zarejestruj się</span>
-            </div>
-        </section> -->
-        <section class="login-element register-element">
-            <div>
-                <span>Rejestracja</span>
-                <span>Utwórz konto za darmo</span>
-                <hr>
-                <form>
+                </section>
+                <section class="forgot-password-section">
                     <div>
-                        <label for="login-name">Imię i nazwisko</label>
-                        <input type="text" class="main-input" id="login-name">
+                        <span>Przypomnij hasło</span>
+                        <span>Na podany adres e-mail otrzymasz link do zresetowania hasła</span>
+                        <hr>
+                        <form id="forgot-password-form">
+                            <div class="inputs">
+                                <div>
+                                    <label for="forgot-password-email">Wprowadź adres e-mail</label>
+                                    <input type="text" class="main-input" id="forgot-password-email" name="forgot-password-email">
+                                </div>
+                            </div>
+                            <span class="output"></span>
+                            <input type="submit" value="Wyślij link" class="main-button">
+                            <span class="incentive switch-form forgot-password">Wróć do logowania</span>
+                        </form>
                     </div>
-                    <div>
-                        <label for="login-email">Wprowadź adres e-mail</label>
-                        <input type="text" class="main-input" id="login-email">
+                </section>
+            </section>
+            <div class="custom-loader-container">
+                <div class="custom-loader">
+                    <div class="track">
+                        <div class="mouse"></div>
                     </div>
-                    <div>
-                        <label for="login-reemail">Wprowadź hasło</label>
-                        <input type="password" class="main-input" id="login-reemail">
+                    <div class="face">
+                        <div class="ears-container"></div>
+                        <div class="eyes-container">
+                            <div class="eye"></div>
+                            <div class="eye"></div>
+                        </div>
+                        <div class="phiz">
+                            <div class="nose"></div>
+                            <div class="lip"></div>
+                            <div class="mouth"></div>
+                        </div>
                     </div>
-                    <div>
-                        <label for="login-email">Powtórz hasło</label>
-                        <input type="password" class="main-input" id="login-password">
-                    </div>
-                    <input type="submit" value="Zarejestruj się" class="main-button">
-                </form>
-                <span class="incentive">Posiadasz konto? Zaloguj się</span>
+                </div>
             </div>
         </section>
     </main>

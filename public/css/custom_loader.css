@@ -1,0 +1,313 @@
+@keyframes rotate {
+    0% {
+        transform: rotate(-0.08turn);
+    }
+
+    100% {
+        transform: rotate(-1.08turn);
+    }
+}
+
+@keyframes hideEye {
+
+    0%,
+    10%,
+    85% {
+        margin-top: 0;
+        height: 50px;
+    }
+
+    30%,
+    65% {
+        margin-top: 20px;
+        height: 30px;
+    }
+}
+
+@keyframes blink {
+
+    /* 0%,
+    10%,
+    85% {
+        bottom: 0;
+    }
+
+    30%,
+    65% {
+        bottom: 20px;
+    } */
+
+    0% {
+        transform: rotate(-0.08turn);
+    }
+
+    100% {
+        transform: rotate(-1.08turn);
+    }
+}
+
+.custom-loader-container {
+    padding: 10px;
+    overflow: hidden;
+    transition-duration: 250ms;
+    max-height: 280px;
+}
+
+.custom-loader-container.hidden {
+    padding: 0px;
+    max-height: 0px;
+}
+
+.custom-loader {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 260px;
+    height: 260px;
+}
+
+.custom-loader .track {
+    width: 100%;
+    height: 100%;
+    border: solid #cdcdcd;
+    border-width: 5px 5px 3px 0;
+    border-top-color: transparent;
+    border-radius: 50%;
+    margin-left: -3px;
+    margin-top: -3px;
+    -webkit-animation: rotate 3s infinite linear;
+    -moz-animation: rotate 3s infinite linear;
+    -o-animation: rotate 3s infinite linear;
+    animation: rotate 3s infinite linear;
+}
+
+
+
+.custom-loader .track .mouse {
+    position: absolute;
+    right: 31px;
+    top: 18px;
+    width: 25px;
+    height: 25px;
+    background: #cdcdcd;
+    border-radius: 80% 0 55% 50% / 55% 0 80% 50%;
+    transform: rotate(-95deg);
+}
+
+.custom-loader .track .mouse:before,
+.custom-loader .track .mouse:after {
+    position: absolute;
+    content: '';
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: inherit;
+}
+
+.custom-loader .track .mouse:before {
+    left: 5px;
+    top: -4px;
+}
+
+.custom-loader .track .mouse:after {
+    left: 20px;
+    top: 11px;
+}
+
+.custom-loader .face {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 130px;
+    height: 130px;
+    margin-left: -65px;
+    margin-top: -65px;
+}
+
+.custom-loader .face:before,
+.custom-loader .face:after {
+    position: absolute;
+    content: '';
+    width: 50%;
+    height: 100%;
+}
+
+.custom-loader .face:before {
+    background: #c8c6c9;
+    border-top-left-radius: 65px;
+    border-bottom-left-radius: 55px;
+}
+
+.custom-loader .face:after {
+    left: 50%;
+    background: #d0ced1;
+    border-top-right-radius: 65px;
+    border-bottom-right-radius: 55px;
+}
+
+
+
+.custom-loader .face .ears-container {
+    position: absolute;
+    top: -8px;
+    width: 130px;
+    height: 50px;
+}
+
+.custom-loader .face .ears-container:before,
+.custom-loader .face .ears-container:after {
+    position: absolute;
+    content: '';
+    width: 0;
+    height: 0;
+    border-top: 35px solid transparent;
+    border-bottom: 35px solid transparent;
+}
+
+.custom-loader .face .ears-container:before {
+    border-left: 35px solid #c8c6c9;
+}
+
+.custom-loader .face .ears-container:after {
+    right: 0;
+    border-right: 35px solid #d0ced1;
+}
+
+.custom-loader .face .eyes-container {
+    position: absolute;
+    overflow: hidden;
+    left: 50%;
+    top: 30px;
+    width: 106px;
+    height: 50px;
+    margin-left: -53px;
+    z-index: 1;
+    /* -webkit-animation: hideEye 3s infinite linear;
+    -moz-animation: hideEye 3s infinite linear;
+    -o-animation: hideEye 3s infinite linear;
+    animation: hideEye 3s infinite linear; */
+}
+
+.custom-loader .face .eyes-container .eye {
+    position: relative;
+    bottom: 0;
+    float: left;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    color: #c8c6c9;
+    background: #fff;
+    -webkit-animation: blink 3s infinite linear;
+    -moz-animation: blink 3s infinite linear;
+    -o-animation: blink 3s infinite linear;
+    animation: blink 3s infinite linear;
+}
+
+.custom-loader .face .eyes-container .eye:after {
+    position: absolute;
+    content: '';
+    top: 4px;
+    right: 14px;
+    width: 12px;
+    height: 12px;
+    border-radius: inherit;
+    background: #838091;
+    transition-duration: 350ms;
+}
+
+.custom-loader .face .eyes-container .eye:last-child {
+    float: right;
+    color: #d0ced1;
+}
+
+.custom-loader .face .phiz {
+    position: absolute;
+    left: 50%;
+    top: 66px;
+    width: 32px;
+    height: 48px;
+    margin-left: -16px;
+    z-index: 1;
+}
+
+.custom-loader .face .phiz .nose {
+    width: 100%;
+    height: 15px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    background: #838091;
+}
+
+.custom-loader .face .phiz .lip {
+    position: relative;
+    left: 50%;
+    width: 4px;
+    height: 12px;
+    margin-left: -2px;
+    background: #838091;
+}
+
+.custom-loader .face .phiz .lip:before {
+    position: absolute;
+    content: '';
+    width: 100%;
+    height: 5px;
+    background: #767385;
+}
+
+.custom-loader .face .phiz .mouth {
+    position: relative;
+    left: 50%;
+    width: 20px;
+    height: 6px;
+    margin-left: -13px;
+    background: #fff;
+    border: 3px solid #838091;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+}
+
+.custom-loader.success .track {
+    display: none;
+}
+
+/* SUCCESS ANIMATION */
+
+.custom-loader.success .face:before {
+    transition-duration: 350ms;
+    background: #50ad60;
+}
+
+.custom-loader.success .face:after {
+    transition-duration: 350ms;
+    background: #69ce79;
+}
+
+.custom-loader.success .face .ears-container:before {
+    transition-duration: 350ms;
+    border-left-color: #50ad60;
+}
+
+.custom-loader.success .face .ears-container:after {
+    transition-duration: 350ms;
+    border-right-color: #69ce79;
+}
+
+.custom-loader.success .face .eyes-container {
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+}
+
+.custom-loader.success .face .eyes-container .eye {
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+}
+
+.custom-loader.success .face .eyes-container .eye:after {
+    top: 50%;
+    right: 50%;
+    transform: translate(50%, -50%);
+}

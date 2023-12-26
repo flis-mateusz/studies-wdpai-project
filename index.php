@@ -10,6 +10,10 @@ Router::get('index', 'DefaultController');
 Router::get('dashboard', 'DefaultController');
 Router::get('login', 'DefaultController');
 
+Router::post('signin', 'SecurityController');
+Router::post('signup', 'SecurityController');
+Router::get('signout', 'SecurityController');
+
 Router::get('profile', 'ProfileController');
 
 Router::get('add_announcement', 'AnnouncementController');
