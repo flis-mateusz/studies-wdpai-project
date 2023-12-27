@@ -1,33 +1,26 @@
 <?php
 
 require_once 'AppController.php';
+require_once 'UserSessionController.php';
 require_once __DIR__ . '/../repository/UsersRepository.php';
 require_once __DIR__ . '/../models/JsonResponse.php';
 require_once __DIR__ . '/../models/User.php';
 
 class SecurityController extends AppController
 {
-
     private $usersRepository;
+    private $session;
 
     public function __construct()
     {
         parent::__construct();
-        session_start();
+        $this->session = new UserSessionController();
         $this->usersRepository = new UsersRepository();
-    }
-
-    public function is_logged_in()
-    {
-        if (isset($_SESSION['user_id'])) {
-            return true;
-        }
-        return false;
     }
 
     public function login_required()
     {
-        if (!$this->is_logged_in()) {
+        if (!$this->session->is_logged_in()) {
             header('Location: /login?required&redirect_url=' . $_SERVER['REQUEST_URI']);
             exit;
         }
@@ -52,7 +45,7 @@ class SecurityController extends AppController
         }
 
         if (password_verify($password, $user->getPassword())) {
-            $_SESSION['user_id'] = $user->getId();
+            $this->session->set_user($user);
             $response->setSuccess(true);
         } else {
             $response->setMessage('Nie znaleziono użytkownika');
@@ -70,6 +63,7 @@ class SecurityController extends AppController
         }
         $name = explode(' ', $_POST['register-names']);
         $email = $_POST['register-email'];
+        $phone = $_POST['register-phone'];
         $password = $_POST['register-password'];
         $repassword = $_POST['register-repassword'];
 
@@ -78,11 +72,11 @@ class SecurityController extends AppController
             $response->send();
         }
 
-        $user = new User(null, $email, password_hash($password, PASSWORD_DEFAULT), null, $name[0], $name[1], null);
+        $user = new User(null, $email, password_hash($password, PASSWORD_DEFAULT), null, $name[0], $name[1], null, $phone);
 
         if ($this->usersRepository->getUser($email) === null) {
             if ($id = $this->usersRepository->addUser($user)) {
-                $_SESSION['user_id'] = $id;
+                $this->session->set_user($user);
                 $response->setSuccess(true);
             }
         } else {
@@ -93,7 +87,7 @@ class SecurityController extends AppController
 
     public function signout()
     {
-        session_destroy();
+        $this->session->destroy();
         if (isset($_SERVER['HTTP_REFERER'])) {
             header('Location: ' . $_SERVER['HTTP_REFERER']);
             exit;

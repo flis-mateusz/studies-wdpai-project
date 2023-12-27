@@ -17,7 +17,7 @@
             <div class="submenu">
                 <div>
                     <a href="/">Strona główna</a>
-                    <a>O nas</a>
+                    <a>Ogłoszenia</a>
                     <a>Kontakt</a>
                 </div>
             </div>
@@ -108,12 +108,12 @@
                 <div class="basic-info">
                     <div>
                         <div>
-                            <label for="login-name"><span>Imię i nazwisko</span></label>
-                            <input type="text" class="main-input" id="login-name">
+                            <label for="edit-name"><span>Imię i nazwisko</span></label>
+                            <input type="text" class="main-input" id="edit-name">
                         </div>
                         <div>
-                            <label for="login-email"><span>Wprowadź adres e-mail</span></label>
-                            <input type="text" class="main-input" id="login-email">
+                            <label for="edit-email"><span>Wprowadź adres e-mail</span></label>
+                            <input type="text" class="main-input" id="edit-email">
                         </div>
                     </div>
                     <div class="avatar resp">
@@ -123,12 +123,16 @@
                     </div>
                 </div>
                 <div>
-                    <label for="login-reemail"><span>Wprowadź hasło</span></label>
-                    <input type="password" autocomplete="new-password" class="main-input" id="login-reemail">
+                    <label for="edit-phone"><span>Wprowadź numer telefonu</span></label>
+                    <input type="password" autocomplete="new-password" class="main-input" id="edit-phone">
                 </div>
                 <div>
-                    <label for="login-email"><span>Powtórz hasło</span></label>
-                    <input type="password" autocomplete="new-password" class="main-input" id="login-password">
+                    <label for="edit-password"><span>Wprowadź hasło</span></label>
+                    <input type="password" autocomplete="new-password" class="main-input" id="edit-password">
+                </div>
+                <div>
+                    <label for="edit-email"><span>Powtórz hasło</span></label>
+                    <input type="password" autocomplete="new-password" class="main-input" id="edit-repassword">
                 </div>
                 <div>
                     <input type="submit" value="Zapisz" class="main-button normal-text">

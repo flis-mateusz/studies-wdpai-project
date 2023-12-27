@@ -20,7 +20,7 @@
                     <span class="logo">ZwierzakSzukaDomu</span>
                 </div>
                 <div>
-                    <a>O nas</a>
+                    <a>Ogłoszenia</a>
                     <a>Kontakt</a>
                 </div>
             </div>
@@ -77,6 +77,10 @@
                                 <div>
                                     <label for="register-email">Wprowadź adres e-mail</label>
                                     <input type="email" autocomplete="off" class="main-input" id="register-email" name="register-email">
+                                </div>
+                                <div>
+                                    <label for="register-phone">Wprowadź numer telefonu</label>
+                                    <input type="text" autocomplete="new-password" class="main-input" id="register-phone" name="register-phone">
                                 </div>
                                 <div>
                                     <label for="register-password">Wprowadź hasło</label>

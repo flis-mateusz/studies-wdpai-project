@@ -27,7 +27,9 @@ class UsersRepository extends Repository
             $user['created_at'],
             $user['name'],
             $user['surname'],
-            $user['avatar_url']
+            $user['avatar_url'],
+            $user['phone'],
+            false
         );
     }
 
@@ -47,15 +49,16 @@ class UsersRepository extends Repository
             $user->setId($result);
 
             $stmt = $this->database->connect()->prepare('
-                INSERT INTO user_detail (user_id, name, surname, avatar_url)
-                VALUES (?,?,?,?) RETURNING detail_id;
+                INSERT INTO user_detail (user_id, name, surname, avatar_url, phone)
+                VALUES (?,?,?,?,?) RETURNING detail_id;
             ');
 
             $stmt->execute([
                 $user->getId(),
                 $user->getName(),
                 $user->getSurname(),
-                $user->getAvatarUrl()
+                $user->getAvatarUrl(),
+                $user->getPhone()
             ]);
 
             return $stmt->fetchColumn();

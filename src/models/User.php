@@ -9,6 +9,8 @@ class User
     private $name;
     private $surname;
     private $avatar_url;
+    private $phone;
+    private $is_admin;
 
     public function __construct(
         ?int $id,
@@ -17,7 +19,9 @@ class User
         ?string $created_at,
         string $name,
         string $surname,
-        ?string $avatar_url
+        ?string $avatar_url,
+        ?string $phone,
+        ?bool $is_admin
     ) {
         $this->id = $id;
         $this->email = $email;
@@ -30,6 +34,8 @@ class User
         $this->name = $name;
         $this->surname = $surname;
         $this->avatar_url = $avatar_url;
+        $this->phone = $phone;
+        $this->is_admin = $is_admin;
     }
 
     public function getId(): int
@@ -90,5 +96,25 @@ class User
     public function setAvatarUrl(string $avatar_url): void
     {
         $this->avatar_url = $avatar_url;
+    }
+
+    public function getPhone():?string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(string $phone): void
+    {
+        $this->phone = $phone;
+    }
+
+    public function isAdmin():?bool
+    {
+        return $this->is_admin;
+    }
+
+    public function setIsAdmin(bool $is_admin): void
+    {
+        $this->is_admin = $is_admin;
     }
 }

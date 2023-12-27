@@ -97,7 +97,7 @@ main .login-required {
     justify-content: center;
     align-items: center;
     position: relative;
-    max-height: 650px;
+    max-height: 750px;
     transition-duration: 350ms;
 }
 
@@ -126,7 +126,7 @@ main .login-required {
     align-items: center;
     gap: 10px;
     transition-duration: 250ms;
-    max-height: 500px;
+    max-height: 700px;
 }
 
 .forms-container>section form.submitting {

@@ -74,6 +74,11 @@ class RegisterForm extends BasicFormController {
             this.showOutput('Podaj adres email we właściwym formacie', true);
             return false;
         }
+        if (!formData.get('register-phone')) {
+            this.markInput('register-phone', true);
+            this.showOutput('Podaj numer telefonu', true);
+            return false;
+        }
         if (!isPasswordStrong(formData.get('register-password'))) {
             this.markInput('register-password', true);
             this.showOutput('Hasło musi mieć co najmniej 8 znaków i zawierać duże i małe litery, cyfrę oraz znak specjalny', true);

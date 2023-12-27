@@ -17,7 +17,7 @@
         <nav>
             <div class="submenu">
                 <div>
-                    <a>O nas</a>
+                    <a>Ogłoszenia</a>
                     <a>Kontakt</a>
                 </div>
             </div>
