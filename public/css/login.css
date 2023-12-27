@@ -19,6 +19,12 @@ main>section {
     box-shadow: none;
 }
 
+@keyframes hide {
+    to {
+        opacity: 0;
+    }
+}
+
 main .login-required {
     position: absolute;
     left: 50%;
@@ -30,6 +36,13 @@ main .login-required {
     border-radius: 20px;
     width: max-content;
     max-width: 90%;
+    animation-name: hide;
+    animation-duration: 500ms;
+    animation-delay: 5s;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: 1;
+    opacity: 1;
 }
 
 .welcome-image {
@@ -85,6 +98,7 @@ main .login-required {
     align-items: center;
     position: relative;
     max-height: 650px;
+    transition-duration: 350ms;
 }
 
 .forms-container>section>div {
@@ -124,10 +138,6 @@ form input,
 form div {
     width: 100% !important;
     transition-duration: 250ms;
-}
-
-form input[type="submit"] {
-    margin-top: 10px;
 }
 
 form div.inputs {

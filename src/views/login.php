@@ -68,23 +68,23 @@
                         <span>Rejestracja</span>
                         <span>Utwórz konto za darmo</span>
                         <hr>
-                        <form id="register-form">
+                        <form id="register-form" autocomplete="off">
                             <div class="inputs">
                                 <div>
                                     <label for="register-names">Imię i nazwisko</label>
-                                    <input type="text" class="main-input" id="register-names" name="register-names">
+                                    <input type="text" autocomplete="off" class="main-input" id="register-names" name="register-names">
                                 </div>
                                 <div>
                                     <label for="register-email">Wprowadź adres e-mail</label>
-                                    <input type="email" class="main-input" id="register-email" name="register-email">
+                                    <input type="email" autocomplete="off" class="main-input" id="register-email" name="register-email">
                                 </div>
                                 <div>
                                     <label for="register-password">Wprowadź hasło</label>
-                                    <input type="password" class="main-input" id="register-password" name="register-password">
+                                    <input type="password" autocomplete="new-password" class="main-input" id="register-password" name="register-password">
                                 </div>
                                 <div>
                                     <label for="register-repassword">Powtórz hasło</label>
-                                    <input type="password" class="main-input" id="register-repassword" name="register-repassword">
+                                    <input type="password" autocomplete="new-password" class="main-input" id="register-repassword" name="register-repassword">
                                 </div>
                             </div>
                             <span class="output"></span>

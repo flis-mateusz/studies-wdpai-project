@@ -1,9 +1,0 @@
-FROM nginx:1.17.8-alpine
-
-RUN apk add --no-cache git
-
-RUN git clone https://github.com/flis-mateusz/studies-wdpai-project /app
-RUN rm -rf /app/.git
-
-# Copy the nginx config file
-COPY ./docker/nginx/nginx.conf /etc/nginx/conf.d/default.conf

@@ -297,13 +297,15 @@
 }
 
 .custom-loader.success .face .eyes-container {
-    animation-fill-mode: forwards;
-    animation-iteration-count: 1;
+    /* animation-fill-mode: forwards;
+    animation-iteration-count: 1; */
+    animation-play-state: paused;
 }
 
 .custom-loader.success .face .eyes-container .eye {
-    animation-fill-mode: forwards;
-    animation-iteration-count: 1;
+    /* animation-fill-mode: forwards;
+    animation-iteration-count: 1; */
+    animation-play-state: paused;
 }
 
 .custom-loader.success .face .eyes-container .eye:after {

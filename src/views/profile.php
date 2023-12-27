@@ -44,7 +44,7 @@
                             <span>Pomoc</span>
                         </a>
                         <hr>
-                        <a href="#">
+                        <a href="/signout">
                             <i class="material-icons">exit_to_app</i>
                             <span>Wyloguj</span>
                         </a>
@@ -124,11 +124,11 @@
                 </div>
                 <div>
                     <label for="login-reemail"><span>Wprowadź hasło</span></label>
-                    <input type="password" class="main-input" id="login-reemail">
+                    <input type="password" autocomplete="new-password" class="main-input" id="login-reemail">
                 </div>
                 <div>
                     <label for="login-email"><span>Powtórz hasło</span></label>
-                    <input type="password" class="main-input" id="login-password">
+                    <input type="password" autocomplete="new-password" class="main-input" id="login-password">
                 </div>
                 <div>
                     <input type="submit" value="Zapisz" class="main-button normal-text">

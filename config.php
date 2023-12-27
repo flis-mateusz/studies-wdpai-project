@@ -2,7 +2,7 @@
 
 const USERNAME = 'docker';
 const PASSWORD = 'docker';
-const HOST = 'db';
+const HOST = 'server.lan';
 const DATABASE = 'db';
 
 

@@ -12,8 +12,10 @@ class BasicFormController extends FormController {
     }
 
     handleError(error) {
-        this.form.classList.remove('submitting');
         this.showOutput(error, true);
+        setTimeout(() => {
+            this.form.classList.remove('submitting');
+        }, 1000);
     }
 
     onSuccess() {
@@ -49,6 +51,8 @@ class LoginForm extends BasicFormController {
                 redirectToTargetOrDefault()
             }, 2000);
             this.onSuccess();
+        } else {
+            this.handleError(data.message);
         }
     }
 }
@@ -89,6 +93,8 @@ class RegisterForm extends BasicFormController {
                 redirectToTargetOrDefault()
             }, 2000);
             this.onSuccess();
+        } else {
+            this.handleError(data.message);
         }
     }
 }

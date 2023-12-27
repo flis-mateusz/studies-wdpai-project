@@ -142,7 +142,9 @@
             <section>
                 <span>Ostatnie oglądane ogłoszenia</span>
                 <section>
-
+                    <?php
+                    print_r($announcements);
+                    ?>
                 </section>
             </section>
         </section>

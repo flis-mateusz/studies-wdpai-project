@@ -1,23 +1,24 @@
 <?php
 
 require_once 'AppController.php';
-require_once __DIR__ . '/../repository/DogsRepository.php';
+require_once __DIR__ . '/../repository/AnnouncementsRepository.php';
 
 
 class DefaultController extends AppController
 {
 
-    private $dogsRepository;
+    private $announcementsRepository;
 
     public function __construct()
     {
-        // parent::__construct();
-        $this->dogsRepository = new DogsRepository();
+        parent::__construct();
+        $this->announcementsRepository = new AnnouncementsRepository();
     }
 
     public function index()
     {
-        $this->render("dashboard");
+        $announcements = [];//$this->announcementsRepository->getAnnouncements();
+        $this->render("dashboard", ['announcements' => $announcements]);
     }
 
     public function login()
@@ -28,9 +29,5 @@ class DefaultController extends AppController
     public function dashboard()
     {
 
-        $this->render("dashboard", [
-            "title" => "Hello on my dashboard",
-            "dogs" => $this->dogsRepository->getDogs()
-        ]);
     }
 }
