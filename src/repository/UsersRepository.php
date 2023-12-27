@@ -9,7 +9,7 @@ class UsersRepository extends Repository
     {
 
         $stmt = $this->database->connect()->prepare('
-            SELECT * FROM users WHERE email = :email;
+            SELECT * FROM users NATURAL JOIN user_detail WHERE email = :email;
         ');
         $stmt->bindParam(':email', $email);
         $stmt->execute();
@@ -24,23 +24,41 @@ class UsersRepository extends Repository
             $user['user_id'],
             $user['email'],
             $user['password_hash'],
-            'test',
-            'test2'
+            $user['created_at'],
+            $user['name'],
+            $user['surname'],
+            $user['avatar_url']
         );
     }
 
     public function addUser(User $user)
     {
         $stmt = $this->database->connect()->prepare('
-            INSERT INTO users (username, email, password_hash)
-            VALUES (?, ?, ?) RETURNING user_id;
+            INSERT INTO users (email, password_hash)
+            VALUES (?, ?) RETURNING user_id;
         ');
         $stmt->execute([
-            $user->getName(),
             $user->getEmail(),
             $user->getPassword()
         ]);
 
-        return $stmt->fetchColumn();
+        $result = $stmt->fetchColumn();
+        if ($result) {
+            $user->setId($result);
+
+            $stmt = $this->database->connect()->prepare('
+                INSERT INTO user_detail (user_id, name, surname, avatar_url)
+                VALUES (?,?,?,?) RETURNING detail_id;
+            ');
+
+            $stmt->execute([
+                $user->getId(),
+                $user->getName(),
+                $user->getSurname(),
+                $user->getAvatarUrl()
+            ]);
+
+            return $stmt->fetchColumn();
+        }
     }
 }

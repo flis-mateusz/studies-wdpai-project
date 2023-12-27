@@ -68,7 +68,7 @@ class SecurityController extends AppController
             $response->setMessage('Uzupełnij wszystkie pola');
             $response->send();
         }
-        $names = $_POST['register-names'];
+        $name = explode(' ', $_POST['register-names']);
         $email = $_POST['register-email'];
         $password = $_POST['register-password'];
         $repassword = $_POST['register-repassword'];
@@ -78,7 +78,7 @@ class SecurityController extends AppController
             $response->send();
         }
 
-        $user = new User(null, $email, password_hash($password, PASSWORD_DEFAULT), $names, '');
+        $user = new User(null, $email, password_hash($password, PASSWORD_DEFAULT), null, $name[0], $name[1], null);
 
         if ($this->usersRepository->getUser($email) === null) {
             if ($id = $this->usersRepository->addUser($user)) {

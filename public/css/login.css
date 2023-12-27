@@ -168,6 +168,7 @@ span.incentive {
     color: #5033A4;
     font-style: normal;
     font-weight: 500;
+    font-size: inherit !important;
     cursor: pointer;
 }
 
