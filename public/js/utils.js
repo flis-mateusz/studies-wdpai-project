@@ -12,7 +12,7 @@ const isTwoOrMoreWords = (string) => {
 }
 
 function isEmpty(str) {
-    return (!str || str.length === 0 );
+    return (!str || str.length === 0);
 }
 
 function isNotEmpty(str) {
@@ -31,7 +31,7 @@ const isPasswordStrong = (password) => {
 
 const redirectToTargetOrDefault = () => {
     const urlParams = new URLSearchParams(window.location.search);
-    const redirectUrl =  urlParams.get('redirect_url');
+    const redirectUrl = urlParams.get('redirect_url');
     if (redirectUrl) {
         window.location.href = redirectUrl;
     } else {

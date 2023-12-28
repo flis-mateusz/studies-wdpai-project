@@ -1,30 +1,6 @@
-import FormController from './controllers/FormController.js';
+import BasicFormController from './controllers/BasicFormController.js';
 import { TwoOrMoreWordsValidation, EmailValidation, NotEmptyValidation, PasswordValidation, ArePasswordsSameValidation } from './controllers/ValidationStrategy.js'
 import { redirectToTargetOrDefault } from './utils.js'
-
-class BasicFormController extends FormController {
-    constructor(formElement) {
-        super(formElement);
-        this.loader = document.querySelector('.custom-loader');
-    }
-    beforeSend() {
-        this.loader.classList.remove('success');
-        this.form.classList.add('submitting');
-    }
-
-    handleError(error) {
-        this.showOutput(error, true);
-        setTimeout(() => {
-            this.form.classList.remove('submitting');
-        }, 1000);
-    }
-
-    onSuccess() {
-        setTimeout(() => {
-            this.loader.classList.add('success')
-        }, 1000);
-    }
-}
 
 class LoginForm extends BasicFormController {
     constructor(formElement) {
@@ -32,7 +8,7 @@ class LoginForm extends BasicFormController {
         this.url = '/signin'
 
         this.registerInput('login-email', new EmailValidation('Podaj adres email we właściwym formacie'))
-        this.registerInput('login-password', new PasswordValidation(false, ''))
+        this.registerInput('login-password', new NotEmptyValidation(''))
     }
 
     handleResponse(data) {
@@ -56,7 +32,7 @@ class RegisterForm extends BasicFormController {
     }
 
     handleResponse(data) {
-        etTimeout(() => {
+        setTimeout(() => {
             redirectToTargetOrDefault()
         }, 2000);
         this.onSuccess();
@@ -92,3 +68,5 @@ document.querySelectorAll('.switch-form').forEach(button => {
         }
     });
 });
+
+export default BasicFormController;

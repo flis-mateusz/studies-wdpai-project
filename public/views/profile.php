@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="/public/css/header.css">
     <link rel="stylesheet" href="/public/css/profile-edit.css">
     <link rel="stylesheet" href="/public/css/forms.css">
+    <link rel="stylesheet" href="/public/css/custom_loader.css">
     <script type="module" src="/public/js/profile-edit.js" defer></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <title>Mój profil</title>
@@ -112,7 +113,7 @@
             </div>
         </section>
         <section class="panel">
-            <form id="profile-edit-form">
+            <form id="profile-edit-form" class="with-absolute-loader">
                 <div>
                     <section>
                         <div>
@@ -160,6 +161,7 @@
                 <div class="submit-container">
                     <input type="submit" value="Zapisz" class="main-button normal-text">
                 </div>
+                <?php include __DIR__ . '/components/CustomContentLoader.php'; ?>
             </form>
         </section>
     </main>

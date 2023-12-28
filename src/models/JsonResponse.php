@@ -2,6 +2,7 @@
 class JsonResponse
 {
     private $status_code;
+    protected $error;
     protected $data;
 
     public function __construct($data = [])
@@ -15,9 +16,10 @@ class JsonResponse
         $this->data = $data;
     }
 
-    public function setError($data)
+    public function setError($data, $status_code = 400)
     {
-        $this->data['error'] = $data;
+        $this->status_code = $status_code;
+        $this->error = $data;
     }
 
     public function setStatusCode($status_code)
@@ -29,10 +31,20 @@ class JsonResponse
     {
         header('Content-Type: application/json');
         http_response_code($this->status_code);
-        echo json_encode([
+
+        $response = [
             'status' => $this->status_code,
-            'data' => $this->data
-        ]);
+        ];
+
+        if (!empty($this->data)) {
+            $response['data'] = $this->data;
+        }
+
+        if (!empty($this->error)) {
+            $response['error'] = $this->error;
+        }
+
+        echo json_encode($response);
         exit;
     }
 }

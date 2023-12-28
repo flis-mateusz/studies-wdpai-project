@@ -3,25 +3,29 @@
 require_once 'AppController.php';
 require_once 'SecurityController.php';
 require_once 'AttachmentController.php';
-require_once __DIR__ . '/../models/ValidationErrorResponse.php';
+require_once __DIR__ . '/../models/PostFormResponse.php';
 require_once __DIR__ . '/../repository/UsersRepository.php';
 require_once __DIR__ . '/../utils/logger.php';
-require_once __DIR__ . '/../utils/validator.php';
+//require_once __DIR__ . '/../utils/validator.php';
+require_once __DIR__ . '/../utils/forms/PostFormValidator.php';
 
 // echo $_SERVER['DOCUMENT_ROOT'];
 
 class ProfileController extends AppController
 {
     private $usersRepository;
-    private $user;
+    private $securityController;
+    private User $user;
 
     public function __construct()
     {
         parent::__construct();
-        $security = new SecurityController();
-        $this->user = $security->login_required();
 
+        $this->securityController = new SecurityController();
+        $userID = $this->securityController->loginRequired('/profile');
+        
         $this->usersRepository = new UsersRepository();
+        $this->user = $this->usersRepository->getUser(null, $userID);
     }
 
     public function profile()
@@ -31,64 +35,54 @@ class ProfileController extends AppController
 
     public function profile_edit()
     {
-        $response = new ValidationErrorResponse();
-
-        $validator = new PostDataValidator();
-        try {
-            $validator->sanitizeData($_POST, [
-                'edit-names', 'edit-email', 'edit-phone', 'edit-password', 'edit-repassword'
-            ]);
-        } catch (Exception $e) {
-            $response->setStatusCode(400);
-            $response->setData($e->getMessage());
-            $response->send();
+        // VALIDATION
+        $validator = new PostFormValidator($_POST);
+        $validator->addField('edit-names', new TwoOrMoreWordsValidation('Podaj imię i nazwisko'));
+        $validator->addField('edit-email', new EmailValidation('Podaj adres e-mail we właściwym formacie'));
+        $validator->addField('edit-phone', new NotEmptyValidation('Podaj numer telefonu'));
+        $validator->addField('edit-password', new PasswordValidation(true));
+        $validator->addField('edit-repassword', new AreValuesSameValidation('Hasła nie są takie same', 'edit-password', true));
+        if (!$validator->validate()) {
+            $errors = $validator->getErrors();
+            (new PostFormResponse($errors))->send();
         }
+        $data = $validator->getSanitizedData();
+        // END VALIDATION
 
-        $sanitizedData = $validator->getSanitizedData();
+        // PROFILE EDIT
+        $response = new PostFormResponse();
 
-        $name = explode(' ', $sanitizedData['edit-names']);
-        $email = $sanitizedData['edit-email'];
-        $phone = $sanitizedData['edit-phone'];
-        $password = $sanitizedData['edit-password'];
-        $repassword = $sanitizedData['edit-repassword'];
-
-        $new_user = clone $this->user;
+        $name = explode(' ', $data['edit-names']);
+        $email = $data['edit-email'];
+        $phone = $data['edit-phone'];
+        $password = $data['edit-password'];
 
         $avatar = new AttachmentController($_FILES['edit-avatar']);
         if ($avatar->is_uploaded()) {
             try {
                 $avatar_url = $avatar->save();
             } catch (Exception $e) {
-                $response->setData($e->getMessage());
+                $response->setError($e->getMessage());
                 $response->send();
             }
-            $new_user->setAvatarName($avatar_url);
+            $this->user->setAvatarName($avatar_url);
         }
 
-        if (!empty($password) || !empty($repassword)) {
-            if ($password != $repassword) {
-                $response->addErrorField('repassword', 'Hasła różnią się od siebie');
-                $response->send();
-            } else {
-                $new_user->setPassword(password_hash($password, PASSWORD_DEFAULT));
-            }
+        if (!empty($password)) {
+            $this->user->setPassword(password_hash($password, PASSWORD_DEFAULT));
         }
 
-        $new_user->setEmail($email);
-        $new_user->setName($name[0]);
-        $new_user->setSurname($name[1]);
-        $new_user->setPhone($phone);
+        $this->user->setEmail($email);
+        $this->user->setName($name[0]);
+        $this->user->setSurname($name[1]);
+        $this->user->setPhone($phone);
 
         try {
-            $this->usersRepository->updateUser($new_user);
-            $response->setStatusCode(200);
+            $this->usersRepository->updateUser($this->user);
         } catch (EmailExistsException $e) {
-            $response->addErrorField('edit-email', $e->getMessage());
+            $response->addErrorField('edit-email', $e->getMessage(), 409);
         } catch (PhoneExistsException $e) {
-            $response->addErrorField('edit-phone', $e->getMessage());
-        } catch (Exception $e) {
-            $response->setStatusCode(400);
-            $response->setError($e->getMessage());
+            $response->addErrorField('edit-phone', $e->getMessage(), 409);
         }
 
         $response->send();

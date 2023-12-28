@@ -59,6 +59,7 @@ main {
 .panel {
     width: 70%;
     padding: 30px;
+    position: relative;
 }
 
 .panel>form {

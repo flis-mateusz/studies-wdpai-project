@@ -111,6 +111,11 @@ class User implements \JsonSerializable
         return $this->avatar_name;
     }
 
+    public function getAvatarName(): ?string
+    {
+        return $this->avatar_name;
+    }
+
     public function setAvatarName(string $avatar_name): void
     {
         $this->avatar_name = $avatar_name;

@@ -1,4 +1,4 @@
-import { isNotEmpty, isEmpty, isEmail, isTwoOrMoreWords, arePasswordsSame, isPasswordStrong, redirectToTargetOrDefault } from '../utils.js'
+import { isNotEmpty, isEmpty, isEmail, isTwoOrMoreWords, arePasswordsSame, isPasswordStrong } from '../utils.js'
 
 class ValidationStrategy {
     constructor(errorMessage) {

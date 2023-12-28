@@ -1,9 +1,11 @@
-import FormController from './controllers/FormController.js';
+import BasicFormController from './controllers/BasicFormController.js';
 import { TwoOrMoreWordsValidation, EmailValidation, NotEmptyValidation, PasswordValidation, ArePasswordsSameValidation } from './controllers/ValidationStrategy.js'
 
-class ProfileEditForm extends FormController {
+
+class ProfileEditForm extends BasicFormController {
     constructor(formElement) {
         super(formElement);
+        
         this.url = '/profile_edit'
 
         // Avatar section
@@ -14,16 +16,15 @@ class ProfileEditForm extends FormController {
             this.avatar.style.backgroundImage = `url(${e.target.result})`
         }
 
-        const avatarTip = this.form.querySelector('div.avatar-tip');
+        this.avatarTip = this.form.querySelector('div.avatar-tip');
 
         this.form.querySelector('input[type="file"]').addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (file) {
                 reader.readAsDataURL(file);
-                avatarTip.classList.remove('hidden');
+                this.avatarTip.classList.remove('hidden');
             }
         });
-
 
         // Inputs section
         this.registerInput('edit-names', new TwoOrMoreWordsValidation('Wprowadź imię i nazwisko'))
@@ -33,8 +34,20 @@ class ProfileEditForm extends FormController {
         this.registerInput('edit-repassword', new ArePasswordsSameValidation('Hasła nie są identyczne', this.getInputByName('edit-password'), true))
     }
 
+    onSuccess() {
+        setTimeout(() => {
+            this.avatarTip.classList.add('hidden');
+            this.loader.classList.add('success')
+            setTimeout(() => {
+                this.submited();
+            }, 500);
+        }, 500);
+    }
+
     handleResponse(data) {
-        //TODO
+        if (data.status === 200) {
+            this.onSuccess();
+        }
     }
 }
 

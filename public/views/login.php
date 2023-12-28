@@ -47,7 +47,7 @@
                         <span>Witaj ponownie</span>
                         <span>Zaloguj się lub utwórz konto za darmo</span>
                         <hr>
-                        <form id="login-form">
+                        <form id="login-form" class="with-loader">
                             <div class="inputs">
                                 <div>
                                     <label for="login-email"><span>Wprowadź adres e-mail</span></label>
@@ -70,7 +70,7 @@
                         <span>Rejestracja</span>
                         <span>Utwórz konto za darmo</span>
                         <hr>
-                        <form id="register-form" autocomplete="off">
+                        <form id="register-form" autocomplete="off" class="with-loader">
                             <div class="inputs">
                                 <div>
                                     <label for="register-names"><span>Imię i nazwisko</span></label>
@@ -104,7 +104,7 @@
                         <span>Przypomnij hasło</span>
                         <span>Na podany adres e-mail otrzymasz link do zresetowania hasła</span>
                         <hr>
-                        <form id="forgot-password-form">
+                        <form id="forgot-password-form" class="with-loader">
                             <div class="inputs">
                                 <div>
                                     <label for="forgot-password-email">Wprowadź adres e-mail</label>
@@ -118,25 +118,7 @@
                     </div>
                 </section>
             </section>
-            <div class="custom-loader-container">
-                <div class="custom-loader">
-                    <div class="track">
-                        <div class="mouse"></div>
-                    </div>
-                    <div class="face">
-                        <div class="ears-container"></div>
-                        <div class="eyes-container">
-                            <div class="eye"></div>
-                            <div class="eye"></div>
-                        </div>
-                        <div class="phiz">
-                            <div class="nose"></div>
-                            <div class="lip"></div>
-                            <div class="mouth"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <?php include __DIR__ . '/components/CustomContentLoader.php'; ?>
         </section>
     </main>
     <footer></footer>

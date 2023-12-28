@@ -10,23 +10,23 @@ class UserSessionController
         session_start();
     }
 
-    public function is_logged_in()
+    public function isLoggedIn()
     {
-        if ($this->get_user()) {
+        if (isset($_SESSION['userID']) && $_SESSION['userID'] !== null) {
             return true;
         }
         return false;
     }
 
-    public function set_user(User $user)
+    public function setUserID(int $userId)
     {
-        $_SESSION['user'] = serialize($user);
+        $_SESSION['userID'] = $userId;
     }
 
-    public function get_user(): ?User
+    public function getUserID(): ?int
     {
-        if (isset($_SESSION['user'])) {
-            return unserialize($_SESSION['user']);
+        if (isset($_SESSION['userID'])) {
+            return $_SESSION['userID'];
         }
         return null;
     }

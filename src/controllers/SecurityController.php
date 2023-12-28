@@ -3,7 +3,7 @@
 require_once 'AppController.php';
 require_once 'UserSessionController.php';
 require_once __DIR__ . '/../repository/UsersRepository.php';
-require_once __DIR__ . '/../models/ValidationErrorResponse.php';
+require_once __DIR__ . '/../models/PostFormResponse.php';
 require_once __DIR__ . '/../models/JsonResponse.php';
 require_once __DIR__ . '/../models/User.php';
 
@@ -19,94 +19,98 @@ class SecurityController extends AppController
         $this->usersRepository = new UsersRepository();
     }
 
-    public function login_required()
+    public function loginRequired($redirect_uri_if_post = null): ?int
     {
-        if (!$this->session->is_logged_in()) {
+        if (!$this->session->isLoggedIn()) {
+            $redirect_url = '/login?required&redirect_url=' . ($this->isPost() && $redirect_uri_if_post ? $redirect_uri_if_post : $_SERVER['REQUEST_URI']);
+
             if ($this->isPost()) {
                 $response = new JsonResponse();
-                $response->setStatusCode(401);
-                $response->setError('Nie jesteś zalogowany');
+                $response->setError('Nie jesteś zalogowany', 401);
+                $response->setData(['redirect_url' => $redirect_url]);
                 $response->send();
             } else {
-                header('Location: /login?required&redirect_url=' . $_SERVER['REQUEST_URI']);
+                header('Location: ' . $redirect_url);
                 exit;
             }
         }
-        return $this->session->get_user();
+        return $this->session->getUserID();
+    }
+
+    public function getSession()
+    {
+        return $this->session;
     }
 
     public function signin()
     {
-        $response = new ValidationErrorResponse();
+        $response = new PostFormResponse();
 
-        $validator = new PostDataValidator();
-        try {
-            $validator->sanitizeData($_POST, [
-                'login-email', 'login-password'
-            ], true);
-        } catch (Exception $e) {
-            $response->setStatusCode(400);
-            $response->setData($e->getMessage());
+        // VALIDATION
+        $validator = new PostFormValidator($_POST);
+        $validator->addField('login-email', new EmailValidation('Podaj adres e-mail'));
+        $validator->addField('login-password', new NotEmptyValidation('Podaj hasło'));
+        if (!$validator->validate()) {
+            $errors = $validator->getErrors();
+            $response->setErrorFields($errors);
             $response->send();
         }
+        $data = $validator->getSanitizedData();
 
-        $sanitizedData = $validator->getSanitizedData();
-
-        $email = $sanitizedData['login-email'];
-        $password = $sanitizedData['login-password'];
+        // SIGNIN
+        $email = $data['login-email'];
+        $password = $data['login-password'];
         $user = $this->usersRepository->getUser($email);
 
-        if ($user === null) {
-            $response->setError('Nie znaleziono użytkownika');
+        if ($user === null || !password_verify($password, $user->getPassword())) {
+            $response->setError('Nie znaleziono użytkownika', 200);
             $response->send();
         }
 
-        if (password_verify($password, $user->getPassword())) {
-            $this->session->set_user($user);
-            $response->setStatusCode(200);
-        } else {
-            $response->setError('Nie znaleziono użytkownika');
-        }
+        $this->session->setUserID($user->getId());
         $response->send();
     }
 
     public function signup()
     {
-        $response = new ValidationErrorResponse();
+        $response = new PostFormResponse();
 
-        $validator = new PostDataValidator();
-        try {
-            $validator->sanitizeData($_POST, [
-                'register-names', 'register-email', 'register-phone', 'register-password', 'register-repassword'
-            ], true);
-        } catch (Exception $e) {
-            $response->setStatusCode(400);
-            $response->setData($e->getMessage());
+        // VALIDATION
+        $validator = new PostFormValidator($_POST);
+        $validator->addField('register-names', new TwoOrMoreWordsValidation('Podaj imię i nazwisko'));
+        $validator->addField('register-email', new EmailValidation('Podaj adres e-mail'));
+        $validator->addField('register-phone', new NotEmptyValidation('Podaj numer telefonu'));
+        $validator->addField('register-password', new PasswordValidation());
+        $validator->addField('register-repassword', new AreValuesSameValidation('Hasła nie są takie same', 'register-password'));
+        if (!$validator->validate()) {
+            $errors = $validator->getErrors();
+            $response->setErrorFields($errors);
             $response->send();
         }
-        $sanitizedData = $validator->getSanitizedData();
+        $data = $validator->getSanitizedData();
 
-        $name = explode(' ', $sanitizedData['register-names']);
-        $email = $sanitizedData['register-email'];
-        $phone = $sanitizedData['register-phone'];
-        $password = $sanitizedData['register-password'];
-        $repassword = $sanitizedData['register-repassword'];
-
-        if ($password != $repassword) {
-            $response->addErrorField('register-repassword', 'Hasła różnią się');
-            $response->send();
-        }
+        // SIGNUP
+        $name = explode(' ', $data['register-names']);
+        $email = $data['register-email'];
+        $phone = $data['register-phone'];
+        $password = $data['register-password'];
 
         $user = new User(null, $email, password_hash($password, PASSWORD_DEFAULT), null, $name[0], $name[1], null, $phone, false);
 
-        if ($this->usersRepository->getUser($email) === null) {
-            if ($id = $this->usersRepository->addUser($user)) {
-                $this->session->set_user($user);
-                $response->setStatusCode(200);
-            }
+        try {
+            $new_user = $this->usersRepository->addUser($user);
+        } catch (EmailExistsException $e) {
+            $response->addErrorField('register-email', $e->getMessage(), 409);
+            $response->send();
+        } catch (PhoneExistsException $e) {
+            $response->addErrorField('register-phone', $e->getMessage(), 409);
+            $response->send();
+        }
+
+        if ($new_user) {
+            $this->session->setUserID($user->getId());
         } else {
-            $response->setStatusCode(409);
-            $response->setError('Użytkownik już istnieje');
+            $response->setError('Wystąpił wewnętrzny błąd, spróbuj ponownie', 500);
         }
         $response->send();
     }

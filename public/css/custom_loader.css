@@ -51,6 +51,9 @@
     overflow: hidden;
     transition-duration: 250ms;
     max-height: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .custom-loader-container.hidden {
@@ -213,7 +216,6 @@
     height: 12px;
     border-radius: inherit;
     background: #838091;
-    transition-duration: 350ms;
 }
 
 .custom-loader .face .eyes-container .eye:last-child {
@@ -270,11 +272,12 @@
     border-bottom-left-radius: 12px;
 }
 
-.custom-loader.success .track {
-    display: none;
-}
-
 /* SUCCESS ANIMATION */
+
+.custom-loader.success .track {
+    animation-play-state: paused;
+    visibility: hidden;
+}
 
 .custom-loader.success .face:before {
     transition-duration: 350ms;
@@ -309,6 +312,7 @@
 }
 
 .custom-loader.success .face .eyes-container .eye:after {
+    transition-duration: 350ms;
     top: 50%;
     right: 50%;
     transform: translate(50%, -50%);
