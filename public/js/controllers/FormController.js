@@ -1,78 +1,129 @@
+import InputField from './InputController.js';
+
 class FormController {
-    constructor(formElement, url) {
+    constructor(formElement, url, showAllErrors = false) {
         this.form = formElement;
         this.url = url;
-        this.output = this.form.querySelector('.output');
-        this.init();
-    }
+        this.showAllErrors = showAllErrors;
 
-    init() {
+        this.generalOutput = this.form.querySelector('.output');
         this.form.addEventListener('submit', (e) => this.#handleSubmit(e));
-
-        this.form.querySelectorAll('input').forEach(input => {
-            input.addEventListener('input', (e) => {
-                e.target.classList.remove('invalid')
-                this.hideOutput()
-            });
-        });
+        this.inputs = {}
     }
 
-    showOutput(text, error = false) {
-        if (!this.output) {
-            return;
-        }
-        this.output.innerText = text;
-        this.output.classList.add('visible');
-        if (error) {
-            this.output.classList.add('error');
-        } else {
-            this.output.classList.remove('error');
-        }
+    /**
+     * Register a new input field with the form controller
+     * @param {string} inputName - the name of the input field
+     * @param {function} validationStrategy - a function that returns true if the input is valid, or an error message if it is not
+     */
+    registerInput(inputName, validationStrategy) {
+        this.inputs[inputName] = new InputField(this.getInputByName(inputName), validationStrategy);
     }
-
-    hideOutput() {
-        this.output.innerText = '';
-        this.output.classList.remove(['visible', 'error']);
-    }
-
-    validate(formData) { return false; }
-
-    beforeSend() { }
 
     #handleSubmit(e) {
         e.preventDefault();
         this.hideOutput();
-        if (this.validate(new FormData(this.form))) {
+        if (this.validate()) {
             this.beforeSend();
-            this.sendData();
+            this.sendRequest();
         }
+    }
+
+    sendRequest() {
+        fetch(this.url, {
+            method: 'POST',
+            body: new FormData(this.form)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw { response: response, status: response.status };
+                }
+                return response.json();
+            })
+            .then(data => this.handleResponse(data))
+            .catch(error => this._handleError(error));
+    }
+
+    _handleError(error) {
+        if (!error.response) {
+            this.showOutput('Błąd sieciowy lub inny błąd', true);
+            return;
+        }
+
+        const statusCode = error.status;
+        error.response.json().then(data => {
+            switch (statusCode) {
+                case 409:
+                    if (data.data.invalidFields) {
+                        for (const [key, message] of Object.entries(data.data.invalidFields)) {
+                            if (this.inputs[key]) {
+                                this.inputs[key].showError(message);
+                            }
+                        }
+                    }
+                    break;
+                case 400:
+                    this.showOutput(data.data.error, true);
+                    break;
+                default:
+                    console.log(`Nieobsługiwany kod statusu: ${statusCode}`);
+                    break;
+            }
+        }).catch(jsonError => {
+            console.error('Błąd podczas parsowania odpowiedzi JSON', jsonError);
+        });
+
+        this.handleError(error);
+    }
+
+    getInputByName(inputName) {
+        return this.form.querySelector(`input[name="${inputName}"]`);
+    }
+
+    showOutput(text, error = false) {
+        if (!this.generalOutput) {
+            return;
+        }
+        this.generalOutput.innerText = text;
+        this.generalOutput.classList.add('visible');
+        if (error) {
+            this.generalOutput.classList.add('error');
+        } else {
+            this.generalOutput.classList.remove('error');
+        }
+    }
+
+    hideOutput() {
+        this.generalOutput.innerText = '';
+        this.generalOutput.classList.remove(['visible', 'error']);
+    }
+
+    validate() {
+        let isValid = true;
+
+        for (const key in this.inputs) {
+            if (this.inputs.hasOwnProperty(key)) {
+                if (!this.inputs[key].validate()) {
+                    isValid = false;
+                    if (!this.showAllErrors) {
+                        break;
+                    }
+                }
+            }
+        }
+
+        return isValid;
+    }
+
+    handleResponse(data) {
+        throw new Error('Handle response from server not implemented');
     }
 
     handleError(error) {
-        console.log(error);
+        throw new Error('Handle error not implemented');
     }
 
-    sendData() {
-        const formData = new FormData(this.form);
-        fetch(this.url, {
-            method: 'POST',
-            body: formData
-        })
-            .then(response => response.json())
-            .then(data => this.handleResponse(data))
-            .catch(error => this.handleError(error));
-    }
-
-    handleResponse(data) { }
-
-    markInput(inputName, invalid = false) {
-        const input = this.form.querySelector(`input[name="${inputName}"]`);
-        if (invalid) {
-            input.classList.add('invalid');
-        } else {
-            input.classList.remove('invalid');
-        }
-    }
+    beforeSend() { }
 }
 
 export default FormController;

@@ -7,8 +7,10 @@
     <link rel="stylesheet" href="/public/css/main.css">
     <link rel="stylesheet" href="/public/css/header.css">
     <link rel="stylesheet" href="/public/css/login.css">
+    <link rel="stylesheet" href="/public/css/forms.css">
     <link rel="stylesheet" href="/public/css/custom_loader.css">
-    <script type="module" src="/public/js/login_form.js" defer></script>
+    <script type="module" src="/public/js/login-form.js" defer></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <title>Logowanie</title>
 </head>
 
@@ -48,11 +50,11 @@
                         <form id="login-form">
                             <div class="inputs">
                                 <div>
-                                    <label for="login-email">Wprowadź adres e-mail</label>
+                                    <label for="login-email"><span>Wprowadź adres e-mail</span></label>
                                     <input type="email" class="main-input" id="login-email" name="login-email">
                                 </div>
                                 <div>
-                                    <label for="login-email">Wprowadź hasło</label>
+                                    <label for="login-email"><span>Wprowadź hasło</span></label>
                                     <input type="password" class="main-input" id="login-password" name="login-password">
                                     <span class="switch-form forgot-password">Zapomniałem/am hasła</span>
                                 </div>
@@ -71,23 +73,23 @@
                         <form id="register-form" autocomplete="off">
                             <div class="inputs">
                                 <div>
-                                    <label for="register-names">Imię i nazwisko</label>
+                                    <label for="register-names"><span>Imię i nazwisko</span></label>
                                     <input type="text" autocomplete="off" class="main-input" id="register-names" name="register-names">
                                 </div>
                                 <div>
-                                    <label for="register-email">Wprowadź adres e-mail</label>
+                                    <label for="register-email"><span>Wprowadź adres e-mail</span></label>
                                     <input type="email" autocomplete="off" class="main-input" id="register-email" name="register-email">
                                 </div>
                                 <div>
-                                    <label for="register-phone">Wprowadź numer telefonu</label>
+                                    <label for="register-phone"><span>Wprowadź numer telefonu</span></label>
                                     <input type="text" autocomplete="new-password" class="main-input" id="register-phone" name="register-phone">
                                 </div>
                                 <div>
-                                    <label for="register-password">Wprowadź hasło</label>
+                                    <label for="register-password"><span>Wprowadź hasło</span></label>
                                     <input type="password" autocomplete="new-password" class="main-input" id="register-password" name="register-password">
                                 </div>
                                 <div>
-                                    <label for="register-repassword">Powtórz hasło</label>
+                                    <label for="register-repassword"><span>Powtórz hasło</span></label>
                                     <input type="password" autocomplete="new-password" class="main-input" id="register-repassword" name="register-repassword">
                                 </div>
                             </div>

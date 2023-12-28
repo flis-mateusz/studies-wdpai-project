@@ -1,6 +1,6 @@
 <?php
 
-class User
+class User implements \JsonSerializable
 {
     private $id;
     private $email;
@@ -8,7 +8,7 @@ class User
     private $created_at;
     private $name;
     private $surname;
-    private $avatar_url;
+    private $avatar_name;
     private $phone;
     private $is_admin;
 
@@ -19,9 +19,9 @@ class User
         ?string $created_at,
         string $name,
         string $surname,
-        ?string $avatar_url,
+        ?string $avatar_name,
         ?string $phone,
-        ?bool $is_admin
+        ?bool $is_admin = false
     ) {
         $this->id = $id;
         $this->email = $email;
@@ -33,7 +33,7 @@ class User
 
         $this->name = $name;
         $this->surname = $surname;
-        $this->avatar_url = $avatar_url;
+        $this->avatar_name = $avatar_name;
         $this->phone = $phone;
         $this->is_admin = $is_admin;
     }
@@ -53,9 +53,19 @@ class User
         return $this->email;
     }
 
+    public function setEmail(string $email): void
+    {
+        $this->email = $email;
+    }
+
     public function getPassword()
     {
         return $this->password;
+    }
+
+    public function setPassword($password)
+    {
+        $this->password = $password;
     }
 
     public function getCreatedAt(): DateTime
@@ -88,17 +98,25 @@ class User
         $this->surname = $surname;
     }
 
+    public function getFullName(): string
+    {
+        return $this->name . ' ' . $this->surname;
+    }
+
     public function getAvatarUrl(): ?string
     {
-        return $this->avatar_url;
+        if ($this->avatar_name) {
+            return '/public/images/uploads/' . $this->avatar_name;
+        }
+        return $this->avatar_name;
     }
 
-    public function setAvatarUrl(string $avatar_url): void
+    public function setAvatarName(string $avatar_name): void
     {
-        $this->avatar_url = $avatar_url;
+        $this->avatar_name = $avatar_name;
     }
 
-    public function getPhone():?string
+    public function getPhone(): ?string
     {
         return $this->phone;
     }
@@ -108,7 +126,7 @@ class User
         $this->phone = $phone;
     }
 
-    public function isAdmin():?bool
+    public function isAdmin(): bool
     {
         return $this->is_admin;
     }
@@ -116,5 +134,10 @@ class User
     public function setIsAdmin(bool $is_admin): void
     {
         $this->is_admin = $is_admin;
+    }
+
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

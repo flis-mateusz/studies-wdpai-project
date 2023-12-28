@@ -147,10 +147,6 @@ form div.inputs {
     gap: 15px;
 }
 
-div.inputs>div:has(> input.invalid)>label {
-    color: red;
-}
-
 div.inputs>div {
     display: flex;
     flex-direction: column;
@@ -158,10 +154,7 @@ div.inputs>div {
 }
 
 div.inputs>div>label {
-    font-size: 0.9em;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
+    font-size: 1em;
 }
 
 span.incentive {
@@ -170,15 +163,6 @@ span.incentive {
     font-weight: 500;
     font-size: inherit !important;
     cursor: pointer;
-}
-
-form span.output {
-    font-size: 0.9em;
-    font-weight: normal;
-}
-
-form span.output.error {
-    color: red;
 }
 
 span.forgot-password {

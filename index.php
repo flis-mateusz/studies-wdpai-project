@@ -15,6 +15,7 @@ Router::post('signup', 'SecurityController');
 Router::get('signout', 'SecurityController');
 
 Router::get('profile', 'ProfileController');
+Router::post('profile_edit', 'ProfileController');
 
 Router::get('add_announcement', 'AnnouncementController');
 Router::get('announcement', 'AnnouncementController');

@@ -1,3 +1,9 @@
+<?php
+
+/**
+ * @var User $user
+ */
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,7 +12,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/public/css/main.css">
     <link rel="stylesheet" href="/public/css/header.css">
-    <link rel="stylesheet" href="/public/css/profile.css">
+    <link rel="stylesheet" href="/public/css/profile-edit.css">
+    <link rel="stylesheet" href="/public/css/forms.css">
+    <script type="module" src="/public/js/profile-edit.js" defer></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <title>Mój profil</title>
 </head>
@@ -104,37 +112,52 @@
             </div>
         </section>
         <section class="panel">
-            <form>
-                <div class="basic-info">
-                    <div>
+            <form id="profile-edit-form">
+                <div>
+                    <section>
                         <div>
-                            <label for="edit-name"><span>Imię i nazwisko</span></label>
-                            <input type="text" class="main-input" id="edit-name">
+                            <label for="edit-names"><span>Twoje imię i nazwisko</span></label>
+                            <input type="text" class="main-input" id="edit-names" name="edit-names" value="<?php echo $user->getFullName(); ?>">
                         </div>
                         <div>
-                            <label for="edit-email"><span>Wprowadź adres e-mail</span></label>
-                            <input type="text" class="main-input" id="edit-email">
+                            <label for="edit-email"><span>Twój adres e-mail</span></label>
+                            <input type="email" class="main-input" id="edit-email" name="edit-email" value="<?php echo $user->getEmail(); ?>">
                         </div>
-                    </div>
-                    <div class="avatar resp">
                         <div>
-                            <i class="material-icons">file_upload</i>
+                            <label for="edit-phone"><span>Twój numer telefonu</span></label>
+                            <input type="text" autocomplete="new-password" class="main-input" id="edit-phone" name="edit-phone" value="<?php echo $user->getPhone(); ?>">
                         </div>
-                    </div>
+                        <div>
+                            <label for="edit-password"><span>Ustaw nowe hasło</span></label>
+                            <input type="password" autocomplete="new-password" class="main-input" id="edit-password" name="edit-password">
+                        </div>
+                        <div>
+                            <label for="edit-email"><span>Powtórz nowe hasło</span></label>
+                            <input type="password" autocomplete="new-password" class="main-input" id="edit-repassword" name="edit-repassword">
+                        </div>
+                    </section>
+                    <section class="align-end">
+                        <div class="avatar-form">
+                            <div class="avatar resp" <?php
+                                                        if ($user->getAvatarUrl()) {
+                                                            echo 'style="background-image: url(' . $user->getAvatarUrl() . ');"';
+                                                        }
+                                                        ?>>
+                                <label for="edit-avatar">
+                                    <div>
+                                        <i class="material-icons">file_upload</i>
+                                        <input type="file" class="main-input" id="edit-avatar" name="edit-avatar">
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="tip avatar-tip hidden">
+                                <span>Zmiany nie są jeszcze zapisane</span>
+                            </div>
+                        </div>
+                    </section>
                 </div>
-                <div>
-                    <label for="edit-phone"><span>Wprowadź numer telefonu</span></label>
-                    <input type="password" autocomplete="new-password" class="main-input" id="edit-phone">
-                </div>
-                <div>
-                    <label for="edit-password"><span>Wprowadź hasło</span></label>
-                    <input type="password" autocomplete="new-password" class="main-input" id="edit-password">
-                </div>
-                <div>
-                    <label for="edit-email"><span>Powtórz hasło</span></label>
-                    <input type="password" autocomplete="new-password" class="main-input" id="edit-repassword">
-                </div>
-                <div>
+                <span class="output"></span>
+                <div class="submit-container">
                     <input type="submit" value="Zapisz" class="main-button normal-text">
                 </div>
             </form>

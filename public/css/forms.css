@@ -1,0 +1,46 @@
+form span.output {
+    font-size: 0.9em;
+    font-weight: normal;
+}
+
+form span.output.error {
+    color: #ff3333;
+}
+
+form label>span {
+    display: flex;
+    align-items: center;
+    gap: 0px;
+}
+
+form label>span::before {
+    font-family: 'Material Icons';
+    content: 'error_outline';
+    font-size: 1.3em;
+    color: #ff3333;
+    max-width: 0px;
+    overflow: hidden;
+    transition-duration: 250ms;
+}
+
+form div:has(> input.invalid)>label>span {
+    gap: 5px;
+}
+
+form div:has(> input.invalid)>label>span::before {
+    max-width: 25px;
+}
+
+form span.input-output {
+    text-align: center;
+    font-size: 0.8em;
+    color: #ff3333;
+    max-height: 0px;
+    overflow: hidden;
+    transition-duration: 450ms;
+    transition-property: max-height;
+}
+
+form span.input-output.visible {
+    max-height: 60px;
+}

@@ -64,29 +64,41 @@ main {
 .panel>form {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 10px;
+    width: 100%;
+    justify-content: space-between;
 }
 
-.panel .basic-info {
+.panel>form>div {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    gap: 10px;
+    gap: 25px;
 }
 
-.basic-info>div {
+.panel>form section {
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    flex: 1 0 0;
+    gap: 10px;
+    flex: 1;
 }
 
-.basic-info .avatar {
+.panel>form section>div {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    width: 300px;
+}
+
+.submit-container {
+    align-items: flex-end;
+}
+
+.panel div>.avatar {
     max-width: 166px;
     cursor: pointer;
 }
 
-.basic-info .avatar div {
+.panel div>.avatar div {
     position: absolute;
     display: none;
     width: calc(100% + 2px);
@@ -99,20 +111,39 @@ main {
     background: rgb(255 255 255 / 80%);
 }
 
-.basic-info .avatar div i {
-    font-size: 1em;
+.panel div>.avatar input[type="file"] {
+    display: none;
 }
 
-.basic-info .avatar:hover div {
+.panel div>.avatar label {
     display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.basic-info input[type="text"] {
-    width: 50%;
+.panel div>.avatar div i {
+    font-size: 1em;
+    cursor: pointer;
 }
 
-.panel>form input:not([type="submit"]) {
-    width: 300px;
+.panel div>.avatar:hover div {
+    display: flex;
+    cursor: pointer;
+}
+
+.avatar-form {
+    width: 100% !important;
+    align-items: flex-end;
+    gap: 15px !important;
+}
+
+.avatar-form i {
+    user-select: none;
+}
+
+.avatar-form:has(.avatar-tip:not(.hidden)) {
+    align-items: center;
+    max-width: max-content;
 }
 
 .panel>form input[type="submit"] {
@@ -120,7 +151,7 @@ main {
     width: 100px;
 }
 
-.panel>form>div:last-child {
+.panel>form>div:has(>input[type="submit"]) {
     display: flex;
     justify-content: flex-end;
 }
@@ -213,16 +244,25 @@ main {
         position: unset !important;
     }
 
-    .panel>form input:not([type="submit"]) {
-        width: 100%;
-        height: unset;
+    .panel form {
+        flex-direction: column;
     }
 
-    .panel .basic-info {
+    .panel form>div {
+        width: 100%;
         flex-direction: column-reverse;
     }
 
-    .panel .basic-info>div {
+    .panel form>div>section {
         width: 100%;
+        align-items: center;
+    }
+
+    .panel form>div>section>div {
+        width: 100%;
+    }
+
+    .avatar-form {
+        align-items: center;
     }
 }

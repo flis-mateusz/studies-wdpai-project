@@ -84,7 +84,6 @@
                     <div class="info">Dodaj zdjęcie w formacie jpg, jped, png lub gif</div>
                     <div>Przeciągnij lub kliknij aby dodać zdjęcie</div>
                     <div class="tip">
-                        <i class="material-icons">lightbulb_outline</i>
                         <span>Jakość zdjęcia wpływa na atrakcyjność ogłoszenia</span>
                     </div>
                 </div>
@@ -165,7 +164,6 @@
                     <div class="info">Podaj szczegółowe informacje o zwierzaku, a unikniesz pytań od zainteresowanych
                     </div>
                     <div class="tip">
-                        <i class="material-icons">lightbulb_outline</i>
                         <span>Dokładny i rzetelny opis statystycznie zwiększa szansę na adopcję zwierzaka</span>
                     </div>
                     <div>

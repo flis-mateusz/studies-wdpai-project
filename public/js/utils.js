@@ -11,6 +11,14 @@ const isTwoOrMoreWords = (string) => {
     return words.length >= 2;
 }
 
+function isEmpty(str) {
+    return (!str || str.length === 0 );
+}
+
+function isNotEmpty(str) {
+    return (str || str.length > 0);
+}
+
 const isPasswordStrong = (password) => {
     const minLength = 8;
     const hasUpperCase = /[A-Z]/.test(password);
@@ -31,4 +39,4 @@ const redirectToTargetOrDefault = () => {
     }
 }
 
-export { arePasswordsSame, isEmail, isTwoOrMoreWords, isPasswordStrong, redirectToTargetOrDefault };
+export { arePasswordsSame, isEmail, isTwoOrMoreWords, isPasswordStrong, redirectToTargetOrDefault, isEmpty, isNotEmpty };

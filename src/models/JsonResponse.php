@@ -1,25 +1,13 @@
 <?php
 class JsonResponse
 {
-    private $success;
-    private $message;
-    private $data;
+    private $status_code;
+    protected $data;
 
-    public function __construct($success = false, $message = '', $data = [])
+    public function __construct($data = [])
     {
-        $this->success = $success;
-        $this->message = $message;
+        $this->status_code = 200;
         $this->data = $data;
-    }
-
-    public function setSuccess($success)
-    {
-        $this->success = $success;
-    }
-
-    public function setMessage($message)
-    {
-        $this->message = $message;
     }
 
     public function setData($data)
@@ -27,12 +15,22 @@ class JsonResponse
         $this->data = $data;
     }
 
+    public function setError($data)
+    {
+        $this->data['error'] = $data;
+    }
+
+    public function setStatusCode($status_code)
+    {
+        $this->status_code = $status_code;
+    }
+
     public function send()
     {
         header('Content-Type: application/json');
+        http_response_code($this->status_code);
         echo json_encode([
-            'success' => $this->success,
-            'message' => $this->message,
+            'status' => $this->status_code,
             'data' => $this->data
         ]);
         exit;

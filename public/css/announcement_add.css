@@ -45,20 +45,6 @@ section>div.field>.info {
     font-size: 0.8em;
 }
 
-section div.tip {
-    flex-direction: row !important;
-    align-items: center;
-    gap: 10px;
-    background-color: #efeaff;
-    padding: 8px 15px;
-    border-radius: 10px;
-}
-
-section div.tip span {
-    font-size: 0.9em;
-    text-align: left;
-}
-
 .characteristics {
     display: grid;
     grid-template-columns: 1fr 1fr;

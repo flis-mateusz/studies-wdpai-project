@@ -3,6 +3,7 @@
 require_once 'AppController.php';
 require_once 'UserSessionController.php';
 require_once __DIR__ . '/../repository/UsersRepository.php';
+require_once __DIR__ . '/../models/ValidationErrorResponse.php';
 require_once __DIR__ . '/../models/JsonResponse.php';
 require_once __DIR__ . '/../models/User.php';
 
@@ -21,66 +22,91 @@ class SecurityController extends AppController
     public function login_required()
     {
         if (!$this->session->is_logged_in()) {
-            header('Location: /login?required&redirect_url=' . $_SERVER['REQUEST_URI']);
-            exit;
+            if ($this->isPost()) {
+                $response = new JsonResponse();
+                $response->setStatusCode(401);
+                $response->setError('Nie jesteś zalogowany');
+                $response->send();
+            } else {
+                header('Location: /login?required&redirect_url=' . $_SERVER['REQUEST_URI']);
+                exit;
+            }
         }
+        return $this->session->get_user();
     }
 
     public function signin()
     {
-        $response = new JsonResponse();
+        $response = new ValidationErrorResponse();
 
-        if (empty($_POST['login-email']) || empty($_POST['login-password'])) {
-            $response->setMessage('Email i hasło jest wymagane');
+        $validator = new PostDataValidator();
+        try {
+            $validator->sanitizeData($_POST, [
+                'login-email', 'login-password'
+            ], true);
+        } catch (Exception $e) {
+            $response->setStatusCode(400);
+            $response->setData($e->getMessage());
             $response->send();
         }
 
-        $email = $_POST['login-email'];
-        $password = $_POST['login-password'];
+        $sanitizedData = $validator->getSanitizedData();
+
+        $email = $sanitizedData['login-email'];
+        $password = $sanitizedData['login-password'];
         $user = $this->usersRepository->getUser($email);
 
         if ($user === null) {
-            $response->setMessage('Nie znaleziono użytkownika');
+            $response->setError('Nie znaleziono użytkownika');
             $response->send();
         }
 
         if (password_verify($password, $user->getPassword())) {
             $this->session->set_user($user);
-            $response->setSuccess(true);
+            $response->setStatusCode(200);
         } else {
-            $response->setMessage('Nie znaleziono użytkownika');
+            $response->setError('Nie znaleziono użytkownika');
         }
         $response->send();
     }
 
     public function signup()
     {
-        $response = new JsonResponse();
+        $response = new ValidationErrorResponse();
 
-        if (empty($_POST['register-names']) || empty($_POST['register-email']) || empty($_POST['register-password']) || empty($_POST['register-repassword'])) {
-            $response->setMessage('Uzupełnij wszystkie pola');
+        $validator = new PostDataValidator();
+        try {
+            $validator->sanitizeData($_POST, [
+                'register-names', 'register-email', 'register-phone', 'register-password', 'register-repassword'
+            ], true);
+        } catch (Exception $e) {
+            $response->setStatusCode(400);
+            $response->setData($e->getMessage());
             $response->send();
         }
-        $name = explode(' ', $_POST['register-names']);
-        $email = $_POST['register-email'];
-        $phone = $_POST['register-phone'];
-        $password = $_POST['register-password'];
-        $repassword = $_POST['register-repassword'];
+        $sanitizedData = $validator->getSanitizedData();
+
+        $name = explode(' ', $sanitizedData['register-names']);
+        $email = $sanitizedData['register-email'];
+        $phone = $sanitizedData['register-phone'];
+        $password = $sanitizedData['register-password'];
+        $repassword = $sanitizedData['register-repassword'];
 
         if ($password != $repassword) {
-            $response->setMessage('Hasła nie są takie same');
+            $response->addErrorField('register-repassword', 'Hasła różnią się');
             $response->send();
         }
 
-        $user = new User(null, $email, password_hash($password, PASSWORD_DEFAULT), null, $name[0], $name[1], null, $phone);
+        $user = new User(null, $email, password_hash($password, PASSWORD_DEFAULT), null, $name[0], $name[1], null, $phone, false);
 
         if ($this->usersRepository->getUser($email) === null) {
             if ($id = $this->usersRepository->addUser($user)) {
                 $this->session->set_user($user);
-                $response->setSuccess(true);
+                $response->setStatusCode(200);
             }
         } else {
-            $response->setMessage('Użytkownik już istnieje');
+            $response->setStatusCode(409);
+            $response->setError('Użytkownik już istnieje');
         }
         $response->send();
     }
