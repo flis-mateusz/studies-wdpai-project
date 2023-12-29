@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../utils.php';
+require_once __DIR__ . '/../utils/utils.php';
 
 
 class TwoOrMoreWordsValidation extends ValidationStrategy
@@ -24,6 +24,13 @@ class NotEmptyValidation extends ValidationStrategy
     public function validate($value): bool
     {
         return isNotEmpty($value);
+    }
+}
+
+class PhoneNumberValidation extends ValidationStrategy {
+    public function validate($value): bool
+    {
+        return isPhoneNumber($value);
     }
 }
 

@@ -11,12 +11,17 @@ const isTwoOrMoreWords = (string) => {
     return words.length >= 2;
 }
 
-function isEmpty(str) {
+const isEmpty = (str) => {
     return (!str || str.length === 0);
 }
 
-function isNotEmpty(str) {
+const isNotEmpty = (str) => {
     return (str || str.length > 0);
+}
+
+const isPhoneNumber = (value) => {
+    const pattern = /^\d{9}$/;
+    return pattern.test(value);
 }
 
 const isPasswordStrong = (password) => {
@@ -39,4 +44,4 @@ const redirectToTargetOrDefault = () => {
     }
 }
 
-export { arePasswordsSame, isEmail, isTwoOrMoreWords, isPasswordStrong, redirectToTargetOrDefault, isEmpty, isNotEmpty };
+export { arePasswordsSame, isEmail, isTwoOrMoreWords, isPasswordStrong, redirectToTargetOrDefault, isEmpty, isNotEmpty, isPhoneNumber };

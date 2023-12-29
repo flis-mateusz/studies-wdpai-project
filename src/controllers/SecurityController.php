@@ -1,45 +1,21 @@
 <?php
 
 require_once 'AppController.php';
-require_once 'UserSessionController.php';
-require_once __DIR__ . '/../repository/UsersRepository.php';
-require_once __DIR__ . '/../models/PostFormResponse.php';
-require_once __DIR__ . '/../models/JsonResponse.php';
 require_once __DIR__ . '/../models/User.php';
+require_once __DIR__ . '/../repository/UsersRepository.php';
+require_once __DIR__ . '/../responses/JsonResponse.php';
+require_once __DIR__ . '/../responses/PostFormResponse.php';
+require_once __DIR__ . '/../validation/PostFormValidator.php';
 
 class SecurityController extends AppController
 {
     private $usersRepository;
-    private $session;
 
     public function __construct()
     {
         parent::__construct();
-        $this->session = new UserSessionController();
+
         $this->usersRepository = new UsersRepository();
-    }
-
-    public function loginRequired($redirect_uri_if_post = null): ?int
-    {
-        if (!$this->session->isLoggedIn()) {
-            $redirect_url = '/login?required&redirect_url=' . ($this->isPost() && $redirect_uri_if_post ? $redirect_uri_if_post : $_SERVER['REQUEST_URI']);
-
-            if ($this->isPost()) {
-                $response = new JsonResponse();
-                $response->setError('Nie jesteś zalogowany', 401);
-                $response->setData(['redirect_url' => $redirect_url]);
-                $response->send();
-            } else {
-                header('Location: ' . $redirect_url);
-                exit;
-            }
-        }
-        return $this->session->getUserID();
-    }
-
-    public function getSession()
-    {
-        return $this->session;
     }
 
     public function signin()
@@ -48,8 +24,8 @@ class SecurityController extends AppController
 
         // VALIDATION
         $validator = new PostFormValidator($_POST);
-        $validator->addField('login-email', new EmailValidation('Podaj adres e-mail'));
-        $validator->addField('login-password', new NotEmptyValidation('Podaj hasło'));
+        $validator->addField('login-email', new EmailValidation('Wprowadź adres e-mail'));
+        $validator->addField('login-password', new NotEmptyValidation('Wprowadź hasło'));
         if (!$validator->validate()) {
             $errors = $validator->getErrors();
             $response->setErrorFields($errors);
@@ -67,7 +43,7 @@ class SecurityController extends AppController
             $response->send();
         }
 
-        $this->session->setUserID($user->getId());
+        $this->getSession()->setUserID($user->getId());
         $response->send();
     }
 
@@ -77,9 +53,9 @@ class SecurityController extends AppController
 
         // VALIDATION
         $validator = new PostFormValidator($_POST);
-        $validator->addField('register-names', new TwoOrMoreWordsValidation('Podaj imię i nazwisko'));
-        $validator->addField('register-email', new EmailValidation('Podaj adres e-mail'));
-        $validator->addField('register-phone', new NotEmptyValidation('Podaj numer telefonu'));
+        $validator->addField('register-names', new TwoOrMoreWordsValidation('Wprowadź imię i nazwisko'));
+        $validator->addField('register-email', new EmailValidation('Wprowadź adres e-mail'));
+        $validator->addField('register-phone', new NotEmptyValidation('Wprowadź prawidłowy numer telefonu'));
         $validator->addField('register-password', new PasswordValidation());
         $validator->addField('register-repassword', new AreValuesSameValidation('Hasła nie są takie same', 'register-password'));
         if (!$validator->validate()) {
@@ -108,7 +84,7 @@ class SecurityController extends AppController
         }
 
         if ($new_user) {
-            $this->session->setUserID($user->getId());
+            $this->getSession()->setUserID($user->getId());
         } else {
             $response->setError('Wystąpił wewnętrzny błąd, spróbuj ponownie', 500);
         }
@@ -117,7 +93,7 @@ class SecurityController extends AppController
 
     public function signout()
     {
-        $this->session->destroy();
+        $this->getSession()->destroy();
         if (isset($_SERVER['HTTP_REFERER'])) {
             header('Location: ' . $_SERVER['HTTP_REFERER']);
             exit;

@@ -1,4 +1,4 @@
-import { isNotEmpty, isEmpty, isEmail, isTwoOrMoreWords, arePasswordsSame, isPasswordStrong } from '../utils.js'
+import { isNotEmpty, isEmpty, isEmail, isTwoOrMoreWords, arePasswordsSame, isPasswordStrong, isPhoneNumber } from '../utils.js'
 
 class ValidationStrategy {
     constructor(errorMessage) {
@@ -25,6 +25,12 @@ class EmailValidation extends ValidationStrategy {
 class NotEmptyValidation extends ValidationStrategy {
     validate(value) {
         return isNotEmpty(value);
+    }
+}
+
+class PhoneNumberValidation extends ValidationStrategy {
+    validate(value) {
+        return isPhoneNumber(value);
     }
 }
 
@@ -59,4 +65,4 @@ class ArePasswordsSameValidation extends ValidationStrategy {
     }
 }
 
-export { TwoOrMoreWordsValidation, EmailValidation, NotEmptyValidation, PasswordValidation, ArePasswordsSameValidation };
+export { TwoOrMoreWordsValidation, EmailValidation, NotEmptyValidation, PasswordValidation, ArePasswordsSameValidation, PhoneNumberValidation };

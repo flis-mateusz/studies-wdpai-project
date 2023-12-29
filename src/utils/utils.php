@@ -30,6 +30,12 @@ function isNotEmpty($str)
     return isset($str) && strlen($str) > 0;
 }
 
+function isPhoneNumber($value)
+{
+    $pattern = '/^\d{9}$/';
+    return preg_match($pattern, $value);
+}
+
 function isPasswordStrong($password)
 {
     $minLength = 8;

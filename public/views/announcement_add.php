@@ -1,3 +1,14 @@
+<?php
+
+/**
+ * @var ?User $user
+ */
+
+require_once __DIR__ . '/components/HeaderComponent.php';
+
+HeaderComponent::initialize();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,57 +16,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/public/css/main.css">
-    <link rel="stylesheet" href="/public/css/header.css">
     <link rel="stylesheet" href="/public/css/announcement_add.css">
+    <?php
+    ResourceManager::appendResources();
+    ?>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <title>Dodaj ogłoszenie</title>
 </head>
 
 <body>
-    <header>
-        <nav>
-            <div class="submenu">
-                <div>
-                    <span>Dodaj ogłoszenie</span>
-                </div>
-                <div>
-                    <a href="/">Strona główna</a>
-                    <a>Ogłoszenia</a>
-                    <a>Kontakt</a>
-                </div>
-            </div>
-            <div class="menu-dropdown">
-                <input class="menu-button" type="checkbox" id="menu-button" />
-                <label class="menu-icon" for="menu-button"><span class="navicon"></span></label>
-                <div class="avatar"></div>
-                <div class="menu-dropdown-content">
-                    <div>
-                        <a href="/add_announcement">
-                            <i class="material-icons">add_circle_outline</i>
-                            <span>Dodaj ogłoszenie</span>
-                        </a>
-                        <a href="/profile">
-                            <i class="material-icons">account_circle</i>
-                            <span>Mój profil</span>
-                        </a>
-                        <a href="#">
-                            <i class="material-icons">favorite_border</i>
-                            <span>Obserwowane</span>
-                        </a>
-                        <a href="#">
-                            <i class="material-icons">help_outline</i>
-                            <span>Pomoc</span>
-                        </a>
-                        <hr>
-                        <a href="/signout">
-                            <i class="material-icons">exit_to_app</i>
-                            <span>Wyloguj</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </nav>
-    </header>
+    <?php
+    (new HeaderComponent($user))->render();
+    ?>
     <main class="static-bgcolor">
         <form>
             <section>

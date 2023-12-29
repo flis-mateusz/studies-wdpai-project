@@ -317,3 +317,9 @@
     right: 50%;
     transform: translate(50%, -50%);
 }
+
+@media screen and (max-width: 350px) {
+    .custom-loader {
+        transform: scale(0.8);
+    }
+}

@@ -171,13 +171,6 @@ span.forgot-password {
     cursor: pointer;
 }
 
-@media screen and (max-width: 720px) {
-    header .logo {
-        display: none;
-    }
-}
-
-
 @media screen and (max-width: 520px) {
     .welcome-image {
         width: 0px;
@@ -191,11 +184,5 @@ span.forgot-password {
     .forms-container>section>div {
         padding: 15px;
         overflow: hidden;
-    }
-}
-
-@media screen and (max-width: 350px) {
-    .custom-loader {
-        transform: scale(0.8);
     }
 }

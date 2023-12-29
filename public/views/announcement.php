@@ -1,3 +1,14 @@
+<?php
+
+/**
+ * @var ?User $user
+ */
+
+require_once __DIR__ . '/components/HeaderComponent.php';
+
+HeaderComponent::initialize();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,14 +17,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/public/css/main.css">
     <link rel="stylesheet" href="/public/css/icons.css">
-    <link rel="stylesheet" href="/public/css/header.css">
     <link rel="stylesheet" href="/public/css/announcement.css">
+    <?php
+    ResourceManager::appendResources();
+    ?>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <title>Ogłoszenie</title>
 </head>
 
 <body>
-    <header>
+    <!-- <header>
         <nav>
             <div class="submenu">
                 <div>
@@ -59,7 +72,10 @@
                 </div>
             </div>
         </nav>
-    </header>
+    </header> -->
+    <?php
+    (new HeaderComponent($user))->render();
+    ?>
     <main>
         <section class="announcement-header">
             <div>

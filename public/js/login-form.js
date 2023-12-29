@@ -1,5 +1,5 @@
 import BasicFormController from './controllers/BasicFormController.js';
-import { TwoOrMoreWordsValidation, EmailValidation, NotEmptyValidation, PasswordValidation, ArePasswordsSameValidation } from './controllers/ValidationStrategy.js'
+import { TwoOrMoreWordsValidation, EmailValidation, NotEmptyValidation, PasswordValidation, ArePasswordsSameValidation, PhoneNumberValidation } from './validation/ValidationStrategy.js'
 import { redirectToTargetOrDefault } from './utils.js'
 
 class LoginForm extends BasicFormController {
@@ -7,7 +7,7 @@ class LoginForm extends BasicFormController {
         super(formElement);
         this.url = '/signin'
 
-        this.registerInput('login-email', new EmailValidation('Podaj adres email we właściwym formacie'))
+        this.registerInput('login-email', new EmailValidation('Wprowadź adres email we właściwym formacie'))
         this.registerInput('login-password', new NotEmptyValidation(''))
     }
 
@@ -24,9 +24,9 @@ class RegisterForm extends BasicFormController {
         super(formElement);
         this.url = '/signup'
 
-        this.registerInput('register-names', new TwoOrMoreWordsValidation('Podaj imię i nazwisko'))
-        this.registerInput('register-email', new EmailValidation('Podaj adres email we właściwym formacie'))
-        this.registerInput('register-phone', new NotEmptyValidation('Podaj numer telefonu'))
+        this.registerInput('register-names', new TwoOrMoreWordsValidation('Wprowadź imię i nazwisko'))
+        this.registerInput('register-email', new EmailValidation('Wprowadź adres email we właściwym formacie'))
+        this.registerInput('register-phone', new PhoneNumberValidation('Wprowadź prawidłowy numer telefonu'))
         this.registerInput('register-password', new PasswordValidation())
         this.registerInput('register-repassword', new ArePasswordsSameValidation('Hasła nie są identyczne', this.getInputByName('register-password'), true))
     }

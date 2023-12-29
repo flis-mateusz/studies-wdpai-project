@@ -1,19 +1,21 @@
 import BasicFormController from './controllers/BasicFormController.js';
-import { TwoOrMoreWordsValidation, EmailValidation, NotEmptyValidation, PasswordValidation, ArePasswordsSameValidation } from './controllers/ValidationStrategy.js'
+import { TwoOrMoreWordsValidation, EmailValidation, NotEmptyValidation, PasswordValidation, ArePasswordsSameValidation, PhoneNumberValidation } from './validation/ValidationStrategy.js'
 
 
 class ProfileEditForm extends BasicFormController {
     constructor(formElement) {
         super(formElement);
-        
+
         this.url = '/profile_edit'
 
         // Avatar section
         this.avatar = this.form.querySelector('div.avatar.resp');
+        this.headerAvatar = document.querySelector('header div.avatar');
 
         const reader = new FileReader();
         reader.onload = (e) => {
             this.avatar.style.backgroundImage = `url(${e.target.result})`
+            this.headerAvatar.style.backgroundImage = `url(${e.target.result})`
         }
 
         this.avatarTip = this.form.querySelector('div.avatar-tip');
@@ -29,12 +31,13 @@ class ProfileEditForm extends BasicFormController {
         // Inputs section
         this.registerInput('edit-names', new TwoOrMoreWordsValidation('Wprowadź imię i nazwisko'))
         this.registerInput('edit-email', new EmailValidation('Wprowadź adres e-mail we właściwym formacie'))
-        this.registerInput('edit-phone', new NotEmptyValidation('Wprowadź numer telefonu'))
+        this.registerInput('edit-phone', new PhoneNumberValidation('Wprowadź prawidłowy numer telefonu'))
         this.registerInput('edit-password', new PasswordValidation(true))
         this.registerInput('edit-repassword', new ArePasswordsSameValidation('Hasła nie są identyczne', this.getInputByName('edit-password'), true))
     }
 
     onSuccess() {
+        this.getInputByName('edit-avatar').value = '';
         setTimeout(() => {
             this.avatarTip.classList.add('hidden');
             this.loader.classList.add('success')

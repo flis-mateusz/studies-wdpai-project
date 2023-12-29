@@ -6,7 +6,6 @@ require_once __DIR__ . '/../repository/AnnouncementsRepository.php';
 
 class DefaultController extends AppController
 {
-
     private $announcementsRepository;
 
     public function __construct()
@@ -17,8 +16,8 @@ class DefaultController extends AppController
 
     public function index()
     {
-        $announcements = [];//$this->announcementsRepository->getAnnouncements();
-        $this->render("dashboard", ['announcements' => $announcements]);
+        $announcements = []; //$this->announcementsRepository->getAnnouncements();
+        $this->render("dashboard", ['announcements' => $announcements, 'user' => $this->getLoggedUser()]);
     }
 
     public function login()

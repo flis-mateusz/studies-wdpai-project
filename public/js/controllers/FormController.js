@@ -53,38 +53,68 @@ class FormController {
             return;
         }
 
-        const statusCode = error.status;
-        error.response.json().then(data => {
-            switch (statusCode) {
-                case 409:
-                case 400:
-                    if (data.data.error) {
-                        this.showOutput(data.data.error, true);
-                    }
-                    if (data.data.invalidFields) {
-                        for (const [key, message] of Object.entries(data.data.invalidFields)) {
-                            if (this.inputs[key]) {
-                                this.inputs[key].showError(message);
-                            }
-                        }
-                    }
-                    break;
-                case 401:
-                    this.showOutput(data.error, true);
-                    if (data.data.redirect_url) {
-                        window.location.href = data.data.redirect_url;
-                    }
-                    break;
-                case 403:
-                default:
-                    console.log(`Nieobsługiwany kod statusu: ${statusCode}`);
-                    break;
-            }
-        }).catch(jsonError => {
-            console.error('Błąd podczas parsowania odpowiedzi JSON', jsonError);
-        });
+        const contentType = error.response.headers.get("Content-Type");
+        if (contentType && contentType.includes("application/json")) {
+            error.response.json().then(data => {
+                this.#handleJsonError(data, error.status);
+            }).catch(jsonError => {
+                console.error('Błąd podczas parsowania odpowiedzi JSON', jsonError);
+            });
+        } else {
+            this.#handleErrorStatusCode(error.status);
+        }
+
         this.handleError(error);
         this.finally();
+    }
+
+    #handleErrorStatusCode(statusCode) {
+        switch (statusCode) {
+            case 400:
+                this.showOutput('Błąd w formularzu', true);
+                break;
+            case 401:
+                this.showOutput('Nie jesteś zalogowany', true);
+                break;
+            case 409:
+                this.showOutput('Nie masz uprawnień', true);
+                break;
+            case 404:
+                this.showOutput('Strona nie istnieje', true);
+                break;
+            case 413:
+                this.showOutput('Plik, który próbujesz przesłać ma zbyt duży rozmiar', true);
+                break;
+            default:
+                this.showOutput(`Nieobsługiwany kod błędu: ${statusCode}`, true);
+        }
+    }
+
+    #handleJsonError(data, statusCode) {
+        switch (statusCode) {
+            case 409:
+            case 400:
+                if (data.data.error) {
+                    this.showOutput(data.data.error, true);
+                }
+                if (data.data.invalidFields) {
+                    for (const [key, message] of Object.entries(data.data.invalidFields)) {
+                        if (this.inputs[key]) {
+                            this.inputs[key].showError(message);
+                        }
+                    }
+                }
+                break;
+            case 401:
+                this.showOutput(data.error, true);
+                if (data.data.redirect_url) {
+                    window.location.href = data.data.redirect_url;
+                }
+                break;
+            default:
+                console.log(`Nieobsługiwany kod statusu: ${statusCode}`);
+                break;
+        }
     }
 
     sendRequest() {

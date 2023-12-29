@@ -1,14 +1,62 @@
 <?php
 
+require_once __DIR__ . '/../repository/UsersRepository.php';
+require_once __DIR__ . '/../managers/SessionManager.php';
 
 class AppController
 {
     private $request;
 
+    private ?SessionManager $sessionController;
+    private ?User $user;
+
     public function __construct()
     {
         $this->request = $_SERVER['REQUEST_METHOD'];
+
+        $this->sessionController = null;
+        $this->user = null;
     }
+
+    protected function getLoggedUser(): ?User
+    {
+        if (!$this->user) {
+            Logger::debug('Getting user from database');
+            $user_id = $this->getSession()->getUserID();
+            if (!$user_id) return null;
+            $this->user = (new UsersRepository())->getUser(null, $user_id);
+        }
+        return $this->user;
+    }
+
+    protected function getSession(): SessionManager
+    {
+        if (!$this->sessionController) {
+            $this->sessionController = new SessionManager();
+        }
+        return $this->sessionController;
+    }
+
+    protected function loginRequired(): void
+    {
+        if ($this->getSession()->isLoggedIn()) {
+            return;
+        }
+
+        $refererPath = $this->isPost() && isset($_SERVER['HTTP_REFERER']) ? parse_url($_SERVER['HTTP_REFERER'], PHP_URL_PATH) : '/';
+        $redirectUrl = '/login?required&redirect_url=' . urlencode($this->isPost() ? $refererPath : $_SERVER['REQUEST_URI']);
+
+        if ($this->isPost()) {
+            $response = new JsonResponse();
+            $response->setError('Nie jesteś zalogowany', 401);
+            $response->setData(['redirect_url' => $redirectUrl]);
+            $response->send();
+        } else {
+            header('Location: ' . $redirectUrl);
+            exit;
+        }
+    }
+
 
     protected function isGet(): bool
     {
@@ -20,7 +68,8 @@ class AppController
         return $this->request === 'POST';
     }
 
-    protected function jsonResponse($data) {
+    protected function jsonResponse($data)
+    {
         header('Content-type: application/json');
         echo json_encode($data);
     }

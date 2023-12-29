@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/../models/User.php';
 
-class UserSessionController
+class SessionManager
 {
 
     public function __construct()

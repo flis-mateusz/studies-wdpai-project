@@ -1,3 +1,10 @@
+<?php
+require_once __DIR__ . '/components/CustomContentLoader.php';
+require_once __DIR__ . '/components/HeaderComponent.php';
+
+CustomContentLoader::initialize();
+HeaderComponent::initialize();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,34 +12,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/public/css/main.css">
-    <link rel="stylesheet" href="/public/css/header.css">
     <link rel="stylesheet" href="/public/css/login.css">
     <link rel="stylesheet" href="/public/css/forms.css">
-    <link rel="stylesheet" href="/public/css/custom_loader.css">
     <script type="module" src="/public/js/login-form.js" defer></script>
+    <?php
+    ResourceManager::appendResources();
+    ?>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <title>Logowanie</title>
 </head>
 
 <body>
-    <header>
-        <nav>
-            <div class="submenu">
-                <div>
-                    <span class="logo">ZwierzakSzukaDomu</span>
-                </div>
-                <div>
-                    <a>Ogłoszenia</a>
-                    <a>Kontakt</a>
-                </div>
-            </div>
-            <div class="menu-dropdown">
-                <input class="menu-button" type="checkbox" id="menu-button" />
-                <label class="menu-icon" for="menu-button"><span class="navicon"></span></label>
-                <a href="/">Strona główna</a>
-            </div>
-        </nav>
-    </header>
+    <?php
+    (new HeaderComponent($user))->render();
+    ?>
     <main>
         <?php
         if (isset($_GET['required'])) {
@@ -118,7 +111,9 @@
                     </div>
                 </section>
             </section>
-            <?php include __DIR__ . '/components/CustomContentLoader.php'; ?>
+            <?php 
+                (new CustomContentLoader())->render();
+            ?>
         </section>
     </main>
     <footer></footer>
