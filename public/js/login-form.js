@@ -21,7 +21,7 @@ class LoginForm extends BasicFormController {
     handleResponse(responseData) {
         this.showLoginSuccess(responseData.data.userName)
         setTimeout(() => {
-            //redirectToTargetOrDefault()
+            redirectToTargetOrDefault()
         }, 1000);
         this.setLoaderSuccess();
     }

@@ -61,8 +61,7 @@ HeaderComponent::initialize();
                 </section>
                 <section class="register-section">
                     <div>
-                        <span>Rejestracja</span>
-                        <span>Utwórz konto za darmo</span>
+                        <span>Utwórz konto</span>
                         <hr>
                         <form id="register-form" autocomplete="off" class="with-loader">
                             <div class="inputs">

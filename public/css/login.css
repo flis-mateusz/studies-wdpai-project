@@ -4,6 +4,10 @@ body {
     flex-direction: column;
 }
 
+header {
+    position: unset !important;
+}
+
 main {
     display: flex;
     flex-direction: row;
@@ -65,18 +69,23 @@ main .login-required {
     align-items: center;
 }
 
-.froms-frame:not(:has(form.submitting)) .custom-loader-container {
+/* .froms-frame:not(:has(form.submitting)) .custom-loader-container {
     padding: 0px;
     max-height: 0px;
-}
+} */
 
-.forms-container:not(.register) section.register-section>div::-webkit-scrollbar {
+/* .forms-container:not(.register) section.register-section>div::-webkit-scrollbar {
     display: none;
 }
 
 .forms-container:not(.register) section.register-section>div {
     -ms-overflow-style: none;
     scrollbar-width: none;
+} */
+
+.froms-frame:not(:has(form.submitting)) .custom-loader-container {
+    padding: 0px;
+    max-height: 0px;
 }
 
 .forms-container {
@@ -98,6 +107,24 @@ main .login-required {
     max-height: 0px;
 }
 
+.forms-container:not(.register):not(.forgot-password) section:not(.login-section) {
+    max-height: 0px;
+    transition-delay: 350ms;
+    transition-duration: 350ms;
+}
+
+.forms-container.register section:not(.register-section) {
+    max-height: 0px;
+    transition-delay: 350ms;
+    transition-duration: 350ms;
+}
+
+.forms-container.forgot-password section:not(.forgot-password-section) {
+    max-height: 0px;
+    transition-delay: 350ms;
+    transition-duration: 350ms;
+}
+
 .forms-container>section {
     min-width: 100%;
     display: flex;
@@ -107,6 +134,7 @@ main .login-required {
     position: relative;
     max-height: 750px;
     overflow: hidden;
+    transition-property: max-height;
 }
 
 .forms-container>section>div {
@@ -152,7 +180,7 @@ form div.inputs {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 15px;
+    gap: 10px;
 }
 
 div.inputs>div {
@@ -199,14 +227,14 @@ span.forgot-password {
 
     .forms-container>section>div {
         padding: 20px;
-        /* overflow: hidden; */
+        overflow: hidden;
     }
 
-    .forms-container>.register-section {
+    /* .forms-container>.register-section {
         max-height: calc(100vh - 75px);
     }
 
     .forms-container>.register-section>div {
         overflow-y: auto;
-    }
+    } */
 }
