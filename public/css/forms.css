@@ -1,9 +1,9 @@
-form span.output {
+form span.form-output {
     font-size: 0.9em;
     font-weight: normal;
 }
 
-form span.output.error {
+form span.form-output.error {
     color: #ff3333;
 }
 
@@ -11,12 +11,13 @@ form label>span {
     display: flex;
     align-items: center;
     gap: 0px;
+    font-size: 0.95em;
 }
 
 form label>span::before {
     font-family: 'Material Icons';
     content: 'error_outline';
-    font-size: 1.3em;
+    font-size: 1.4em;
     color: #ff3333;
     max-width: 0px;
     overflow: hidden;
@@ -31,17 +32,17 @@ form div:has(> input.invalid)>label>span::before {
     max-width: 25px;
 }
 
-form span.input-output {
+form span.input-error {
     text-align: center;
     font-size: 0.8em;
     color: #ff3333;
     max-height: 0px;
     overflow: hidden;
-    transition-duration: 450ms;
+    transition-duration: 350ms;
     transition-property: max-height;
 }
 
-form span.input-output.visible {
+form span.input-error.visible {
     max-height: 60px;
 }
 
@@ -66,6 +67,7 @@ form.with-absolute-loader .custom-loader-container {
     align-items: center;
     background-color: #ffffffa1;
     border-radius: 20px;
+    z-index: 5;
 }
 
 form.with-absolute-loader.submitting .custom-loader-container {

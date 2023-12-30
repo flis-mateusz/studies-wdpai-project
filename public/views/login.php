@@ -24,7 +24,7 @@ HeaderComponent::initialize();
 
 <body>
     <?php
-    (new HeaderComponent($user))->render();
+    (new HeaderComponent(null))->render();
     ?>
     <main>
         <?php
@@ -37,8 +37,8 @@ HeaderComponent::initialize();
             <section class="forms-container">
                 <section class="login-section">
                     <div>
-                        <span>Witaj ponownie</span>
-                        <span>Zaloguj się lub utwórz konto za darmo</span>
+                        <span class="login-successful">Witaj ponownie</span>
+                        <span class="login-successful-name">Zaloguj się lub utwórz konto za darmo</span>
                         <hr>
                         <form id="login-form" class="with-loader">
                             <div class="inputs">
@@ -52,10 +52,11 @@ HeaderComponent::initialize();
                                     <span class="switch-form forgot-password">Zapomniałem/am hasła</span>
                                 </div>
                             </div>
-                            <span class="output"></span>
+                            <span class="form-output"></span>
                             <input type="submit" value="Zaloguj" class="main-button">
                             <span class="incentive switch-form">Zarejestruj się</span>
                         </form>
+                        <span class="animated-hidden-span"></span>
                     </div>
                 </section>
                 <section class="register-section">
@@ -86,7 +87,7 @@ HeaderComponent::initialize();
                                     <input type="password" autocomplete="new-password" class="main-input" id="register-repassword" name="register-repassword">
                                 </div>
                             </div>
-                            <span class="output"></span>
+                            <span class="form-output"></span>
                             <input type="submit" value="Zarejestruj się" class="main-button">
                             <span class="incentive switch-form">Posiadasz konto? Zaloguj się</span>
                         </form>
@@ -100,19 +101,19 @@ HeaderComponent::initialize();
                         <form id="forgot-password-form" class="with-loader">
                             <div class="inputs">
                                 <div>
-                                    <label for="forgot-password-email">Wprowadź adres e-mail</label>
+                                    <label for="forgot-password-email"><span>Wprowadź adres e-mail</span></label>
                                     <input type="text" class="main-input" id="forgot-password-email" name="forgot-password-email">
                                 </div>
                             </div>
-                            <span class="output"></span>
+                            <span class="form-output"></span>
                             <input type="submit" value="Wyślij link" class="main-button">
                             <span class="incentive switch-form forgot-password">Wróć do logowania</span>
                         </form>
                     </div>
                 </section>
             </section>
-            <?php 
-                (new CustomContentLoader())->render();
+            <?php
+            (new CustomContentLoader())->render();
             ?>
         </section>
     </main>

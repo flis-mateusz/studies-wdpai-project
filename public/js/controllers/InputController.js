@@ -2,16 +2,16 @@ class InputField {
     constructor(inputElement, validationStrategy) {
         this.inputElement = inputElement;
         this.validationStrategy = validationStrategy;
-        
+
         let nextSibling = this.inputElement.nextElementSibling;
-        if (nextSibling && 
-            nextSibling.tagName === 'SPAN' && 
-            nextSibling.classList.length === 0 && 
+        if (nextSibling &&
+            nextSibling.tagName === 'SPAN' &&
+            nextSibling.classList.length === 0 &&
             nextSibling.innerHTML.trim() === '') {
             this.errorSpan = nextSibling;
         } else {
             this.errorSpan = document.createElement('span');
-            this.errorSpan.classList.add('input-output');
+            this.errorSpan.classList.add('input-error');
             this.inputElement.parentNode.insertBefore(this.errorSpan, this.inputElement.nextSibling);
         }
 
@@ -36,7 +36,6 @@ class InputField {
     }
 
     hideError() {
-        this.errorSpan.innerText = '';
         this.errorSpan.classList.remove('visible');
         this.inputElement.classList.remove('invalid');
     }

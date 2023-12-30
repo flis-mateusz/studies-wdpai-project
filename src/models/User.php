@@ -27,7 +27,7 @@ class User implements \JsonSerializable
         $this->email = $email;
         $this->password = $password;
 
-        $dateTime = new DateTime($created_at);
+        $dateTime = new DateTime($created_at ? $created_at : 'now');
         $dateTime->setTimezone(new DateTimeZone('UTC'));
         $this->created_at = $dateTime;
 
@@ -116,7 +116,7 @@ class User implements \JsonSerializable
         return $this->avatar_name;
     }
 
-    public function setAvatarName(string $avatar_name): void
+    public function setAvatarName(?string $avatar_name): void
     {
         $this->avatar_name = $avatar_name;
     }
@@ -141,7 +141,7 @@ class User implements \JsonSerializable
         $this->is_admin = $is_admin;
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return get_object_vars($this);
     }

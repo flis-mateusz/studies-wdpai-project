@@ -13,9 +13,11 @@ Router::get('login', 'DefaultController');
 Router::post('signin', 'SecurityController');
 Router::post('signup', 'SecurityController');
 Router::get('signout', 'SecurityController');
+Router::get('forgot_password', 'SecurityController');
 
 Router::get('profile', 'ProfileController');
 Router::post('profile_edit', 'ProfileController');
+Router::post('profile_avatar_delete', 'ProfileController');
 
 Router::get('add_announcement', 'AnnouncementController');
 Router::get('announcement', 'AnnouncementController');

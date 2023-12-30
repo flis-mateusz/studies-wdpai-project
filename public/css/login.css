@@ -5,7 +5,6 @@ body {
 }
 
 main {
-    height: 100%;
     display: flex;
     flex-direction: row;
     padding: 0 !important;
@@ -71,6 +70,15 @@ main .login-required {
     max-height: 0px;
 }
 
+.forms-container:not(.register) section.register-section>div::-webkit-scrollbar {
+    display: none;
+}
+
+.forms-container:not(.register) section.register-section>div {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
 .forms-container {
     width: 100%;
     display: flex;
@@ -87,7 +95,7 @@ main .login-required {
 }
 
 .forms-container:has(form.submitting) section:not(:has(form.submitting)) {
-    max-height: 0;
+    max-height: 0px;
 }
 
 .forms-container>section {
@@ -98,7 +106,7 @@ main .login-required {
     align-items: center;
     position: relative;
     max-height: 750px;
-    transition-duration: 350ms;
+    overflow: hidden;
 }
 
 .forms-container>section>div {
@@ -171,6 +179,14 @@ span.forgot-password {
     cursor: pointer;
 }
 
+.animated-hidden-span {
+    font-size: 1.5em;
+}
+
+.custom-loader.success {
+    height: 130px;
+}
+
 @media screen and (max-width: 520px) {
     .welcome-image {
         width: 0px;
@@ -182,7 +198,15 @@ span.forgot-password {
     }
 
     .forms-container>section>div {
-        padding: 15px;
-        overflow: hidden;
+        padding: 20px;
+        /* overflow: hidden; */
+    }
+
+    .forms-container>.register-section {
+        max-height: calc(100vh - 75px);
+    }
+
+    .forms-container>.register-section>div {
+        overflow-y: auto;
     }
 }

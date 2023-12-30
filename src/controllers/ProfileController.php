@@ -52,13 +52,16 @@ class ProfileController extends AppController
         $avatar = new AttachmentManager($_FILES['edit-avatar']);
         if ($avatar->is_uploaded()) {
             try {
-                $avatar_url = $avatar->save();
+                $avatarName = $avatar->save();
             } catch (Exception $e) {
                 Logger::debug('Upload exception: ' . $e->getMessage());
-                $response->setError($e->getMessage());
+                $response->setError($e->getMessage(), 500);
                 $response->send();
             }
-            $user->setAvatarName($avatar_url);
+            if ($user->getAvatarName()) {
+                AttachmentManager::delete($user->getAvatarName());
+            }
+            $user->setAvatarName($avatarName);
         }
 
         if (!empty($password)) {
@@ -77,6 +80,25 @@ class ProfileController extends AppController
         } catch (PhoneExistsException $e) {
             $response->addErrorField('edit-phone', $e->getMessage(), 409);
         }
+
+        $response->send();
+    }
+
+    public function profile_avatar_delete()
+    {
+        $user = $this->getLoggedUser();
+        $response = new JsonResponse();
+
+        if (!$user->getAvatarName()) {
+            $response->setError('Nie posiadasz awataru', 400);
+            $response->send();
+        }
+
+        if (!$this->usersRepository->removeAvatar($user->getId())) {
+            $response->setError('Wystąpił błąd podczas usuwania awataru', 500);
+        }
+
+        AttachmentManager::delete($user->getAvatarName());
 
         $response->send();
     }

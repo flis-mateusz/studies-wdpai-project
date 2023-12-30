@@ -1,11 +1,12 @@
 import InputField from './InputController.js';
+import { FetchController, TextualError, JsonObjectError } from './FetchController.js';
 
 class FormController {
     constructor(formElement, url, showAllErrors = false) {
         this.form = formElement;
-        this.url = url;
+        this.fetchController = new FetchController(url);
         this.showAllErrors = showAllErrors;
-        this.generalOutput = this.form.querySelector('.output');
+        this.generalOutput = this.form.querySelector('.form-output');
         this.form.addEventListener('submit', (e) => this.#handleSubmit(e));
         this.inputs = {};
     }
@@ -18,7 +19,7 @@ class FormController {
         this.form.classList.remove('submitting');
     }
 
-    #submitting() {
+    submitting() {
         this.form.classList.add('submitting');
     }
 
@@ -27,7 +28,7 @@ class FormController {
         this.hideOutput();
         if (this.validate()) {
             this.beforeSend();
-            this.#submitting();
+            this.submitting();
             setTimeout(() => {
                 this.sendRequest();
             }, 300);
@@ -48,83 +49,38 @@ class FormController {
 
     #handleError(error) {
         if (!error.response) {
-            this.showOutput('Błąd sieciowy lub inny błąd', true);
-            this.handleError(error);
+            this.showOutput(error.message, true);
+            this.handleError(error)
             return;
         }
 
-        const contentType = error.response.headers.get("Content-Type");
-        if (contentType && contentType.includes("application/json")) {
-            error.response.json().then(data => {
-                this.#handleJsonError(data, error.status);
-            }).catch(jsonError => {
-                console.error('Błąd podczas parsowania odpowiedzi JSON', jsonError);
-            });
-        } else {
-            this.#handleErrorStatusCode(error.status);
+        if (error.response.error) {
+            this.showOutput(error.response.error, true);
         }
-
-        this.handleError(error);
-        this.finally();
-    }
-
-    #handleErrorStatusCode(statusCode) {
-        switch (statusCode) {
-            case 400:
-                this.showOutput('Błąd w formularzu', true);
-                break;
-            case 401:
-                this.showOutput('Nie jesteś zalogowany', true);
-                break;
-            case 409:
-                this.showOutput('Nie masz uprawnień', true);
-                break;
-            case 404:
-                this.showOutput('Strona nie istnieje', true);
-                break;
-            case 413:
-                this.showOutput('Plik, który próbujesz przesłać ma zbyt duży rozmiar', true);
-                break;
-            default:
-                this.showOutput(`Nieobsługiwany kod błędu: ${statusCode}`, true);
-        }
-    }
-
-    #handleJsonError(data, statusCode) {
-        switch (statusCode) {
-            case 409:
-            case 400:
-                if (data.data.error) {
-                    this.showOutput(data.data.error, true);
-                }
-                if (data.data.invalidFields) {
-                    for (const [key, message] of Object.entries(data.data.invalidFields)) {
-                        if (this.inputs[key]) {
-                            this.inputs[key].showError(message);
-                        }
+        const responseData = error.response.data;
+        console.log(error.response)
+        if (responseData?.invalidFields) {
+            for (const [key, message] of Object.entries(responseData.invalidFields)) {
+                if (this.inputs[key]) {
+                    this.inputs[key].showError(message);
+                    if (!this.showAllErrors) {
+                        break;
                     }
                 }
-                break;
-            case 401:
-                this.showOutput(data.error, true);
-                if (data.data.redirect_url) {
-                    window.location.href = data.data.redirect_url;
-                }
-                break;
-            default:
-                console.log(`Nieobsługiwany kod statusu: ${statusCode}`);
-                break;
+            }
         }
+        this.handleError(error)
     }
 
-    sendRequest() {
-        fetch(this.url, {
-            method: 'POST',
-            body: new FormData(this.form)
-        })
-            .then(response => response.ok ? response.json() : Promise.reject({ response, status: response.status }))
-            .then(data => this.#handleResponse(data))
-            .catch(error => this.#handleError(error));
+    async sendRequest() {
+        await this.fetchController.post(new FormData(this.form))
+            .then(data => {
+                this.#handleResponse(data)
+            })
+            .catch(error => {
+                this.#handleError(error);
+            });
+        this.finally();
     }
 
     getInputByName(inputName) {

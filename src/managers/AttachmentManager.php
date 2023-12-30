@@ -35,7 +35,7 @@ class AttachmentManager
 
     public function is_uploaded()
     {
-       
+
         return is_uploaded_file($this->attachment['tmp_name']);
     }
 
@@ -49,6 +49,15 @@ class AttachmentManager
             throw new InvalidArgumentException('Plik o tym rozrzeczeniu nie jest obsługiwany');
         }
 
+        return true;
+    }
+
+    public static function delete($fileName): bool
+    {
+        $path = dirname(__DIR__). self::UPLOAD_DIRECTORY. $fileName;
+        if (file_exists($path)) {
+            return unlink($path);
+        }
         return true;
     }
 }

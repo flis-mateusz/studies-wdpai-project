@@ -68,6 +68,7 @@
     align-items: center;
     width: 260px;
     height: 260px;
+    transition-duration: 250ms;
 }
 
 .custom-loader .track {

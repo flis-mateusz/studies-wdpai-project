@@ -34,6 +34,12 @@ const isPasswordStrong = (password) => {
     return password.length >= minLength && hasUpperCase && hasLowerCase && hasNumbers && hasSpecialChars;
 }
 
+const isTouchDevice = () => {
+    return (('ontouchstart' in window) ||
+        (navigator.maxTouchPoints > 0) ||
+        (navigator.msMaxTouchPoints > 0));
+}
+
 const redirectToTargetOrDefault = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const redirectUrl = urlParams.get('redirect_url');
@@ -44,4 +50,4 @@ const redirectToTargetOrDefault = () => {
     }
 }
 
-export { arePasswordsSame, isEmail, isTwoOrMoreWords, isPasswordStrong, redirectToTargetOrDefault, isEmpty, isNotEmpty, isPhoneNumber };
+export { arePasswordsSame, isEmail, isTwoOrMoreWords, isPasswordStrong, redirectToTargetOrDefault, isEmpty, isNotEmpty, isPhoneNumber, isTouchDevice };

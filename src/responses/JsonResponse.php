@@ -16,6 +16,11 @@ class JsonResponse
         $this->data = $data;
     }
 
+    public function appendData($data)
+    {
+        $this->data = array_merge($this->data, $data);
+    }
+
     public function setError($data, $status_code = 400)
     {
         $this->status_code = $status_code;

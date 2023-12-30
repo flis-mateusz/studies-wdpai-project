@@ -2,24 +2,32 @@ import FormController from './FormController.js';
 
 
 class BasicFormController extends FormController {
-    constructor(formElement) {
-        super(formElement);
+    constructor(formElement, url, showAllErrors = false) {
+        super(formElement, url, showAllErrors);
         this.loader = document.querySelector('.custom-loader');
     }
 
-    beforeSend() {
+    showLoader() {
         this.loader.classList.remove('success');
-        this.submited()
+        this.submitting();
+    }
+
+    hideLoader() {
+        this.submited();
+    }
+
+    beforeSend() {
+        this.showLoader()
     }
 
     handleError(error) {
-        this.submited()
+        setTimeout(() => {
+            this.submited()
+        }, 1500)
     }
 
-    onSuccess() {
-        setTimeout(() => {
-            this.loader.classList.add('success')
-        }, 1000);
+    setLoaderSuccess() {
+        this.loader.classList.add('success')
     }
 }
 

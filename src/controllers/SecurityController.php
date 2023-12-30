@@ -6,6 +6,7 @@ require_once __DIR__ . '/../repository/UsersRepository.php';
 require_once __DIR__ . '/../responses/JsonResponse.php';
 require_once __DIR__ . '/../responses/PostFormResponse.php';
 require_once __DIR__ . '/../validation/PostFormValidator.php';
+require_once __DIR__ . '/../utils/utils.php';
 
 class SecurityController extends AppController
 {
@@ -44,6 +45,7 @@ class SecurityController extends AppController
         }
 
         $this->getSession()->setUserID($user->getId());
+        $response->setData(['userName' => $user->getFullName()]);
         $response->send();
     }
 
@@ -95,11 +97,15 @@ class SecurityController extends AppController
     {
         $this->getSession()->destroy();
         if (isset($_SERVER['HTTP_REFERER'])) {
-            header('Location: ' . $_SERVER['HTTP_REFERER']);
-            exit;
+            redirect($_SERVER['HTTP_REFERER']);
         } else {
-            header('Location: /login');
-            exit;
+            redirect('/login');
         }
+    }
+
+    public function forgot_password() {
+        $response = new JsonResponse();
+        $response->setError('Ta opcja nie jest jeszcze dostępna', 501);
+        $response->send();
     }
 }

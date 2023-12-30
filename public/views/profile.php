@@ -108,16 +108,21 @@ HeaderComponent::initialize();
                     </section>
                     <section class="align-end">
                         <div class="avatar-form">
-                            <div class="avatar resp" <?php
-                                                        if ($user->getAvatarUrl()) {
-                                                            echo 'style="background-image: url(' . $user->getAvatarUrl() . ');"';
-                                                        }
-                                                        ?>>
-                                <label for="edit-avatar">
-                                    <div>
-                                        <i class="material-icons">file_upload</i>
-                                        <input type="file" class="main-input" id="edit-avatar" name="edit-avatar">
-                                    </div>
+                            <div class="avatar-container">
+                                <input class="mobile-avatar-checkbox" type="checkbox" id="mobile-avatar-checkbox" />
+                                <label class="mobile-avatar-checkbox-overlay" for="mobile-avatar-checkbox"> </label>
+                                <div class="avatar resp" <?php
+                                                            if ($user->getAvatarUrl()) {
+                                                                echo 'style="background-image: url(' . $user->getAvatarUrl() . ');"';
+                                                            }
+                                                            ?>>
+                                    <input type="file" class="main-input" id="edit-avatar" name="edit-avatar">
+                                </div>
+                                <label for="edit-avatar" class="avatar-action upload">
+                                    <i class="material-icons">file_upload</i>
+                                </label>
+                                <label class="avatar-action remove <?php echo $user->getAvatarUrl() ? '' : 'hidden' ?>">
+                                    <i class="material-icons">delete_forever</i>
                                 </label>
                             </div>
                             <div class="tip avatar-tip hidden">
@@ -126,7 +131,7 @@ HeaderComponent::initialize();
                         </div>
                     </section>
                 </div>
-                <span class="output"></span>
+                <span class="form-output"></span>
                 <div class="submit-container">
                     <input type="submit" value="Zapisz" class="main-button normal-text">
                 </div>

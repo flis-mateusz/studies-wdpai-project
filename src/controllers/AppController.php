@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../repository/UsersRepository.php';
 require_once __DIR__ . '/../managers/SessionManager.php';
+require_once __DIR__ . '/../utils/utils.php';
 
 class AppController
 {
@@ -52,8 +53,7 @@ class AppController
             $response->setData(['redirect_url' => $redirectUrl]);
             $response->send();
         } else {
-            header('Location: ' . $redirectUrl);
-            exit;
+            redirect($redirectUrl);
         }
     }
 

@@ -94,32 +94,70 @@ main {
     align-items: flex-end;
 }
 
-.panel div>.avatar {
+.avatar-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border-radius: 50%;
+    overflow: hidden;
     max-width: 166px;
+    width: 100%;
+    box-shadow: 0px 3.5px 40px 0px rgb(0 0 0 / 30%);
+}
+
+.panel .avatar-action {
+    position: absolute;
+    display: none;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    background: #bdbdbdcc;
+    border-radius: 0% 100% 100% 0%;
     cursor: pointer;
 }
 
-.panel div>.avatar div {
-    position: absolute;
-    display: none;
-    width: calc(100% + 2px);
-    height: calc(100% + 2px);
-    border-radius: 50%;
-    justify-content: center;
-    align-items: center;
-    font-size: 5em;
-    z-index: 1;
-    background: rgb(255 255 255 / 80%);
+.panel .avatar-action i {
+    font-size: 2em;
+}
+
+.panel .avatar-action.upload {
+    width: 70%;
+    left: 0%;
+    border-radius: 100% 0% 0% 100%;
+}
+
+.panel .avatar-action.upload:hover i {
+    color: #265BD7;
+}
+
+.panel .avatar-action.remove {
+    width: 30%;
+    left: 70%;
+    background: #ffa5a5cc;
+}
+
+.panel .avatar-action.upload i {
+    font-size: 2.2em;
+}
+
+.panel .avatar-action.remove:hover i {
+    color: #872121;
+}
+
+.panel .avatar-action.remove.hidden {
+    display: none !important;
+}
+
+.panel .avatar-action.upload:has(~.avatar-action.remove.hidden) {
+    width: 100%;
+    left: unset;
 }
 
 .panel div>.avatar input[type="file"] {
     display: none;
-}
-
-.panel div>.avatar label {
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 .panel div>.avatar div i {
@@ -189,6 +227,26 @@ main {
     transition-duration: 200ms;
 }
 
+.avatar-container:hover {
+    padding: 1px;
+}
+
+.avatar-container:hover .avatar-action {
+    display: flex;
+}
+
+.mobile-avatar-checkbox {
+    display: none;
+}
+
+.mobile-avatar-checkbox-overlay {
+    display: none;
+    position: absolute;
+    width: calc(100% - 5px);
+    height: calc(100% - 5px);
+    border-radius: 100%;
+}
+
 @media screen and (max-width: 1100px) {
     header {
         padding: 15px 20px !important;
@@ -219,6 +277,7 @@ main {
     .sidenav:has(#sidenav-button:checked) {
         transform: translateX(0);
         padding-top: 60px;
+        z-index: 2;
     }
 
     .sidenav:has(#sidenav-button:checked) .nav-expander {
@@ -265,5 +324,35 @@ main {
 
     .avatar-form {
         align-items: center;
+    }
+    
+    .avatar-container:hover {
+        padding: 0px;
+    }
+
+    .avatar-container:hover .avatar-action {
+        display: none;
+    }
+
+    .avatar-container .avatar-action {
+        pointer-events: none;
+    }
+
+    .mobile-avatar-checkbox-overlay {
+        display: block;
+        z-index: 3;
+    }
+
+    .mobile-avatar-checkbox:checked~.mobile-avatar-checkbox-overlay {
+        z-index: 0;
+    }
+
+    .avatar-container:has(.mobile-avatar-checkbox:checked) {
+        padding: 1px;
+    }
+
+    .avatar-container .mobile-avatar-checkbox:checked ~ .avatar-action {
+        display: flex;
+        pointer-events: unset;
     }
 }

@@ -7,14 +7,14 @@ class EmailExistsException extends Exception
 {
     public function __construct()
     {
-        parent::__construct('Adres e-mail już istnieje w bazie danych');
+        parent::__construct('Podany adres e-mail jest zajęty');
     }
 }
 class PhoneExistsException extends Exception
 {
     public function __construct()
     {
-        parent::__construct('Numer telefonu już istnieje w bazie danych');
+        parent::__construct('Podany numer telefonu jest zajęty');
     }
 }
 
@@ -126,6 +126,16 @@ class UsersRepository extends Repository
             $user->getAvatarName(),
             $user->getId()
         ]);
+    }
+
+    public function removeAvatar(int $userId)
+    {
+        $stmt = $this->database->connect()->prepare('
+            UPDATE user_detail SET avatar_name = NULL
+            WHERE user_id =?;
+        ');
+
+        return $stmt->execute([$userId]);
     }
 
     /**

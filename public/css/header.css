@@ -6,7 +6,7 @@ header {
     border-bottom: 1px solid var(--neutral-2, #DEE5ED);
     background: var(--neutral-0, #FFF);
     transition-duration: 100ms;
-    z-index: 3;
+    z-index: 97;
 }
 
 header>nav {
@@ -155,10 +155,11 @@ header .menu-button:checked~.menu-icon .navicon:after {
     top: 3rem;
     opacity: 0;
     display: none;
-    z-index: 4;
+    z-index: 98;
 }
 
 .menu-dropdown-content>div {
+    z-index: 99;
     display: flex;
     flex-direction: column;
     background-color: white;
@@ -186,6 +187,7 @@ header .menu-button:checked~.menu-icon .navicon:after {
     align-items: center;
     justify-content: flex-start;
     gap: 10px;
+    z-index: 100;
 }
 
 .menu-dropdown-content a:last-child {
