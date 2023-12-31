@@ -197,6 +197,8 @@ span.bolder {
     color: #265BD7;
     font-family: 'Poppins', sans-serif;
     font-size: 0.9em;
+    max-width: 100%;
+    flex: 1;
 }
 
 .main-input:focus,

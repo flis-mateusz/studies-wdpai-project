@@ -1,13 +1,15 @@
-import BasicFormController from './controllers/BasicFormController.js';
+import FormControllerWithLoader from './controllers/FormControllerWithLoader.js';
 import { TwoOrMoreWordsValidation, EmailValidation, PasswordValidation, ArePasswordsSameValidation, PhoneNumberValidation } from './validation/ValidationStrategy.js'
 import { FetchController } from './controllers/FetchController.js';
 
-class ProfileEditForm extends BasicFormController {
+class ProfileEditForm extends FormControllerWithLoader {
     constructor(formElement) {
         super(formElement, '/profile_edit');
 
         this.initializeUIElements();
         this.initializeAvatarHandlers();
+
+        this.loader.setupAbsolute()
 
         // Inputs section
         this.registerInput('edit-names', new TwoOrMoreWordsValidation('Wprowadź imię i nazwisko'))
@@ -71,7 +73,7 @@ class ProfileEditForm extends BasicFormController {
             }
             this.mobileAvatarCheckbox.checked = false;
         } else {
-            this.showLoader();
+            this.loader.show();
             new FetchController('/profile_avatar_delete').post()
                 .then(() => {
                     this.avatar.style.backgroundImage = '';
@@ -83,7 +85,7 @@ class ProfileEditForm extends BasicFormController {
                 })
                 .catch((error) => {
                     this.showOutput(error.message, true);
-                    this.hideLoader();
+                    this.loader.hide();
                 });
         }
     }
@@ -92,10 +94,8 @@ class ProfileEditForm extends BasicFormController {
         this.getInputByName('edit-avatar').value = '';
         this.isNewFile = false;
         this.newAvatarTip.classList.add('hidden');
-        this.setLoaderSuccess()
-        setTimeout(() => {
-            this.submited();
-        }, 1000);
+        
+        this.loader.completeLoadingAsync().then(this.loader.hide)
     }
 
     handleResponse(data) {
@@ -105,7 +105,7 @@ class ProfileEditForm extends BasicFormController {
     }
 
     handleError() {
-        this.hideLoader();
+        this.loader.hide();
     }
 }
 

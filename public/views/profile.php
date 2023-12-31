@@ -17,8 +17,8 @@ HeaderComponent::initialize();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/public/css/main.css">
-    <link rel="stylesheet" href="/public/css/profile-edit.css">
-    <link rel="stylesheet" href="/public/css/forms.css">
+    <link rel="stylesheet" href="/public/css/profile/profile-edit.css">
+    <link rel="stylesheet" href="/public/css/components/forms.css">
     <script type="module" src="/public/js/profile-edit.js" defer></script>
     <?php
     ResourceManager::appendResources();

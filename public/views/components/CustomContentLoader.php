@@ -7,13 +7,13 @@ class CustomContentLoader extends Component
 {
     public static function initialize()
     {
-        ResourceManager::addStyle('/public/css/custom_loader.css');
+        ResourceManager::addStyle('/public/css/components/custom_loader.css');
     }
 
     public function render()
     {
         echo <<<HTML
-        <div class="custom-loader-container">
+        <div class="custom-loader-container hidden">
         <div class="custom-loader">
             <div class="track">
                 <div class="mouse"></div>

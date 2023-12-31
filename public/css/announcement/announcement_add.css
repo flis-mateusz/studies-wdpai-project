@@ -1,3 +1,11 @@
+main {
+    position: relative;
+}
+
+.main-input {
+    max-width: 300px;
+}
+
 form {
     max-width: 850px;
     width: 100%;
@@ -6,7 +14,7 @@ form {
     gap: 20px;
 }
 
-form>section {
+form fieldset {
     background: #FFF;
     box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.08);
     border-radius: 20px;
@@ -16,36 +24,54 @@ form>section {
     justify-content: center;
     gap: 10px;
     padding: 20px;
+    border: none;
+    min-inline-size: auto;
 }
 
-section>div {
+form>div {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+}
+
+fieldset>div {
     display: flex;
     align-self: stretch;
 }
 
-section>div .main-input {
+fieldset>div .main-input {
     border-radius: 15px;
     padding: 12px 20px;
     box-shadow: 0px 3px 20px 0px rgba(0, 0, 0, 0.08);
 }
 
-
-section>div.field,
-section>div.field>div {
-    width: 100%;
+fieldset>div.field,
+fieldset>div.field>div {
     display: flex;
     flex-direction: column;
 }
 
-section>div.field>div:first-child {
+fieldset>div.field>div.row {
+    flex-direction: row;
+}
+
+fieldset>div.field>div:first-child {
     font-size: 1.1em;
 }
 
-section>div.field>.info {
+fieldset>div.field>.info {
     font-size: 0.8em;
 }
 
-.characteristics {
+fieldset div.tip {
+    margin-top: 5px;
+}
+
+fieldset div.info {
+    margin-bottom: 5px;
+}
+
+.animal-features {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-column-gap: 10px;
@@ -54,14 +80,14 @@ section>div.field>.info {
     overflow-y: auto;
 }
 
-.characteristics>div {
+.animal-features>div {
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
 }
 
-.characteristics div input {
+.animal-features div input {
     display: none;
 }
 
@@ -73,7 +99,7 @@ div.checkboxes {
     gap: 5px;
 }
 
-.characteristics>div:hover>div.checkboxes {
+.animal-features>div:hover>div.checkboxes {
     display: flex;
 }
 
@@ -111,7 +137,7 @@ div.checkboxes::before {
     margin-top: 2px;
 }
 
-.characteristics>div>div:first-child {
+.animal-features>div>div:first-child {
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -121,28 +147,27 @@ div.checkboxes::before {
     padding: 2px 0px;
 }
 
-
-.characteristics>div>div:first-child::before {
+.animal-features>div>div:first-child::before {
     font-family: "Material Icons";
     font-size: 24px;
 }
 
-.characteristics>div:has(input[value="1"]:checked)>div:first-child::before {
+.animal-features>div:has(input[value="1"]:checked)>div:first-child::before {
     color: #6361E8;
     content: "check_circle";
 }
 
-.characteristics>div:has(input[value="-1"]:checked)>div:first-child::before {
+.animal-features>div:has(input[value="-1"]:checked)>div:first-child::before {
     color: #ca3b3b;
     content: "remove_circle";
 }
 
-.characteristics>div:has(input[value="0"]:checked)>div:first-child::before {
+.animal-features>div:has(input[value="0"]:checked)>div:first-child::before {
     color: #adadad;
     content: "help_outline";
 }
 
-.characteristics .checkboxes:has(input[value="0"]:checked)>label.yes {
+.animal-features .checkboxes:has(input[value="0"]:checked)>label.yes {
     order: -1;
 }
 
@@ -160,13 +185,13 @@ div.checkboxes>input[value="0"]:not(:checked)~label.not-sure {
 }
 
 @media screen and (max-width: 700px) {
-    .characteristics {
+    .animal-features {
         display: flex;
         flex-direction: column;
         gap: 5px;
     }
 
-    .characteristics>div>div:first-child {
+    .animal-features>div>div:first-child {
         font-size: 0.9em;
     }
 
@@ -176,11 +201,12 @@ div.checkboxes>input[value="0"]:not(:checked)~label.not-sure {
 }
 
 @media screen and (max-width: 500px) {
-    .characteristics>div {
+    .animal-features>div {
         flex-direction: column;
     }
 
-    div.checkboxes label, div.checkboxes::before {
+    div.checkboxes label,
+    div.checkboxes::before {
         font-size: 0.8em;
     }
 
@@ -188,21 +214,22 @@ div.checkboxes>input[value="0"]:not(:checked)~label.not-sure {
         margin-top: 0.5px;
     }
 
-    .characteristics>div>div {
+    .animal-features>div>div {
         width: 100%;
+        justify-content: space-between;
     }
 
-    .characteristics>div>div:first-child {
+    .animal-features>div>div:first-child {
         font-size: 0.8em;
     }
 }
 
 @media screen and (max-width: 400px) {
-    section>div.field>.info {
+    fieldset>div.field>.info {
         text-align: justify;
     }
 
-    section>div.field>div:first-child {
+    fieldset>div.field>div:first-child {
         font-size: 1em;
     }
 }

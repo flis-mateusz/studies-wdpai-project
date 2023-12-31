@@ -1,0 +1,65 @@
+.toggle {
+    box-sizing: border-box;
+    font-size: 0;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    align-items: stretch;
+    display: flex;
+}
+
+.toggle input {
+    display: none;
+}
+
+.toggle input+label {
+    cursor: pointer;
+    padding: 7px 10px;
+    border: solid 1px #ddd;
+    background-color: #fff;
+    font-size: 1rem;
+    text-align: center;
+    flex: 1;
+    /* ADD THESE PROPERTIES TO SWITCH FROM AUTO WIDTH TO FULL WIDTH */
+    /*flex: 0 0 50%;
+	 display: flex;
+	 justify-content: center;
+	 align-items: center;
+	*/
+    /* ----- */
+}
+
+.toggle input+label:first-of-type {
+    border-radius: 20px 0 0 20px;
+    border-right: none;
+}
+
+.toggle input+label:last-of-type {
+    border-radius: 0 20px 20px 0;
+    border-left: none;
+}
+
+.toggle input:checked+label {
+    background: linear-gradient(180deg, #9c80ed 0%, rgb(144 122 205 / 65%) 96.87%, rgba(80, 51, 164, 0.00) 100%);
+    color: #fff;
+    box-shadow: 0 0 10px rgba(102, 179, 251, .5);
+    z-index: 1;
+}
+
+@media (max-width: 800px) {
+    .toggle input+label {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+@media (max-width: 800px) {
+    .status span:first-of-type {
+        display: none;
+    }
+
+    .status span:last-of-type {
+        display: inline;
+    }
+}

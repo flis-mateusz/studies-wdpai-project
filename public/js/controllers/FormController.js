@@ -19,7 +19,7 @@ class FormController {
         this.form.classList.remove('submitting');
     }
 
-    submitting() {
+    #submitting() {
         this.form.classList.add('submitting');
     }
 
@@ -28,7 +28,7 @@ class FormController {
         this.hideOutput();
         if (this.validate()) {
             this.beforeSend();
-            this.submitting();
+            this.#submitting();
             setTimeout(() => {
                 this.sendRequest();
             }, 300);
@@ -48,6 +48,7 @@ class FormController {
     }
 
     #handleError(error) {
+        console.warn(error)
         if (!error.response) {
             this.showOutput(error.message, true);
             this.handleError(error)
@@ -71,6 +72,7 @@ class FormController {
         }
         this.handleError(error)
     }
+    
 
     async sendRequest() {
         await this.fetchController.post(new FormData(this.form))

@@ -275,48 +275,89 @@
 
 /* SUCCESS ANIMATION */
 
-.custom-loader.success .track {
+.custom-loader-container.success .track {
     animation-play-state: paused;
     visibility: hidden;
 }
 
-.custom-loader.success .face:before {
+.custom-loader-container.success .face:before {
     transition-duration: 350ms;
     background: #50ad60;
 }
 
-.custom-loader.success .face:after {
+.custom-loader-container.success .face:after {
     transition-duration: 350ms;
     background: #69ce79;
 }
 
-.custom-loader.success .face .ears-container:before {
+.custom-loader-container.success .face .ears-container:before {
     transition-duration: 350ms;
     border-left-color: #50ad60;
 }
 
-.custom-loader.success .face .ears-container:after {
+.custom-loader-container.success .face .ears-container:after {
     transition-duration: 350ms;
     border-right-color: #69ce79;
 }
 
-.custom-loader.success .face .eyes-container {
+.custom-loader-container.success .face .eyes-container {
     /* animation-fill-mode: forwards;
     animation-iteration-count: 1; */
     animation-play-state: paused;
 }
 
-.custom-loader.success .face .eyes-container .eye {
+.custom-loader-container.success .face .eyes-container .eye {
     /* animation-fill-mode: forwards;
     animation-iteration-count: 1; */
     animation-play-state: paused;
 }
 
-.custom-loader.success .face .eyes-container .eye:after {
+.custom-loader-container.success .face .eyes-container .eye:after {
     transition-duration: 350ms;
     top: 50%;
     right: 50%;
     transform: translate(50%, -50%);
+}
+
+.custom-loader-container.success.minimize .custom-loader {
+    height: 130px;
+}
+
+/* POSITIONS */
+.custom-loader-container.fixed,
+.custom-loader-container.absolute,
+.custom-loader-container.absolute-centered-pov {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffffa1;
+    border-radius: 20px;
+    z-index: 50;
+    max-height: unset;
+}
+
+.custom-loader-container.absolute {
+    position: absolute;
+}
+
+.custom-loader-container.absolute-centered-pov .custom-loader {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.custom-loader-container:not(.absolute):not(.fixed).hidden {
+    padding: 0px;
+    max-height: 0px;
+}
+
+.custom-loader-container.absolute.hidden,
+.custom-loader-container.fixed.hidden {
+    display: none;
 }
 
 @media screen and (max-width: 350px) {

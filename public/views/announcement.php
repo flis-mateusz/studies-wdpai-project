@@ -16,8 +16,7 @@ HeaderComponent::initialize();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/public/css/main.css">
-    <link rel="stylesheet" href="/public/css/icons.css">
-    <link rel="stylesheet" href="/public/css/announcement.css">
+    <link rel="stylesheet" href="/public/css/announcement/announcement.css">
     <?php
     ResourceManager::appendResources();
     ?>

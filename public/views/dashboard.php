@@ -17,7 +17,7 @@ HeaderComponent::initialize();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/public/css/main.css">
     <link rel="stylesheet" href="/public/css/dashboard.css">
-    <link rel="stylesheet" href="/public/css/announcement_element.css">
+    <link rel="stylesheet" href="/public/css/announcement/announcement_element.css">
     <?php
     ResourceManager::appendResources();
     ?>

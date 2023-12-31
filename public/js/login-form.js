@@ -1,8 +1,8 @@
-import BasicFormController from './controllers/BasicFormController.js';
+import FormControllerWithLoader from './controllers/FormControllerWithLoader.js';
 import { TwoOrMoreWordsValidation, EmailValidation, NotEmptyValidation, PasswordValidation, ArePasswordsSameValidation, PhoneNumberValidation } from './validation/ValidationStrategy.js'
 import { redirectToTargetOrDefault } from './utils.js'
 
-class LoginForm extends BasicFormController {
+class LoginForm extends FormControllerWithLoader {
     constructor(formElement) {
         super(formElement, '/signin');
         this.outerOutput = document.querySelector('.login-successful')
@@ -11,7 +11,7 @@ class LoginForm extends BasicFormController {
         this.registerInput('login-password', new NotEmptyValidation(''))
     }
 
-    showLoginSuccess(userName) { 
+    showLoginSuccess(userName) {
         document.querySelector('.login-successful').innerText += ','
         let loginSuccessfulName = document.querySelector('.login-successful-name')
         loginSuccessfulName.innerText = `${userName}`
@@ -20,14 +20,11 @@ class LoginForm extends BasicFormController {
 
     handleResponse(responseData) {
         this.showLoginSuccess(responseData.data.userName)
-        setTimeout(() => {
-            redirectToTargetOrDefault()
-        }, 1000);
-        this.setLoaderSuccess();
+        this.loader.completeLoadingAsync().then(redirectToTargetOrDefault)
     }
 }
 
-class RegisterForm extends BasicFormController {
+class RegisterForm extends FormControllerWithLoader {
     constructor(formElement) {
         super(formElement, '/signup');
 
@@ -37,24 +34,13 @@ class RegisterForm extends BasicFormController {
         this.registerInput('register-password', new PasswordValidation())
         this.registerInput('register-repassword', new ArePasswordsSameValidation('Hasła nie są identyczne', this.getInputByName('register-password'), true))
     }
-
-    handleResponse(data) {
-        setTimeout(() => {
-            redirectToTargetOrDefault()
-        }, 1000);
-        this.setLoaderSuccess();
-    }
 }
 
-class ForgotPasswordForm extends BasicFormController {
+class ForgotPasswordForm extends FormControllerWithLoader {
     constructor(formElement) {
         super(formElement, '/forgot_password');
 
         this.registerInput('forgot-password-email', new EmailValidation('Podaj adres email we właściwym formacie'))
-    }
-
-    handleResponse(data) {
-        // TODO
     }
 }
 
@@ -73,10 +59,8 @@ document.querySelectorAll('.switch-form').forEach(button => {
         else {
             formsConatiner.classList.toggle('register');
         }
-        setTimeout(()=>{
-            registerSection.scroll(0,0)
+        setTimeout(() => {
+            registerSection.scroll(0, 0)
         }, 350)
     });
 });
-
-export default BasicFormController;

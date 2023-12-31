@@ -16,7 +16,7 @@ class HeaderComponent extends Component
 
     public static function initialize()
     {
-        ResourceManager::addStyle('/public/css/header.css');
+        ResourceManager::addStyle('/public/css/components/header.css');
     }
 
     public function render()

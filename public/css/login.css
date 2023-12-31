@@ -83,11 +83,6 @@ main .login-required {
     scrollbar-width: none;
 } */
 
-.froms-frame:not(:has(form.submitting)) .custom-loader-container {
-    padding: 0px;
-    max-height: 0px;
-}
-
 .forms-container {
     width: 100%;
     display: flex;
@@ -209,10 +204,6 @@ span.forgot-password {
 
 .animated-hidden-span {
     font-size: 1.5em;
-}
-
-.custom-loader.success {
-    height: 130px;
 }
 
 @media screen and (max-width: 520px) {

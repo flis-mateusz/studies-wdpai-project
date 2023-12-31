@@ -21,6 +21,7 @@ class ProfileController extends AppController
 
     public function profile()
     {
+        Logger::debug($this->getLoggedUser());
         $this->render("profile", ['user' => $this->getLoggedUser()]);
     }
 

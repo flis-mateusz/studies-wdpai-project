@@ -55,26 +55,3 @@ form.with-loader.submitting {
     max-height: 0px;
     overflow: hidden;
 }
-
-form.with-absolute-loader .custom-loader-container {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #ffffffa1;
-    border-radius: 20px;
-    z-index: 5;
-}
-
-form.with-absolute-loader.submitting .custom-loader-container {
-    max-height: inherit !important;
-}
-
-section:not(:has(form.with-loader.submitting)) .custom-loader-container {
-    padding: 0px;
-    max-height: 0px;
-}

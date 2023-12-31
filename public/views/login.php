@@ -13,7 +13,7 @@ HeaderComponent::initialize();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/public/css/main.css">
     <link rel="stylesheet" href="/public/css/login.css">
-    <link rel="stylesheet" href="/public/css/forms.css">
+    <link rel="stylesheet" href="/public/css/components/forms.css">
     <script type="module" src="/public/js/login-form.js" defer></script>
     <?php
     ResourceManager::appendResources();
