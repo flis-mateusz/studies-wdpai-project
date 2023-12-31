@@ -75,6 +75,17 @@ class AreValuesSameValidation extends ValidationStrategy {
     }
 }
 
+class SanitizeOnly extends ValidationStrategy {
+    public function __construct() {
+        parent::__construct('Sanitization error');
+    }
+
+    public function validate($value): bool
+    {
+        return true;
+    }
+}
+
 
 abstract class ValidationStrategy
 {
@@ -97,3 +108,5 @@ abstract class ValidationStrategy
 
     abstract public function validate($value): bool;
 }
+
+

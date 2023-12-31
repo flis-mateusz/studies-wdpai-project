@@ -5,10 +5,12 @@ class ResourceManager
     private static $scripts = [];
     private static $styles = [];
 
-    public static function addScript($script)
+    public static function addScript($script, $defer = true, $module = false)
     {
-        if (!in_array($script, self::$scripts)) {
-            self::$scripts[] = $script;
+        $scriptData = ['src' => $script, 'defer' => $defer, 'module' => $module];
+
+        if (!in_array($scriptData, self::$scripts)) {
+            self::$scripts[] = $scriptData;
         }
     }
 
@@ -25,7 +27,9 @@ class ResourceManager
             echo "<link rel='stylesheet' href='$style'>";
         }
         foreach (self::$scripts as $script) {
-            echo "<script src='$script' defer></script>";
+            $defer = $script['defer'] ? 'defer' : '';
+            $type = $script['module'] ? "type='module'" : '';
+            echo "<script src='{$script['src']}' $defer $type></script>";
         }
     }
 }

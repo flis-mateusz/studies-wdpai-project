@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/ValidationStrategy.php';
 
-class PostFormValidator
+class PostDataValidator
 {
     private $data;
     private $errors = [];

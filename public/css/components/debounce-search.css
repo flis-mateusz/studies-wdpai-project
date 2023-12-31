@@ -1,0 +1,95 @@
+.debonced-search {
+    width: 100%;
+    position: relative;
+}
+
+.debonced-search label {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.debonced-search label i {
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+    color: silver;
+}
+
+.debonced-search label i::before {
+    content: 'search';
+}
+
+.debonced-search input {
+    padding-left: calc(1em + 30px);
+    width: 100%;
+    transition-duration: 350ms;
+}
+
+.search-results {
+    transition-duration: 250ms;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: absolute;
+    box-shadow: 0px 8px 8px 0px rgba(0, 0, 0, 0.08);
+    background: #FFF;
+    width: 100%;
+    border-radius: 0px 0px 15px 15px;
+    max-height: 0px;
+}
+
+.debonced-search:not(.selected) input:focus,
+.debonced-search:not(.selected):has(.search-results:hover) input {
+    border-radius: 15px 15px 0px 0px;
+}
+
+.debonced-search:not(.selected):has(input:focus) .search-results,
+.debonced-search:not(.selected) .search-results:hover {
+    overflow-y: auto;
+    max-height: 300px;
+}
+
+.search-results div {
+    font-size: 0.9em;
+    display: flex;
+    padding: 5px 15px;
+    cursor: pointer;
+}
+
+.search-results div:hover {
+    background-color: #efeaff;
+}
+
+.debonced-search.selected label i::before {
+    content: 'playlist_add_check';
+    color: #34793f;
+}
+
+.debonced-search.selected input.search-input {
+    color: #34793f;
+    background: #efeaff;
+}
+
+.debonced-search.loading label i::before {
+    content: '';
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    display: block;
+    width: 15px;
+    height: 15px;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

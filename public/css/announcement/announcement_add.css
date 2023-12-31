@@ -3,7 +3,9 @@ main {
 }
 
 .main-input {
-    max-width: 300px;
+    border-radius: 15px;
+    padding: 12px 20px;
+    box-shadow: 0px 3px 20px 0px rgba(0, 0, 0, 0.08);
 }
 
 form {
@@ -28,6 +30,10 @@ form fieldset {
     min-inline-size: auto;
 }
 
+.main-input, .input-related {
+    max-width: 300px;
+}
+
 form>div {
     display: flex;
     justify-content: flex-end;
@@ -37,12 +43,6 @@ form>div {
 fieldset>div {
     display: flex;
     align-self: stretch;
-}
-
-fieldset>div .main-input {
-    border-radius: 15px;
-    padding: 12px 20px;
-    box-shadow: 0px 3px 20px 0px rgba(0, 0, 0, 0.08);
 }
 
 fieldset>div.field,

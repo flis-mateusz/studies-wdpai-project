@@ -1,7 +1,7 @@
-import FormControllerWithLoader from './controllers/FormControllerWithLoader.js';
+import FormControllerWithLoader from './controllers/form-controller-loader.js';
 import { TwoOrMoreWordsValidation, EmailValidation, PasswordValidation, ArePasswordsSameValidation, PhoneNumberValidation } from './validation/ValidationStrategy.js'
-import { FetchController } from './controllers/FetchController.js';
-import AttachmentDragDropController from './controllers/AttachmentDragDropController.js';
+import { FetchController } from './controllers/fetch-controller.js';
+import AttachmentDragDropController from './controllers/attachment-drop-controller.js';
 
 class AnnoucementAddForm extends FormControllerWithLoader {
     constructor(formElement) {

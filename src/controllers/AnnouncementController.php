@@ -21,7 +21,8 @@ class AnnouncementController extends AppController
             "announcement_add",
             [
                 'user' => $this->getLoggedUser(),
-                'animalFeatures' => $this->announcemetsRepository->getAnimalFeatures()
+                'animalFeatures' => $this->announcemetsRepository->getAnimalFeatures(),
+                'animalTypes' => $this->announcemetsRepository->getAnimalTypes()
             ]
         );
     }

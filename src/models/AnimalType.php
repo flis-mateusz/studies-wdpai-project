@@ -1,5 +1,5 @@
 <?php
-class AnimalType
+class AnimalType implements \JsonSerializable
 {
     private $id;
     private $name;
@@ -18,5 +18,12 @@ class AnimalType
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function jsonSerialize(): mixed
+    {
+        return [
+            $this->id => $this->name,
+        ];
     }
 }

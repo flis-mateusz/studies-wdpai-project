@@ -22,6 +22,7 @@ class FetchController {
                         options.body = data;
                     } else {
                         options.body = JSON.stringify(data);
+                        console.log(options.body);
                         options.headers['Content-Type'] = 'application/json';
                     }
                 }

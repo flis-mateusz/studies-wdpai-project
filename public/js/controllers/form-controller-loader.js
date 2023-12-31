@@ -1,5 +1,5 @@
-import FormController from './FormController.js';
-import CustomContentLoaderController from './CustomContentLoaderController.js';
+import FormController from './form-controller.js';
+import CustomContentLoaderController from './custom-loader.js';
 
 class FormControllerWithLoader extends FormController {
     constructor(formElement, url, showAllErrors = false) {

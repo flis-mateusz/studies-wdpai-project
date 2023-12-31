@@ -23,20 +23,30 @@ class AnnouncementsRepository extends Repository
         return $result;
     }
 
-    public function getAnimalTypes(): array
+    public function getAnimalTypes($query = null): array
     {
         $result = [];
-        $stmt = $this->database->connect()->prepare('
-            SELECT * FROM animal_types ORDER BY type_id ASC;
-        ');
+
+        $sql = 'SELECT * FROM animal_types';
+        if ($query) {
+            $sql .= ' WHERE type_name LIKE :query';
+        }
+        $sql .= ' ORDER BY type_name ASC;';
+
+        $stmt = $this->database->connect()->prepare($sql);
+        if ($query) {
+            $stmt->bindValue(':query', '%' . $query . '%', PDO::PARAM_STR);
+        }
         $stmt->execute();
         $types = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
         foreach ($types as $type) {
             $result[] = new AnimalType(
                 $type['type_id'],
                 $type['type_name']
             );
         }
+
         return $result;
     }
 }

@@ -57,6 +57,18 @@ class AppController
         }
     }
 
+    protected function getJsonData() {
+        $json = file_get_contents('php://input');
+        $data = json_decode($json, true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            $response = new JsonResponse();
+            $response->setError('Wystąpił wewnętrzny błąd, spróbuj ponownie', 500);
+            $response->send();
+        }
+
+        return $data;
+    }
 
     protected function isGet(): bool
     {

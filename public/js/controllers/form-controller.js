@@ -1,5 +1,5 @@
-import InputField from './InputController.js';
-import { FetchController, TextualError, JsonObjectError } from './FetchController.js';
+import InputField from './input-controller.js';
+import { FetchController, TextualError, JsonObjectError } from './fetch-controller.js';
 
 class FormController {
     constructor(formElement, url, showAllErrors = false) {

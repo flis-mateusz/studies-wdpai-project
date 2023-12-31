@@ -1,6 +1,6 @@
-import FormControllerWithLoader from './controllers/FormControllerWithLoader.js';
+import FormControllerWithLoader from './controllers/form-controller-loader.js';
 import { TwoOrMoreWordsValidation, EmailValidation, PasswordValidation, ArePasswordsSameValidation, PhoneNumberValidation } from './validation/ValidationStrategy.js'
-import { FetchController } from './controllers/FetchController.js';
+import { FetchController } from './controllers/fetch-controller.js';
 
 class ProfileEditForm extends FormControllerWithLoader {
     constructor(formElement) {

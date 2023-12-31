@@ -10,10 +10,14 @@ require_once __DIR__ . '/components/HeaderComponent.php';
 require_once __DIR__ . '/components/AttachmentDragDrop.php';
 require_once __DIR__ . '/components/CustomContentLoader.php';
 require_once __DIR__ . '/components/AnimalFeatures.php';
+require_once __DIR__ . '/components/DebounceSearch.php';
 
 HeaderComponent::initialize();
 AttachmentDragDrop::initialize();
 CustomContentLoader::initialize();
+DebounceSearchComponent::initialize();
+
+$petTypeSearch = new DebounceSearchComponent('pet-type', null, null, json_encode($animalTypes));
 ?>
 
 <!DOCTYPE html>
@@ -26,7 +30,7 @@ CustomContentLoader::initialize();
     <link rel="stylesheet" href="/public/css/components/forms.css">
     <link rel="stylesheet" href="/public/css/components/custom_radio.css">
     <link rel="stylesheet" href="/public/css/announcement/announcement_add.css">
-        <script type="module" src="/public/js/announcement_add.js" defer></script>
+    <script type="module" src="/public/js/announcement_add.js" defer></script>
     <?php
     ResourceManager::appendResources();
     ?>
@@ -88,9 +92,23 @@ CustomContentLoader::initialize();
                 <div class="field">
                     <div>Typ zwierzęcia*</div>
                     <div class="info">Przykładowo kot, pies, chomik, papuga</div>
-                    <section class="debonced-search">
-                        <input type="text" class="main-input" id="pet-kind">
+                    <div class="input-related">
+                        <!-- <section class="debonced-search">
+                            <input type="text" class="hidden" id="ds-123-value">
+                            <label>
+                                <i class="material-icons">search</i>
+                                <input type="text" class="main-input" placeholder="Wyszukaj">
+                            </label>
+                            <div class="search-results">
+                                
+                            </div>
+                        </section> -->
+
+                        <?php
+                        $petTypeSearch->render();
+                        ?>
                     </div>
+                </div>
                 </div>
                 <div class="field">
                     <div>Gatunek</div>
@@ -110,52 +128,6 @@ CustomContentLoader::initialize();
                 <?php
                 (new AnimalFeatures($animalFeatures))->render();
                 ?>
-                <!-- <div class="animal-features">
-                    <div>
-                        <div>Odpchlony</div>
-                        <div class="checkboxes">
-                            <input type="radio" id="charac-1-yes" name="charac-1" value="1" />
-                            <label class="yes" for="charac-1-yes">Tak</label>
-                            <input type="radio" id="charac-1-no" name="charac-1" value="-1" />
-                            <label class="no" for="charac-1-no">Nie</label>
-                            <input type="radio" id="charac-1-not-sure" name="charac-1" value="0" checked />
-                            <label class="not-sure" for="charac-1-not-sure">Nie wiem</label>
-                        </div>
-                    </div>
-                    <div>
-                        <div>Szczepiony</div>
-                        <div class="checkboxes">
-                            <input type="radio" id="charac-2-yes" name="charac-2" value="1" />
-                            <label class="yes" for="charac-2-yes">Tak</label>
-                            <input type="radio" id="charac-2-no" name="charac-2" value="-1" />
-                            <label class="no" for="charac-2-no">Nie</label>
-                            <input type="radio" id="charac-2-not-sure" name="charac-2" value="0" checked />
-                            <label class="not-sure" for="charac-2-not-sure">Nie wiem</label>
-                        </div>
-                    </div>
-                    <div>
-                        <div>Przyjazny dzieciom</div>
-                        <div class="checkboxes">
-                            <input type="radio" id="charac-3-yes" name="charac-3" value="1" />
-                            <label class="yes" for="charac-3-yes">Tak</label>
-                            <input type="radio" id="charac-3-no" name="charac-3" value="-1" />
-                            <label class="no" for="charac-3-no">Nie</label>
-                            <input type="radio" id="charac-3-not-sure" name="charac-3" value="0" checked />
-                            <label class="not-sure" for="charac-3-not-sure">Nie wiem</label>
-                        </div>
-                    </div>
-                    <div>
-                        <div>Uwielbia zabawę</div>
-                        <div class="checkboxes">
-                            <input type="radio" id="charac-4-yes" name="charac-4" value="1" />
-                            <label class="yes" for="charac-4-yes">Tak</label>
-                            <input type="radio" id="charac-4-no" name="charac-4" value="-1" />
-                            <label class="no" for="charac-4-no">Nie</label>
-                            <input type="radio" id="charac-4-not-sure" name="charac-4" value="0" checked />
-                            <label class="not-sure" for="charac-4-not-sure">Nie wiem</label>
-                        </div>
-                    </div>
-                </div> -->
             </fieldset>
             <fieldset>
                 <div class="field">
@@ -188,6 +160,10 @@ CustomContentLoader::initialize();
     </main>
     <footer>
     </footer>
+
+    <?php
+        $petTypeSearch->renderScript();
+    ?>
 </body>
 
 </html>

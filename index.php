@@ -22,4 +22,6 @@ Router::post('profile_avatar_delete', 'ProfileController');
 Router::get('add_announcement', 'AnnouncementController');
 Router::get('announcement', 'AnnouncementController');
 
+Router::get('query_animal_types', 'SearchController');
+
 Router::run($path);

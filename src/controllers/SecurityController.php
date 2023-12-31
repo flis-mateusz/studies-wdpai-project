@@ -5,7 +5,7 @@ require_once __DIR__ . '/../models/User.php';
 require_once __DIR__ . '/../repository/UsersRepository.php';
 require_once __DIR__ . '/../responses/JsonResponse.php';
 require_once __DIR__ . '/../responses/PostFormResponse.php';
-require_once __DIR__ . '/../validation/PostFormValidator.php';
+require_once __DIR__ . '/../validation/PostDataValidator.php';
 require_once __DIR__ . '/../utils/utils.php';
 
 class SecurityController extends AppController
@@ -24,7 +24,7 @@ class SecurityController extends AppController
         $response = new PostFormResponse();
 
         // VALIDATION
-        $validator = new PostFormValidator($_POST);
+        $validator = new PostDataValidator($_POST);
         $validator->addField('login-email', new EmailValidation('Wprowadź adres e-mail'));
         $validator->addField('login-password', new NotEmptyValidation('Wprowadź hasło'));
         if (!$validator->validate()) {
@@ -54,7 +54,7 @@ class SecurityController extends AppController
         $response = new PostFormResponse();
 
         // VALIDATION
-        $validator = new PostFormValidator($_POST);
+        $validator = new PostDataValidator($_POST);
         $validator->addField('register-names', new TwoOrMoreWordsValidation('Wprowadź imię i nazwisko'));
         $validator->addField('register-email', new EmailValidation('Wprowadź adres e-mail'));
         $validator->addField('register-phone', new NotEmptyValidation('Wprowadź prawidłowy numer telefonu'));

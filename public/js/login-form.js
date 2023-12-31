@@ -1,4 +1,4 @@
-import FormControllerWithLoader from './controllers/FormControllerWithLoader.js';
+import FormControllerWithLoader from './controllers/form-controller-loader.js';
 import { TwoOrMoreWordsValidation, EmailValidation, NotEmptyValidation, PasswordValidation, ArePasswordsSameValidation, PhoneNumberValidation } from './validation/ValidationStrategy.js'
 import { redirectToTargetOrDefault } from './utils.js'
 

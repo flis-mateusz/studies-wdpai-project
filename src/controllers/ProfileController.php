@@ -5,7 +5,7 @@ require_once __DIR__ . '/../managers/AttachmentManager.php';
 require_once __DIR__ . '/../repository/UsersRepository.php';
 require_once __DIR__ . '/../responses/PostFormResponse.php';
 require_once __DIR__ . '/../utils/logger.php';
-require_once __DIR__ . '/../validation/PostFormValidator.php';
+require_once __DIR__ . '/../validation/PostDataValidator.php';
 
 class ProfileController extends AppController
 {
@@ -28,7 +28,7 @@ class ProfileController extends AppController
     public function profile_edit()
     {
         // VALIDATION
-        $validator = new PostFormValidator($_POST);
+        $validator = new PostDataValidator($_POST);
         $validator->addField('edit-names', new TwoOrMoreWordsValidation('Wprowadź imię i nazwisko'));
         $validator->addField('edit-email', new EmailValidation('Wprowadź adres e-mail we właściwym formacie'));
         $validator->addField('edit-phone', new NotEmptyValidation('Wprowadź numer telefonu'));
