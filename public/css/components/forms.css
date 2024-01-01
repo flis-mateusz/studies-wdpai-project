@@ -55,3 +55,70 @@ form.with-loader.submitting {
     max-height: 0px;
     overflow: hidden;
 }
+
+form textarea.main-input {
+    flex: unset;
+    max-width: 100%;
+    resize: vertical;
+    min-height: 50px;
+}
+
+form textarea ~ .counter {
+    display: flex;
+    justify-content: flex-end;
+    font-size: 0.8em;
+    gap: 5px;
+    margin-top: 2px;
+}
+
+form textarea ~ .counter:has(div) {
+    justify-content: space-between;
+}
+
+form textarea ~ .counter > div {
+    display: flex;
+    gap: 5px;
+    min-width: max-content;
+}
+
+form .input-with-select {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+    box-shadow: 0px 3px 20px 0px rgba(0, 0, 0, 0.08);
+    padding: 12px 20px;
+    border-radius: 15px;
+}
+
+form .input-with-select input {
+    box-shadow: none;
+    padding: 0;
+    border-radius: 0;
+    min-width: 50px;
+}
+
+form .input-with-select select {
+    border: none !important;
+    outline: none;
+    background: transparent !important;
+}
+
+form .input-with-select select:focus {
+    border: none !important;
+    outline: none;
+}
+
+form .input-with-select select:focus-visible {
+    border: none !important;
+}
+
+@media screen and (max-width: 400px) {
+    form textarea ~ .counter:has(div) {
+        flex-direction: column-reverse;
+    }
+
+    form textarea ~ .counter > div {
+        justify-content: flex-end;
+    }
+}

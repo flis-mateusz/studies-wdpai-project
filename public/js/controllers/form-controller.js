@@ -9,9 +9,19 @@ class FormController {
         this.generalOutput = this.form.querySelector('.form-output');
         this.form.addEventListener('submit', (e) => this.#handleSubmit(e));
         this.inputs = {};
+
+        this.form.querySelectorAll('textarea')?.forEach((textarea) => {
+            let counter = textarea.nextElementSibling;
+            let current = counter.querySelector('.current');
+            if (current) {
+                textarea.addEventListener('input', (e) => {
+                    current.textContent = textarea.value.length;
+                });
+            }
+        });
     }
 
-    registerInput(inputName, validationStrategy) {
+    registerInput(inputName, validationStrategy = null) {
         this.inputs[inputName] = new InputField(this.getInputByName(inputName), validationStrategy);
     }
 
@@ -72,7 +82,7 @@ class FormController {
         }
         this.handleError(error)
     }
-    
+
 
     async sendRequest() {
         await this.fetchController.post(new FormData(this.form))
@@ -86,7 +96,7 @@ class FormController {
     }
 
     getInputByName(inputName) {
-        return this.form.querySelector(`input[name="${inputName}"]`);
+        return this.form.querySelector(`input[name="${inputName}"]`) || this.form.querySelector(`textarea[name="${inputName}"]`);
     }
 
     showOutput(text, error = false) {

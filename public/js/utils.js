@@ -24,6 +24,11 @@ const isPhoneNumber = (value) => {
     return pattern.test(value);
 }
 
+const isNumber = (value) => {
+    const pattern = /^\d+$/;
+    return pattern.test(value);
+}
+
 const isPasswordStrong = (password) => {
     const minLength = 8;
     const hasUpperCase = /[A-Z]/.test(password);
@@ -50,4 +55,4 @@ const redirectToTargetOrDefault = () => {
     }
 }
 
-export { arePasswordsSame, isEmail, isTwoOrMoreWords, isPasswordStrong, redirectToTargetOrDefault, isEmpty, isNotEmpty, isPhoneNumber, isTouchDevice };
+export { arePasswordsSame, isEmail, isTwoOrMoreWords, isPasswordStrong, redirectToTargetOrDefault, isEmpty, isNotEmpty, isPhoneNumber, isTouchDevice, isNumber };

@@ -18,6 +18,7 @@ class FormControllerWithLoader extends FormController {
     handleError(error) {
         setTimeout(() => {
             this.loader.hide();
+            this.submited()
         }, 1000)
     }
 }

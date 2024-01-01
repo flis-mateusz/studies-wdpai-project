@@ -28,7 +28,7 @@ class HeaderComponent extends Component
 
     public function showLogo()
     {
-        return in_array($this->uri, ['/login', '/add_announcement']);
+        return in_array($this->uri, ['/login', '/add']);
     }
 
     public function showBackLink()
@@ -69,7 +69,7 @@ class HeaderComponent extends Component
         <header>
             <nav>
                 <div class="submenu">
-                    <?php if ($this->uri == '/login' || $this->uri == '/add_announcement') : ?>
+                    <?php if ($this->uri == '/login' || $this->uri == '/add') : ?>
                         <div>
                             <span class="logo">ZwierzakSzukaDomu</span>
                         </div>
@@ -98,7 +98,7 @@ class HeaderComponent extends Component
                         <div class="avatar"></div>
                         <div class="menu-dropdown-content">
                             <div>
-                                <a href="/add_announcement">
+                                <a href="/add">
                                     <i class="material-icons">add_circle_outline</i>
                                     <span>Dodaj ogłoszenie</span>
                                 </a>

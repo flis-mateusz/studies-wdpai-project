@@ -28,7 +28,7 @@ $petTypeSearch = new DebounceSearchComponent('pet-type', null, null, json_encode
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/public/css/main.css">
     <link rel="stylesheet" href="/public/css/components/forms.css">
-    <link rel="stylesheet" href="/public/css/components/custom_radio.css">
+    <link rel="stylesheet" href="/public/css/components/custom-radio.css">
     <link rel="stylesheet" href="/public/css/announcement/announcement_add.css">
     <script type="module" src="/public/js/announcement_add.js" defer></script>
     <?php
@@ -47,7 +47,7 @@ $petTypeSearch = new DebounceSearchComponent('pet-type', null, null, json_encode
         (new CustomContentLoader())->render();
         ?>
         <form id="announcement-add-form">
-            <fieldset>
+            <fieldset class="scroll-to">
                 <div class="field">
                     <div>Imię*</div>
                     <div class="info">Jeśli Twój zwierzak reaguje na konkretne imię, podaj je. W przeciwnym wypadku to
@@ -63,7 +63,14 @@ $petTypeSearch = new DebounceSearchComponent('pet-type', null, null, json_encode
                         pozostaw to pole
                         puste</div>
                     <div>
-                        <input type="text" class="main-input" name="pet-age">
+                        <div class="input-with-select input-related">
+                            <input type="number" class="main-input" name="pet-age">
+                            <select name="age-type">
+                                <option value="dni">dzień</option>
+                                <option value="miesiecy" selected>miesiąc</option>
+                                <option value="lat">lat</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
                 <div class="field">
@@ -76,34 +83,24 @@ $petTypeSearch = new DebounceSearchComponent('pet-type', null, null, json_encode
                     </div>
                 </div>
             </fieldset>
-            <fieldset>
+            <fieldset class="scroll-to">
                 <div class="field">
                     <div>Zdjęcie*</div>
                     <div class="info">Dodaj zdjęcie w formacie jpg, jped, png lub gif</div>
                     <?php
                     (new AttachmentDragDrop('pet-avatar'))->render();
                     ?>
+                    <span class="input-error"></span>
                     <div class="tip">
                         <span>Jakość zdjęcia wpływa na atrakcyjność ogłoszenia</span>
                     </div>
                 </div>
             </fieldset>
-            <fieldset>
+            <fieldset class="scroll-to">
                 <div class="field">
                     <div>Typ zwierzęcia*</div>
                     <div class="info">Przykładowo kot, pies, chomik, papuga</div>
                     <div class="input-related">
-                        <!-- <section class="debonced-search">
-                            <input type="text" class="hidden" id="ds-123-value">
-                            <label>
-                                <i class="material-icons">search</i>
-                                <input type="text" class="main-input" placeholder="Wyszukaj">
-                            </label>
-                            <div class="search-results">
-                                
-                            </div>
-                        </section> -->
-
                         <?php
                         $petTypeSearch->render();
                         ?>
@@ -118,7 +115,7 @@ $petTypeSearch = new DebounceSearchComponent('pet-type', null, null, json_encode
                     </div>
                 </div>
             </fieldset>
-            <fieldset>
+            <fieldset class="scroll-to">
                 <div class="field">
                     <div>Cechy*</div>
                     <div class="info">Zaznacz tylko te pola, co do których masz absolutną pewność i uniknij
@@ -129,31 +126,37 @@ $petTypeSearch = new DebounceSearchComponent('pet-type', null, null, json_encode
                 (new AnimalFeatures($animalFeatures))->render();
                 ?>
             </fieldset>
-            <fieldset>
+            <fieldset class="scroll-to">
                 <div class="field">
                     <div>Opis</div>
                     <div class="info">Podaj szczegółowe informacje o zwierzaku, a unikniesz pytań od zainteresowanych
                     </div>
+                    <div>
+                        <textarea name="pet-description" id="pet-description" cols="30" rows="5" class="main-input" maxlength="2000" minlength="1"></textarea>
+                        <div class="counter">
+                            <span class="input-error font-inherit"></span>
+                            <div>
+                                <span class="current">0</span><span>/ 2000</span>
+                            </div>
+                        </div>
+
+                    </div>
                     <div class="tip">
                         <span>Dokładny i rzetelny opis statystycznie zwiększa szansę na adopcję zwierzaka</span>
                     </div>
-                    <div>
-
-                    </div>
                 </div>
-
             </fieldset>
-            <fieldset>
+            <fieldset class="scroll-to">
                 <div class="field">
                     <div>Cena</div>
                     <div class="info">Jeśli chcesz oddać zwierzaka za darmo pozostaw to pole puste</div>
                     <div>
-                        <input type="text" class="main-input" id="pet-price">
+                        <input type="number" class="main-input" id="pet-price" min='0'>
                     </div>
                 </div>
             </fieldset>
+            <span class="form-output"></span>
             <div>
-                <span class="form-output"></span>
                 <input type="submit" value="Dodaj ogłoszenie" class="main-button">
             </div>
         </form>
@@ -162,7 +165,7 @@ $petTypeSearch = new DebounceSearchComponent('pet-type', null, null, json_encode
     </footer>
 
     <?php
-        $petTypeSearch->renderScript();
+    $petTypeSearch->renderScript();
     ?>
 </body>
 

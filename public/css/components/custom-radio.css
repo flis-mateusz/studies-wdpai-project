@@ -2,10 +2,11 @@
     box-sizing: border-box;
     font-size: 0;
     display: flex;
-    flex-flow: row nowrap;
+    flex-direction: row !important;
     justify-content: flex-start;
     align-items: stretch;
     display: flex;
+    max-width: max-content;
 }
 
 .toggle input {
@@ -14,7 +15,7 @@
 
 .toggle input+label {
     cursor: pointer;
-    padding: 7px 10px;
+    padding: 7px 30px;
     border: solid 1px #ddd;
     background-color: #fff;
     font-size: 1rem;
@@ -30,19 +31,18 @@
 }
 
 .toggle input+label:first-of-type {
-    border-radius: 20px 0 0 20px;
+    border-radius: 15px 0 0 15px;
     border-right: none;
 }
 
 .toggle input+label:last-of-type {
-    border-radius: 0 20px 20px 0;
+    border-radius: 0 15px 15px 0;
     border-left: none;
 }
 
 .toggle input:checked+label {
     background: linear-gradient(180deg, #9c80ed 0%, rgb(144 122 205 / 65%) 96.87%, rgba(80, 51, 164, 0.00) 100%);
     color: #fff;
-    box-shadow: 0 0 10px rgba(102, 179, 251, .5);
     z-index: 1;
 }
 

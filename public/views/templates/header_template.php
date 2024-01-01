@@ -36,7 +36,7 @@
                 </div>
                 <div class="menu-dropdown-content">
                     <div>
-                        <?php echo $this->renderNavLink('/add_announcement', 'Dodaj ogłoszenie', 'add_circle_outline'); ?>
+                        <?php echo $this->renderNavLink('/add', 'Dodaj ogłoszenie', 'add_circle_outline'); ?>
                         <?php echo $this->renderNavLink('/profile', 'Mój profil', 'account_circle'); ?>
                         <?php echo $this->renderNavLink('/favorite', 'Obserwowane', 'favorite_border'); ?>
                         <?php echo $this->renderNavLink('/help', 'Pomoc', 'help_outline'); ?>

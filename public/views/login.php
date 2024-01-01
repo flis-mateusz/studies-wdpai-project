@@ -56,7 +56,6 @@ HeaderComponent::initialize();
                             <input type="submit" value="Zaloguj" class="main-button">
                             <span class="incentive switch-form">Zarejestruj się</span>
                         </form>
-                        <span class="animated-hidden-span"></span>
                     </div>
                 </section>
                 <section class="register-section">

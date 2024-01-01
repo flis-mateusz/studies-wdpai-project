@@ -1,11 +1,11 @@
 import FormControllerWithLoader from './controllers/form-controller-loader.js';
-import { TwoOrMoreWordsValidation, EmailValidation, PasswordValidation, ArePasswordsSameValidation, PhoneNumberValidation } from './validation/ValidationStrategy.js'
+import { NumberValidation, EmailValidation, PasswordValidation, ArePasswordsSameValidation, InputMinLengthValidation, NotEmptyValidation } from './validation/ValidationStrategy.js'
 import { FetchController } from './controllers/fetch-controller.js';
 import AttachmentDragDropController from './controllers/attachment-drop-controller.js';
 
 class AnnoucementAddForm extends FormControllerWithLoader {
     constructor(formElement) {
-        super(formElement, '/profile_edit');
+        super(formElement, '/add_announcement');
 
         this.attachmentController = new AttachmentDragDropController(
             this.form.querySelector('.attachment-dropdown'), 3)
@@ -13,11 +13,13 @@ class AnnoucementAddForm extends FormControllerWithLoader {
         this.loader.setupAbsoluteCenteredPOV()
 
         // Inputs section
-        // this.registerInput('edit-names', new TwoOrMoreWordsValidation('Wprowadź imię i nazwisko'))
-        // this.registerInput('edit-email', new EmailValidation('Wprowadź adres e-mail we właściwym formacie'))
-        // this.registerInput('edit-phone', new PhoneNumberValidation('Wprowadź prawidłowy numer telefonu'))
-        // this.registerInput('edit-password', new PasswordValidation(true))
-        // this.registerInput('edit-repassword', new ArePasswordsSameValidation('Hasła nie są identyczne', this.getInputByName('edit-password'), true))
+        this.registerInput('pet-name', new NotEmptyValidation('Wprowadź imię zwierzaka'))
+        this.registerInput('pet-age')
+        this.registerInput('pet-gender')
+        this.registerInput('pet-avatar', new NotEmptyValidation('Dodaj zdjęcie zwierzaka'))
+        this.registerInput('pet-type', new NotEmptyValidation('Wyszukaj typ zwierzaka'))
+        this.registerInput('pet-description', new InputMinLengthValidation(1, 'Opis powinien zawierać conajmniej 1 znaków'))
+        this.registerInput('pet-price')
     }
 
     onSuccess() {
@@ -25,7 +27,7 @@ class AnnoucementAddForm extends FormControllerWithLoader {
     }
 
     handleResponse(data) {
-
+        
     }
 }
 

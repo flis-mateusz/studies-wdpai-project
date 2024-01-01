@@ -19,7 +19,8 @@ Router::get('profile', 'ProfileController');
 Router::post('profile_edit', 'ProfileController');
 Router::post('profile_avatar_delete', 'ProfileController');
 
-Router::get('add_announcement', 'AnnouncementController');
+Router::get('add', 'AnnouncementController');
+Router::post('add_announcement', 'AnnouncementController');
 Router::get('announcement', 'AnnouncementController');
 
 Router::get('query_animal_types', 'SearchController');

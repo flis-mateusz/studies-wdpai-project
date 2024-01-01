@@ -36,8 +36,10 @@ class DebounceSearchComponent extends Component
             <input type="text" class="hidden target-input" name="$inputName">
             <label>
                 <i class="material-icons"></i>
-                <input type="text" class="main-input search-input" placeholder="Wyszukaj">
+                <input type="text" class="main-input search-input" placeholder="Wyszukaj" id="$id-input">
+                
             </label>
+            <span class="input-error"></span>
             <div class="search-results">
             </div>
         </section>

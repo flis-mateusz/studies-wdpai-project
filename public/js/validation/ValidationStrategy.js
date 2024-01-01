@@ -1,4 +1,4 @@
-import { isNotEmpty, isEmpty, isEmail, isTwoOrMoreWords, arePasswordsSame, isPasswordStrong, isPhoneNumber } from '../utils.js'
+import { isNotEmpty, isEmpty, isEmail, isTwoOrMoreWords, arePasswordsSame, isPasswordStrong, isPhoneNumber, isNumber } from '../utils.js'
 
 class ValidationStrategy {
     constructor(errorMessage) {
@@ -34,6 +34,22 @@ class PhoneNumberValidation extends ValidationStrategy {
     }
 }
 
+class NumberValidation extends ValidationStrategy {
+    validate(value) {
+        return isNumber(value);
+    }
+}
+
+class InputMinLengthValidation extends ValidationStrategy {
+    constructor(minLength, errorMessage) {
+        super(errorMessage);
+        this.minLength = minLength;
+    }
+    validate(value) {
+        return value.length >= this.minLength;
+    }
+}
+
 class PasswordValidation extends ValidationStrategy {
     constructor(skipEmpty = false, errorMessage = 'Hasło musi mieć co najmniej 8 znaków i zawierać duże i małe litery, cyfrę oraz znak specjalny') {
         super(errorMessage);
@@ -65,4 +81,13 @@ class ArePasswordsSameValidation extends ValidationStrategy {
     }
 }
 
-export { TwoOrMoreWordsValidation, EmailValidation, NotEmptyValidation, PasswordValidation, ArePasswordsSameValidation, PhoneNumberValidation };
+export {
+    TwoOrMoreWordsValidation,
+    EmailValidation,
+    NotEmptyValidation,
+    PasswordValidation,
+    ArePasswordsSameValidation,
+    PhoneNumberValidation,
+    InputMinLengthValidation,
+    NumberValidation
+};

@@ -14,7 +14,7 @@ class AnnouncementController extends AppController
         $this->announcemetsRepository = new AnnouncementsRepository();
     }
 
-    public function add_announcement()
+    public function add()
     {
         $this->loginRequired();
         $this->render(
@@ -25,6 +25,12 @@ class AnnouncementController extends AppController
                 'animalTypes' => $this->announcemetsRepository->getAnimalTypes()
             ]
         );
+    }
+
+    public function add_announcement() {
+        $this->loginRequired();
+
+
     }
 
     public function announcement($id)

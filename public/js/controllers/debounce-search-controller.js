@@ -102,7 +102,9 @@ class DebounceSearchController {
     handleOptionSelect(optionId, optionName) {
         this.setTargetInputValue(optionId);
         this.inputSearchElement.value = optionName;
+        this.targetInputElement.dispatchEvent(new Event('change'));
         this.element.classList.add('selected');
+        this.inputSearchElement.classList.add('valid');
     }
 
     setTargetInputValue(value) {
@@ -111,7 +113,9 @@ class DebounceSearchController {
 
     resetSearch() {
         this.setTargetInputValue('');
+        this.targetInputElement.dispatchEvent(new Event('change'));
         this.element.classList.remove('selected');
+        this.inputSearchElement.classList.remove('valid');
     }
 }
 

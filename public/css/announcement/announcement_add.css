@@ -30,7 +30,8 @@ form fieldset {
     min-inline-size: auto;
 }
 
-.main-input, .input-related {
+.main-input,
+.input-related {
     max-width: 300px;
 }
 
@@ -152,17 +153,18 @@ div.checkboxes::before {
     font-size: 24px;
 }
 
-.animal-features>div:has(input[value="1"]:checked)>div:first-child::before {
+.animal-features>div:has(input[value="2"]:checked)>div:first-child::before {
     color: #6361E8;
     content: "check_circle";
 }
 
-.animal-features>div:has(input[value="-1"]:checked)>div:first-child::before {
+.animal-features>div:has(input[value="1"]:checked)>div:first-child::before {
     color: #ca3b3b;
     content: "remove_circle";
 }
 
-.animal-features>div:has(input[value="0"]:checked)>div:first-child::before {
+.animal-features>div:has(input[value="0"]:checked)>div:first-child::before,
+.animal-features>div:has(input:not(:checked))>div:first-child::before {
     color: #adadad;
     content: "help_outline";
 }
@@ -171,17 +173,21 @@ div.checkboxes::before {
     order: -1;
 }
 
-div.checkboxes>input[value="1"]:checked~label.yes {
+div.checkboxes>input[value="2"]:checked~label.yes {
     display: none;
 }
 
-div.checkboxes>input[value="-1"]:checked~label.no {
+div.checkboxes>input[value="1"]:checked~label.no {
     display: none;
 }
 
 div.checkboxes>input[value="0"]:not(:checked)~label.not-sure {
     order: -1;
     display: flex;
+}
+
+span.input-error {
+    text-align: left !important;
 }
 
 @media screen and (max-width: 700px) {
@@ -225,6 +231,11 @@ div.checkboxes>input[value="0"]:not(:checked)~label.not-sure {
 }
 
 @media screen and (max-width: 400px) {
+    form>div {
+        justify-content: center;
+        width: 100%;
+    }
+
     fieldset>div.field>.info {
         text-align: justify;
     }
