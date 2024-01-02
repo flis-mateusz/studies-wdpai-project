@@ -21,8 +21,8 @@ class FormController {
         });
     }
 
-    registerInput(inputName, validationStrategy = null) {
-        this.inputs[inputName] = new InputField(this.getInputByName(inputName), validationStrategy);
+    registerInput(inputName, validationStrategy = null, noObject = false) {
+        this.inputs[inputName] = new InputField(noObject ? inputName : this.getInputByName(inputName), validationStrategy, noObject);
     }
 
     submited() {

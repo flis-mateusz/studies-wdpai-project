@@ -64,13 +64,14 @@ $petTypeSearch = new DebounceSearchComponent('pet-type', null, null, json_encode
                         puste</div>
                     <div>
                         <div class="input-with-select input-related">
-                            <input type="number" class="main-input" name="pet-age">
-                            <select name="age-type">
-                                <option value="dni">dzień</option>
-                                <option value="miesiecy" selected>miesiąc</option>
-                                <option value="lat">lat</option>
+                            <input type="number" min="1" class="main-input" name="pet-age">
+                            <select name="pet-age-type">
+                                <option value="day">dni</option>
+                                <option value="month" selected>miesięcy</option>
+                                <option value="year">lat</option>
                             </select>
                         </div>
+                        <span class="input-error"></span>
                     </div>
                 </div>
                 <div class="field">
@@ -81,6 +82,7 @@ $petTypeSearch = new DebounceSearchComponent('pet-type', null, null, json_encode
                         <input type="radio" name="pet-gender" value="female" id="pet-gender-female" />
                         <label for="pet-gender-female">Ona</label>
                     </div>
+                    <span class="input-error"></span>
                 </div>
             </fieldset>
             <fieldset class="scroll-to">
@@ -111,20 +113,19 @@ $petTypeSearch = new DebounceSearchComponent('pet-type', null, null, json_encode
                     <div>Gatunek</div>
                     <div class="info">Jeśli nie znasz gatunku, pozostaw to pole puste</div>
                     <div>
-                        <input type="text" class="main-input" id="pet-kind">
+                        <input type="text" class="main-input" id="pet-kind" name="pet-kind">
                     </div>
                 </div>
             </fieldset>
             <fieldset class="scroll-to">
                 <div class="field">
                     <div>Cechy*</div>
-                    <div class="info">Zaznacz tylko te pola, co do których masz absolutną pewność i uniknij
-                        nieporozumień, lepsza
-                        gorzka prawda niż słodkie kłamstwo</div>
+                    <div class="info">Zaznacz tylko te pola, które dotyczą zwierzaka oraz co do których masz absolutną pewność</div>
                 </div>
                 <?php
                 (new AnimalFeatures($animalFeatures))->render();
                 ?>
+                <span class="input-error pet-characteristics"></span>
             </fieldset>
             <fieldset class="scroll-to">
                 <div class="field">
@@ -148,10 +149,17 @@ $petTypeSearch = new DebounceSearchComponent('pet-type', null, null, json_encode
             </fieldset>
             <fieldset class="scroll-to">
                 <div class="field">
+                    <div>Lokalizacja*</div>
+                    <div class="info">Wpisz miasto, w którym zwykle zwierzak przebywa</div>
+                    <div>
+                        <input type="text" class="main-input" name="pet-location">
+                    </div>
+                </div>
+                <div class="field">
                     <div>Cena</div>
                     <div class="info">Jeśli chcesz oddać zwierzaka za darmo pozostaw to pole puste</div>
                     <div>
-                        <input type="number" class="main-input" id="pet-price" min='0'>
+                        <input type="number" class="main-input" min='0' name="pet-price">
                     </div>
                 </div>
             </fieldset>

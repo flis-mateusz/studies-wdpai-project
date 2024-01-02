@@ -11,28 +11,36 @@ class AnnouncementDetail
     private $price;
     private $description;
     private $age;
+    private $ageType;
     private $gender;
-    private $avatar_url;
+    private $avatarName;
+    private $kind;
     private array $features;
 
     public function __construct(
         string $name,
         string $locality,
-        float $price,
+        ?float $price,
         string $description,
-        int $age,
+        ?int $age,
+        ?string $age_type,
         string $gender,
-        string $avatar_url
+        ?string $avatarName,
+        ?string $kind,
+        array $features
     ) {
         $this->name = $name;
         $this->locality = $locality;
         $this->price = $price;
         $this->description = $description;
         $this->age = $age;
+        $this->ageType = $age_type;
         $this->gender = $gender;
-        $this->avatar_url = $avatar_url;
+        $this->avatarName = $avatarName;
+        $this->kind = $kind;
+        $this->features = $features;
     }
-    
+
     public function getName(): string
     {
         return $this->name;
@@ -47,13 +55,13 @@ class AnnouncementDetail
     {
         return $this->locality;
     }
-    
+
     public function setLocality(string $locality): void
     {
         $this->locality = $locality;
     }
 
-    public function getPrice(): float
+    public function getPrice(): ?float
     {
         return $this->price;
     }
@@ -67,22 +75,22 @@ class AnnouncementDetail
     {
         return $this->description;
     }
-    
+
     public function setDescription(string $description): void
     {
         $this->description = $description;
     }
-    
-    public function getAge(): int
+
+    public function getAge(): ?int
     {
         return $this->age;
     }
-    
+
     public function setAge(int $age): void
     {
         $this->age = $age;
     }
-    
+
     public function getGender(): string
     {
         return $this->gender;
@@ -92,22 +100,42 @@ class AnnouncementDetail
     {
         $this->gender = $gender;
     }
-    
-    public function getAvatarUrl(): string
+
+    public function getAvatarName(): ?string
     {
-        return $this->avatar_url;
+        return $this->avatarName;
     }
-    
-    public function setAvatarUrl(string $avatar_url): void
+
+    public function setAvatarName(string $avatarName): void
     {
-        $this->avatar_url = $avatar_url;
+        $this->avatarName = $avatarName;
     }
 
     public function getFeatures(): array
     {
         return $this->features;
     }
-    
+
+    public function getKind(): ?string
+    {
+        return $this->kind;
+    }
+
+    public function setKind(string $kind): void
+    {
+        $this->kind = $kind;
+    }
+
+    public function getAgeType(): ?string
+    {
+        return $this->ageType;
+    }
+
+    public function setAgeType(string $ageType): void
+    {
+        $this->ageType = $ageType;
+    }
+
     public function addFeature(AnimalFeature $feature): void
     {
         array_push($this->features, $feature);
@@ -118,33 +146,41 @@ class Announcement
 {
     private $announcement_id;
     private AnimalType $type;
-    private $species_name;
     private User $user;
+    private bool $accepted;
     private AnnouncementDetail $details;
 
     public function __construct(
-        int $announcement_id,
+        ?int $announcement_id,
         AnimalType $type,
-        string $species_name,
-        User $user,
+        ?User $user,
+        ?string $kind,
+        bool $accepted,
         string $name,
         string $locality,
         ?int $price,
         string $description,
-        string $age,
+        ?string $age,
+        ?string $age_type,
         string $gender,
-        string $avatar_url
+        ?string $avatarName,
+        array $features
     ) {
         $this->announcement_id = $announcement_id;
         $this->type = $type;
-        $this->species_name = $species_name;
         $this->user = $user;
-        $this->details = new AnnouncementDetail($name, $locality, $price, $description, $age, $gender, $avatar_url);
+        $this->accepted = $accepted;
+        $this->details = new AnnouncementDetail($name, $locality, $price, $description, $age, $age_type, $gender, $avatarName, $kind, $features);
     }
 
-    public function getAnnouncementId(): int
+    public function getId(): int
     {
         return $this->announcement_id;
+    }
+
+    public function setId(int $announcement_id): void
+    {
+        $this->announcement_id = $announcement_id;
     }
 
     public function getUser(): User
@@ -162,8 +198,13 @@ class Announcement
         return $this->type;
     }
 
-    public function getSpeciesName(): string
+    public function isAccepted(): bool
     {
-        return $this->species_name;
+        return $this->accepted;
+    }
+
+    public function setAccepted(bool $accepted): void
+    {
+        $this->accepted = $accepted;
     }
 }

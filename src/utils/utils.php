@@ -20,20 +20,48 @@ function isTwoOrMoreWords($string)
     return count($words) >= 2;
 }
 
-function isEmpty($str)
+function isEmpty($var)
 {
-    return !isset($str) || strlen($str) === 0;
+    if (is_string($var)) {
+        return trim($var) === '';
+    }
+    if (is_array($var)){
+        return empty($var);
+    }
 }
 
-function isNotEmpty($str)
+function isNotEmpty($var)
 {
-    return isset($str) && strlen($str) > 0;
+    return !isEmpty($var);
 }
 
 function isPhoneNumber($value)
 {
     $pattern = '/^\d{9}$/';
     return preg_match($pattern, $value);
+}
+
+function isNumber($value)
+{
+    return is_numeric($value);
+}
+
+function isInteger($value)
+{
+    return is_int($value);
+}
+
+function inRange($value, $min = null, $max = null): bool
+{
+    if ($min !== null && $max !== null) {
+        return $value >= $min && $value <= $max;
+    } elseif ($min !== null) {
+        return $value >= $min;
+    } elseif ($max !== null) {
+        return $value <= $max;
+    } else {
+        return true;
+    }
 }
 
 function isPasswordStrong($password)

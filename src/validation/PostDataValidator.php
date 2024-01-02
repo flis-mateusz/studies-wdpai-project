@@ -1,6 +1,8 @@
 <?php
 
 require_once __DIR__ . '/ValidationStrategy.php';
+require_once __DIR__ . '/../utils/utils.php';
+
 
 class PostDataValidator
 {
@@ -27,18 +29,45 @@ class PostDataValidator
     public function validate()
     {
         foreach ($this->validationStrategies as $field => $strategy) {
-            $value = $this->data[$field] ?? '';
+            if (!array_key_exists($field, $this->data)) {
+                if ($strategy->canValueBeEmpty()) {
+                    $this->sanitizedData[$field] = null;
+                    continue;
+                }
+                $this->errors[$field] = $strategy->getErrorMessage();
+                continue;
+            }
+            $value = $this->data[$field];
+
+            if (isEmpty($value) && $strategy->canValueBeEmpty()) {
+                $this->sanitizedData[$field] = null;
+                continue;
+            }
+
             $sanitizedValue = $strategy->sanitize($value);
-            $this->sanitizedData[$field] = $sanitizedValue;
+            if ($sanitizedValue === false) {
+                $this->errors[$field] = 'Wartość nie może zawierać znaków specjalnych';
+                continue;
+            }
+
+            try {
+                $convertedValue = $strategy->convertType($sanitizedValue);
+            } catch (InvalidArgumentException $e) {
+                $this->errors[$field] = $e->getMessage();
+                continue;
+            }
+
+            $this->sanitizedData[$field] = $convertedValue;
 
             if ($strategy instanceof AreValuesSameValidation) {
                 $otherFieldName = $strategy->getOtherFieldName();
                 $otherValue = $this->sanitizedData[$otherFieldName] ?? '';
-                if (!$strategy->validate($sanitizedValue, $otherValue)) {
+
+                if ($otherValue !== $sanitizedValue) {
                     $this->errors[$field] = $strategy->getErrorMessage();
                 }
             } else {
-                if (!$strategy->validate($sanitizedValue)) {
+                if (!$strategy->validate($convertedValue)) {
                     $this->errors[$field] = $strategy->getErrorMessage();
                 }
             }
@@ -50,6 +79,11 @@ class PostDataValidator
     public function getSanitizedData()
     {
         return $this->sanitizedData;
+    }
+
+    public function getData()
+    {
+        return $this->data;
     }
 
     public function getErrors()

@@ -26,7 +26,7 @@ class SecurityController extends AppController
         // VALIDATION
         $validator = new PostDataValidator($_POST);
         $validator->addField('login-email', new EmailValidation('Wprowadź adres e-mail'));
-        $validator->addField('login-password', new NotEmptyValidation('Wprowadź hasło'));
+        $validator->addField('login-password', (new NotEmptyValidation('Wprowadź hasło'))->setSantization(false));
         if (!$validator->validate()) {
             $errors = $validator->getErrors();
             $response->setErrorFields($errors);
@@ -40,7 +40,7 @@ class SecurityController extends AppController
         $user = $this->usersRepository->getUser($email);
 
         if ($user === null || !password_verify($password, $user->getPassword())) {
-            $response->setError('Nie znaleziono użytkownika', 200);
+            $response->setError('Nie znaleziono użytkownika', 401);
             $response->send();
         }
 
@@ -57,9 +57,9 @@ class SecurityController extends AppController
         $validator = new PostDataValidator($_POST);
         $validator->addField('register-names', new TwoOrMoreWordsValidation('Wprowadź imię i nazwisko'));
         $validator->addField('register-email', new EmailValidation('Wprowadź adres e-mail'));
-        $validator->addField('register-phone', new NotEmptyValidation('Wprowadź prawidłowy numer telefonu'));
-        $validator->addField('register-password', new PasswordValidation());
-        $validator->addField('register-repassword', new AreValuesSameValidation('Hasła nie są takie same', 'register-password'));
+        $validator->addField('register-phone', new PhoneNumberValidation('Wprowadź prawidłowy numer telefonu'));
+        $validator->addField('register-password', (new PasswordValidation())->setSantization(false));
+        $validator->addField('register-repassword', (new AreValuesSameValidation('Hasła nie są takie same', 'register-password'))->setSantization(false));
         if (!$validator->validate()) {
             $errors = $validator->getErrors();
             $response->setErrorFields($errors);
@@ -83,12 +83,15 @@ class SecurityController extends AppController
         } catch (PhoneExistsException $e) {
             $response->addErrorField('register-phone', $e->getMessage(), 409);
             $response->send();
+        } catch (Exception $e) {
+            $response->setError('Wystąpił wewnętrzny błąd, spróbuj ponownie później', 500);
+            $response->send();
         }
 
         if ($new_user) {
+            Logger::debug($new_user);
+            Logger::debug($user);
             $this->getSession()->setUserID($user->getId());
-        } else {
-            $response->setError('Wystąpił wewnętrzny błąd, spróbuj ponownie', 500);
         }
         $response->send();
     }
@@ -103,7 +106,8 @@ class SecurityController extends AppController
         }
     }
 
-    public function forgot_password() {
+    public function forgot_password()
+    {
         $response = new JsonResponse();
         $response->setError('Ta opcja nie jest jeszcze dostępna', 501);
         $response->send();

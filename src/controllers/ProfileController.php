@@ -1,6 +1,7 @@
 <?php
 
 require_once 'AppController.php';
+require_once __DIR__ . '/../models/Announcement.php';
 require_once __DIR__ . '/../managers/AttachmentManager.php';
 require_once __DIR__ . '/../repository/UsersRepository.php';
 require_once __DIR__ . '/../responses/PostFormResponse.php';
@@ -31,9 +32,9 @@ class ProfileController extends AppController
         $validator = new PostDataValidator($_POST);
         $validator->addField('edit-names', new TwoOrMoreWordsValidation('Wprowadź imię i nazwisko'));
         $validator->addField('edit-email', new EmailValidation('Wprowadź adres e-mail we właściwym formacie'));
-        $validator->addField('edit-phone', new NotEmptyValidation('Wprowadź numer telefonu'));
-        $validator->addField('edit-password', new PasswordValidation(true));
-        $validator->addField('edit-repassword', new AreValuesSameValidation('Wprowadź nie są takie same', 'edit-password', true));
+        $validator->addField('edit-phone', new PhoneNumberValidation('Wprowadź numer telefonu'));
+        $validator->addField('edit-password', (new PasswordValidation())->setCanValueBeEmpty(true)->setSantization(false));
+        $validator->addField('edit-repassword', (new AreValuesSameValidation('Hasła różnią się', 'edit-password')));
         if (!$validator->validate()) {
             $errors = $validator->getErrors();
             (new PostFormResponse($errors))->send();
@@ -80,6 +81,9 @@ class ProfileController extends AppController
             $response->addErrorField('edit-email', $e->getMessage(), 409);
         } catch (PhoneExistsException $e) {
             $response->addErrorField('edit-phone', $e->getMessage(), 409);
+        } catch (Exception $e) {
+            $response->setError('Wystąpił wewnętrzny błąd, spróbuj ponownie później', 500);
+            $response->send();
         }
 
         $response->send();

@@ -10,6 +10,12 @@ class ValidationStrategy {
     }
 }
 
+class NoValidation {
+    validate(value) {
+        return true;
+    }
+}
+
 class TwoOrMoreWordsValidation extends ValidationStrategy {
     validate(value) {
         return isTwoOrMoreWords(value);
@@ -89,5 +95,6 @@ export {
     ArePasswordsSameValidation,
     PhoneNumberValidation,
     InputMinLengthValidation,
-    NumberValidation
+    NumberValidation,
+    NoValidation
 };

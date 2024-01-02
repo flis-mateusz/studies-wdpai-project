@@ -69,25 +69,29 @@ class UsersRepository extends Repository
     {
         $this->checkUnique($user->getEmail(), $user->getPhone());
 
-        $stmt = $this->database->connect()->prepare('
+        $connection = $this->database->connect();
+        try {
+            $connection->beginTransaction();
+
+            $stmt = $connection->prepare('
             INSERT INTO users (email, password_hash, phone)
-            VALUES (?, ?, ?) RETURNING user_id;
-        ');
-        $stmt->execute([
-            $user->getEmail(),
-            $user->getPassword(),
-            $user->getPhone()
-        ]);
+            VALUES (?, ?, ?) RETURNING user_id;');
+            $stmt->execute([
+                $user->getEmail(),
+                $user->getPassword(),
+                $user->getPhone()
+            ]);
 
-        $result = $stmt->fetchColumn();
+            $user_id = $stmt->fetchColumn();
+            if (!$user_id) {
+                throw new Exception();
+            }
+            $user->setId($user_id);
 
-        if ($result) {
-            $user->setId($result);
-
-            $stmt = $this->database->connect()->prepare('
-                INSERT INTO user_detail (user_id, name, surname, avatar_name)
-                VALUES (?,?,?,?) RETURNING detail_id;
-            ');
+            $stmt = $connection->prepare('
+                    INSERT INTO user_detail (user_id, name, surname, avatar_name)
+                    VALUES (?,?,?,?) RETURNING detail_id;
+                ');
 
             $stmt->execute([
                 $user->getId(),
@@ -96,7 +100,16 @@ class UsersRepository extends Repository
                 $user->getAvatarUrl()
             ]);
 
-            return $stmt->fetchColumn();
+            $detail_id = $stmt->fetchColumn();
+            if (!$detail_id) {
+                throw new Exception();
+            }
+
+            $connection->commit();
+            return $user_id;
+        } catch (Exception $e) {
+            $connection->rollback();
+            throw $e;
         }
     }
 
@@ -104,28 +117,37 @@ class UsersRepository extends Repository
     {
         $this->checkUnique($user->getEmail(), $user->getPhone(), $user->getId());
 
-        $stmt = $this->database->connect()->prepare('
+        $connection = $this->database->connect();
+        try {
+            $connection->beginTransaction();
+            
+            $stmt = $connection->prepare('
             UPDATE users SET email =?, password_hash =?, phone =?, is_admin =?
-            WHERE user_id =? ;
-        ');
-        $stmt->execute([
-            $user->getEmail(),
-            $user->getPassword(),
-            $user->getPhone(),
-            json_encode($user->isAdmin()),
-            $user->getId()
-        ]);
+            WHERE user_id =? ;');
+            $stmt->execute([
+                $user->getEmail(),
+                $user->getPassword(),
+                $user->getPhone(),
+                json_encode($user->isAdmin()),
+                $user->getId()
+            ]);
 
-        $stmt = $this->database->connect()->prepare('
+            $stmt = $connection->prepare('
             UPDATE user_detail SET name =?, surname =?, avatar_name =?
-            WHERE user_id =?;
-        ');
-        $stmt->execute([
-            $user->getName(),
-            $user->getSurname(),
-            $user->getAvatarName(),
-            $user->getId()
-        ]);
+            WHERE user_id =?;');
+            $stmt->execute([
+                $user->getName(),
+                $user->getSurname(),
+                $user->getAvatarName(),
+                $user->getId()
+            ]);
+            
+            $connection->commit();
+            return true;
+        } catch (Exception $e) {
+            $connection->rollback();
+            throw $e;
+        }
     }
 
     public function removeAvatar(int $userId)

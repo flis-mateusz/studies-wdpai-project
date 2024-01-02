@@ -1,5 +1,6 @@
 import FormController from './form-controller.js';
 import CustomContentLoaderController from './custom-loader.js';
+import { redirectToTargetOrDefault } from '../utils.js'
 
 class FormControllerWithLoader extends FormController {
     constructor(formElement, url, showAllErrors = false) {
@@ -12,7 +13,7 @@ class FormControllerWithLoader extends FormController {
     }
 
     handleResponse(data) {
-        this.loader.completeLoadingAsync().then(redirectToTargetOrDefault)
+        this.loader.completeLoadingAsync().then() // redirectToTargetOrDefault
     }
 
     handleError(error) {

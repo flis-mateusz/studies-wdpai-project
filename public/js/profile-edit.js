@@ -95,6 +95,8 @@ class ProfileEditForm extends FormControllerWithLoader {
         this.isNewFile = false;
         this.newAvatarTip.classList.add('hidden');
         
+        this.getInputByName('edit-password').value = '';
+        this.getInputByName('edit-repassword').value = '';
         this.loader.completeLoadingAsync().then(this.loader.hide)
     }
 

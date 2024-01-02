@@ -100,7 +100,7 @@ HeaderComponent::initialize();
                             <div class="inputs">
                                 <div>
                                     <label for="forgot-password-email"><span>Wprowadź adres e-mail</span></label>
-                                    <input type="text" class="main-input" id="forgot-password-email" name="forgot-password-email">
+                                    <input type="number" step="0.01" class="main-input" id="forgot-password-email" name="forgot-password-email">
                                 </div>
                             </div>
                             <span class="form-output"></span>

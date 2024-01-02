@@ -38,7 +38,7 @@ class User implements \JsonSerializable
         $this->is_admin = $is_admin;
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }

@@ -1,50 +1,55 @@
 class InputField {
-    constructor(inputElement, validationStrategy = null) {
+    constructor(inputElement, validationStrategy = null, noObject = false) {
         this.inputElement = inputElement;
         this.validationStrategy = validationStrategy;
+        this.noObject = noObject;
 
-        if (this.validationStrategy) {
-            let nextSibling = this.inputElement.nextElementSibling;
-
-            if (nextSibling && nextSibling.tagName != 'SPAN') {
-                let findErrorSpan = document.querySelector(`form *:has(*[name=${this.inputElement.name}]) span.input-error`);
-                if (!findErrorSpan) {
-                    console.warn('No error span found');
-                } else {
-                    this.errorSpan = findErrorSpan;
-                }
-            }
-            else if (nextSibling &&
-                nextSibling.tagName === 'SPAN' &&
-                nextSibling.classList.length === 0 &&
-                nextSibling.innerHTML.trim() === '') {
-                this.errorSpan = nextSibling;
-            } else {
-                this.errorSpan = document.createElement('span');
-                this.errorSpan.classList.add('input-error');
-                this.inputElement.parentNode.insertBefore(this.errorSpan, this.inputElement.nextSibling);
-            }
-
-            this.inputElement.addEventListener('input', (e) => {
-                this.hideError();
-            });
-
-            this.inputElement.addEventListener('change', (e) => {
-                this.hideError();
-            });
-
-            this.scrollParent = this.inputElement.closest('.scroll-to')
+        if (noObject) {
+            this.inputElement = document.querySelector('span.input-error.' + inputElement);
+            this.errorSpan = this.inputElement;
+            return
         }
+
+        let nextSibling = this.inputElement.nextElementSibling;
+
+        if (nextSibling && nextSibling.tagName != 'SPAN') {
+            let findErrorSpan = document.querySelector(`form .field:has(*[name=${this.inputElement.name}]) span.input-error`);
+            if (!findErrorSpan) {
+                console.warn('No error span found for ' + this.inputElement.name);
+            } else {
+                this.errorSpan = findErrorSpan;
+            }
+        }
+        else if (nextSibling &&
+            nextSibling.tagName === 'SPAN' &&
+            nextSibling.classList.length === 0 &&
+            nextSibling.innerHTML.trim() === '') {
+            this.errorSpan = nextSibling;
+        } else {
+            this.errorSpan = document.createElement('span');
+            this.errorSpan.classList.add('input-error');
+            this.inputElement.parentNode.insertBefore(this.errorSpan, this.inputElement.nextSibling);
+        }
+
+        this.inputElement.addEventListener('input', (e) => {
+            this.hideError();
+        });
+
+        this.inputElement.addEventListener('change', (e) => {
+            this.hideError();
+        });
+
+        this.scrollParent = this.inputElement.closest('.scroll-to')
     }
 
     validate() {
-        if (this.validationStrategy) {
+        if (this.validationStrategy && !this.noObject) {
             if (!this.validationStrategy.validate(this.inputElement.value)) {
                 this.showError(this.validationStrategy.errorMessage);
                 return false;
             }
-            this.hideError();
         }
+        this.hideError();
         return true;
     }
 
