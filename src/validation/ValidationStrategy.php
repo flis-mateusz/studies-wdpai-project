@@ -173,6 +173,10 @@ abstract class ValidationStrategy
 
     public function sanitize(mixed $value)
     {
+        if (!$this->santization) {
+            return $value;
+        }
+        
         if (is_array($value)) {
             return array_map([$this, 'sanitize'], $value);
         }

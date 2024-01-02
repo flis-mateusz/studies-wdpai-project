@@ -1,6 +1,6 @@
 <?php
 
-class Animal
+class Pet
 {
     public $name;
 

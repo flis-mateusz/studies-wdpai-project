@@ -2,11 +2,15 @@
 
 /**
  * @var ?User $user
+ * @var ?Announcement[] $announcements
+ * @var ?Announcement[] $observedAnnouncements
  */
 
 require_once __DIR__ . '/components/HeaderComponent.php';
+require_once __DIR__ . '/components/AnnouncementElement.php';
 
 HeaderComponent::initialize();
+AnnouncementElement::initialize();
 ?>
 
 <!DOCTYPE html>
@@ -17,7 +21,7 @@ HeaderComponent::initialize();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/public/css/main.css">
     <link rel="stylesheet" href="/public/css/dashboard.css">
-    <link rel="stylesheet" href="/public/css/announcement/announcement_element.css">
+    <script type="module" src="/public/js/announcement.js" defer></script>
     <?php
     ResourceManager::appendResources();
     ?>
@@ -82,46 +86,28 @@ HeaderComponent::initialize();
         </section>
         <section class="announcements">
             <section>
-                <span>Ostatnie dodane ogłoszenia</span>
-                <section class="announcements-list">
-                    <a class="announcement" href="/announcement/1">
-                        <div class="announcement-image"></div>
-                        <div class="announcement-data">
-                            <div class="announcement-detail">
-                                <div class="flex-center gap-10">
-                                    <div class="announcement-avatar"></div>
-                                    <div class="announcement-name">
-                                        <div>Kubuś</div>
-                                        <div>Alpejski gończy</div>
-                                    </div>
-                                </div>
-                                <div class="flex-center gap-5">
-                                    <i class="material-icons">location_on</i>
-                                    <span>Kraków</span>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="announcement-price">
-                                <div class="flex-center gap-5">
-                                    <i class="material-icons">date_range</i>
-                                    <span>2 lata</span>
-                                </div>
-                                <div class="flex-center gap-5">
-                                    <i class="material-icons">account_balance_wallet</i>
-                                    <span>Oddam za darmo</span>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </section>
+                <?php if (isset($announcements) && !isEmpty($announcements)) : ?>
+                    <span>Ostatnie dodane ogłoszenia</span>
+                    <section class="announcements-list">
+                        <?php
+                        foreach ($announcements as $announcement) {
+                            (new AnnouncementElement($announcement))->render();
+                        }
+                        ?>
+                    </section>
+                <?php endif; ?>
             </section>
             <section>
-                <span>Ostatnie oglądane ogłoszenia</span>
-                <section>
-                    <?php
-                    print_r($announcements);
-                    ?>
-                </section>
+                <?php if (isset($observedAnnouncements) && !isEmpty($observedAnnouncements)) : ?>
+                    <span>Obserwowane ogłoszenia</span>
+                    <section class="announcements-list">
+                        <?php
+                        foreach ($observedAnnouncements as $announcement) {
+                            (new AnnouncementElement($announcement))->render();
+                        }
+                        ?>
+                    </section>
+                <?php endif; ?>
             </section>
         </section>
     </main>

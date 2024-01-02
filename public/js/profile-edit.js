@@ -74,7 +74,7 @@ class ProfileEditForm extends FormControllerWithLoader {
             this.mobileAvatarCheckbox.checked = false;
         } else {
             this.loader.show();
-            new FetchController('/profile_avatar_delete').post()
+            new FetchController('/api_profile_avatar_delete').post()
                 .then(() => {
                     this.avatar.style.backgroundImage = '';
                     this.headerAvatar.style.backgroundImage = '';

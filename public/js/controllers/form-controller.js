@@ -68,6 +68,7 @@ class FormController {
         if (error.response.error) {
             this.showOutput(error.response.error, true);
         }
+        
         const responseData = error.response.data;
         console.log(error.response)
         if (responseData?.invalidFields) {

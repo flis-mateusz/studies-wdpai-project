@@ -4,7 +4,7 @@ import { redirectToTargetOrDefault } from './utils.js'
 
 class LoginForm extends FormControllerWithLoader {
     constructor(formElement) {
-        super(formElement, '/signin');
+        super(formElement, '/api_login');
         this.outerOutput = document.querySelector('.login-successful')
 
         this.registerInput('login-email', new EmailValidation('Wprowadź adres email we właściwym formacie'))
@@ -26,7 +26,7 @@ class LoginForm extends FormControllerWithLoader {
 
 class RegisterForm extends FormControllerWithLoader {
     constructor(formElement) {
-        super(formElement, '/signup');
+        super(formElement, '/api_register');
 
         this.registerInput('register-names', new TwoOrMoreWordsValidation('Wprowadź imię i nazwisko'))
         this.registerInput('register-email', new EmailValidation('Wprowadź adres email we właściwym formacie'))
@@ -38,7 +38,7 @@ class RegisterForm extends FormControllerWithLoader {
 
 class ForgotPasswordForm extends FormControllerWithLoader {
     constructor(formElement) {
-        super(formElement, '/forgot_password');
+        super(formElement, '/api_forgot_password');
 
         this.registerInput('forgot-password-email', new EmailValidation('Podaj adres email we właściwym formacie'))
     }

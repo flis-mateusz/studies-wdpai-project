@@ -22,7 +22,6 @@ class FetchController {
                         options.body = data;
                     } else {
                         options.body = JSON.stringify(data);
-                        console.log(options.body);
                         options.headers['Content-Type'] = 'application/json';
                     }
                 }
@@ -71,7 +70,7 @@ class FetchController {
             try {
                 const responseData = await handledResponse.json();
 
-                if (responseData.status === 401 && responseData.data.redirect_url) {
+                if (responseData.status === 401 && responseData.data?.redirect_url) {
                     window.location.href = responseData.data.redirect_url;
                 }
                 return new JsonObjectError(handledResponse.status, responseData);

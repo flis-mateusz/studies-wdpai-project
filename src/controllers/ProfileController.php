@@ -1,7 +1,7 @@
 <?php
 
 require_once 'AppController.php';
-require_once __DIR__ . '/../models/Announcement.php';
+require_once __DIR__ . '/../models/announcement/Announcement.php';
 require_once __DIR__ . '/../managers/AttachmentManager.php';
 require_once __DIR__ . '/../repository/UsersRepository.php';
 require_once __DIR__ . '/../responses/PostFormResponse.php';
@@ -89,7 +89,7 @@ class ProfileController extends AppController
         $response->send();
     }
 
-    public function profile_avatar_delete()
+    public function api_profile_avatar_delete()
     {
         $user = $this->getLoggedUser();
         $response = new JsonResponse();

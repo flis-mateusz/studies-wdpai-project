@@ -22,7 +22,6 @@ class AppController
     protected function getLoggedUser(): ?User
     {
         if (!$this->user) {
-            Logger::debug('Getting user from database');
             $user_id = $this->getSession()->getUserID();
             if (!$user_id) return null;
             $this->user = (new UsersRepository())->getUser(null, $user_id);
@@ -57,7 +56,19 @@ class AppController
         }
     }
 
-    protected function getJsonData() {
+    protected function adminPrivilegesRequired(): void
+    {
+        $this->loginRequired();
+        $currentUser = $this->getLoggedUser();
+        if (!$currentUser->isAdmin()) {
+            $response = new JsonResponse();
+            $response->setError('Nie masz uprawnień do wykonania tej operacji', 403);
+            $response->send();
+        }
+    }
+
+    protected function getJsonData()
+    {
         $json = file_get_contents('php://input');
         $data = json_decode($json, true);
 

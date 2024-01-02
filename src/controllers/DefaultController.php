@@ -16,7 +16,7 @@ class DefaultController extends AppController
 
     public function index()
     {
-        $announcements = []; //$this->announcementsRepository->getAnnouncements();
+        $announcements = $this->announcementsRepository->getAnnouncements();
         $this->render("dashboard", ['announcements' => $announcements, 'user' => $this->getLoggedUser()]);
     }
 

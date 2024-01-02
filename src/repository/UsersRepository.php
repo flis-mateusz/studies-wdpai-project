@@ -61,7 +61,7 @@ class UsersRepository extends Repository
             $user['surname'],
             $user['avatar_name'],
             $user['phone'],
-            false
+            $user['is_admin'],
         );
     }
 

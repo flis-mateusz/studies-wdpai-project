@@ -19,11 +19,24 @@ class AnnouncementController extends AppController
         $this->announcemetsRepository = new AnnouncementsRepository();
     }
 
+    // --------------------- RENDERS ---------------------------
+    public function announcement($id)
+    {
+        $currentUser = $this->getLoggedUser();
+        $this->render(
+            "announcement",
+            [
+                'viewer' => $this->getLoggedUser(),
+                'announcement' => $this->announcemetsRepository->getAnnouncementWithUserContext($id, $currentUser ? $currentUser->getId() : null),
+            ]
+        );
+    }
+
     public function add()
     {
         $this->loginRequired();
         $this->render(
-            "announcement_add",
+            "announcement_form",
             [
                 'user' => $this->getLoggedUser(),
                 'animalFeatures' => $this->announcemetsRepository->getAnimalFeatures(),
@@ -31,8 +44,10 @@ class AnnouncementController extends AppController
             ]
         );
     }
+    // ----------------------------------------------------------------
 
-    public function add_announcement()
+    // --------------------- ACTIONS ---------------------------
+    public function api_add()
     {
         $this->loginRequired();
         //
@@ -87,16 +102,11 @@ class AnnouncementController extends AppController
         $animalFeatures = [];
         foreach ($_POST['pet-characteristics'] ?? [] as $id => $value) {
             if ($value != 0) {
-                $animalFeatures[] = new AnimalFeature($id, null, $value);
+                $animalFeatures[] = new PetFeature($id, null, $value);
             }
         }
 
-        $announcement = new Announcement(
-            null,
-            new AnimalType($data['pet-type'], null),
-            $this->getLoggedUser(),
-            $data['pet-kind'],
-            false,
+        $announcementDetail = new AnnouncementDetail(
             $data['pet-name'],
             $data['pet-location'],
             $data['pet-price'],
@@ -105,9 +115,18 @@ class AnnouncementController extends AppController
             $data['pet-age'] ? $data['pet-age-type'] : null,
             $data['pet-gender'],
             null,
+            $data['pet-kind'],
             $animalFeatures
         );
 
+        $announcement = new Announcement(
+            null,
+            new PetType($data['pet-type'], null),
+            $this->getLoggedUser(),
+            $announcementDetail,
+            false,
+            null
+        );
 
         $avatar = new AttachmentManager($_FILES['pet-avatar']);
         if ($avatar->is_uploaded()) {
@@ -124,7 +143,7 @@ class AnnouncementController extends AppController
         }
 
         try {
-            $this->announcemetsRepository->add_or_edit($announcement);
+            $this->announcemetsRepository->addAnnouncement($announcement);
         } catch (Exception $e) {
             $response->setError('Wystąpił wewnętrzny błąd, spróbuj ponownie później', 500);
         }
@@ -133,8 +152,132 @@ class AnnouncementController extends AppController
         $response->send();
     }
 
-    public function announcement($id)
+    public function api_announcement_delete()
     {
-        $this->render("announcement", ['user' => $this->getLoggedUser()]);
+        $this->loginRequired();
+
+        $response = new JsonResponse();
+        $id = $this->getPostAnnouncementId();
+
+        $currentUser = $this->getLoggedUser();
+        $announcement = $this->announcemetsRepository->getAnnouncementWithUserContext($id, null, false);
+        $adminId = null;
+
+        if (!$announcement || $announcement->isDeleted()) {
+            $response->setError('Ogłoszenie nie istnieje lub zostało już usunięte', 400);
+            $response->send();
+        } else if ($currentUser->getId() !== $announcement->getUser()->getId()) {
+            $this->adminPrivilegesRequired();
+            $adminId = $currentUser->getId();
+        }
+
+        try {
+            $this->announcemetsRepository->delete($id, $adminId);
+        } catch (Exception $e) {
+            error_log($e);
+            $response->setError('Wystąpił wewnętrzny błąd, spróbuj ponownie później', 500);
+        }
+        if ($adminId) {
+            $response->setData(['redirect_url' => '/panel-announcements']);
+        } else {
+            $response->setData(['redirect_url' => '/profile-announcements']);
+        }
+        $response->send();
+    }
+
+    public function api_announcement_approve()
+    {
+        $this->adminPrivilegesRequired();
+
+        $response = new JsonResponse();
+        $id = $this->getPostAnnouncementId();
+
+        try {
+            $this->announcemetsRepository->approve($id);
+        } catch (Exception $e) {
+            error_log($e);
+            $response->setError('Wystąpił wewnętrzny błąd, spróbuj ponownie później', 500);
+            $response->send();
+        }
+        $response->setData('approved');
+        $response->send();
+    }
+
+    public function api_announcement_report()
+    {
+        $this->loginRequired();
+        $response = new JsonResponse();
+
+        $id = $this->getPostAnnouncementId();
+
+        $currentUser = $this->getLoggedUser();
+        $announcement = $this->announcemetsRepository->getAnnouncementWithUserContext($id, $currentUser->getId(), false);
+
+        if (!$announcement || $announcement->isDeleted()) {
+            $response->setError('Ogłoszenie nie istnieje lub zostało usunięte', 400);
+            $response->send();
+        } else if ($currentUser->getId() == $announcement->getUser()->getId()) {
+            $response->setError('Nie możesz zgłosić swojego ogłoszenia', 400);
+            $response->send();
+        } else if ($announcement->isReporedByUser()) {
+            $response->setError('Zgłoszono już to ogłoszenie', 400);
+            $response->send();
+        }
+
+        try {
+            $this->announcemetsRepository->report($currentUser->getId(), $announcement->getId());
+        } catch (Exception $e) {
+            $response->setError('Wystąpił wewnętrzny błąd, spróbuj ponownie później', 500);
+            $response->send();
+        }
+        $response->setData('reported');
+        $response->send();
+    }
+
+    public function api_announcement_like()
+    {
+        $this->loginRequired();
+        $response = new JsonResponse();
+
+        $id = $this->getPostAnnouncementId();
+        $currentUser = $this->getLoggedUser();
+        $announcement = $this->announcemetsRepository->getAnnouncementWithUserContext($id, $currentUser->getId(), false);
+        if (!$announcement || $announcement->isDeleted()) {
+            $response->setError('Ogłoszenie nie istnieje lub zostało usunięte', 404);
+            $response->send();
+        }
+
+        try {
+            if ($announcement->isUserFavourite()) {
+                $this->announcemetsRepository->unlike($currentUser->getId(), $announcement->getId());
+                $response->setData('unliked');
+                $response->send();
+            } else {
+                $this->announcemetsRepository->like($currentUser->getId(), $announcement->getId());
+                $response->setData('liked');
+                $response->send();
+            }
+        } catch (Exception $e) {
+            error_log($e);
+            $response->setError('Wystąpił wewnętrzny błąd, spróbuj ponownie później', 500);
+            $response->send();
+        }
+    }
+
+    // ----------------------------------------------------------------
+    public function getUsersFavorite($user)
+    {
+        return $this->announcemetsRepository->getUsersFavorite($user);
+    }
+
+    private function getPostAnnouncementId(): ?int
+    {
+        $data = $this->getJsonData();
+        if (!isset($data['id']) || !is_numeric($data['id'])) {
+            $response = new JsonResponse();
+            $response->setError('Nieprawidłowy identyfikator ogłoszenia', 400);
+            $response->send();
+        }
+        return $data['id'];
     }
 }

@@ -5,7 +5,7 @@ import AttachmentDragDropController from './controllers/attachment-drop-controll
 
 class AnnouncementAddForm extends FormControllerWithLoader {
     constructor(formElement) {
-        super(formElement, '/add_announcement');
+        super(formElement, '/api_add');
 
         this.attachmentController = new AttachmentDragDropController(
             this.form.querySelector('.attachment-dropdown'), 3)

@@ -19,7 +19,7 @@ class SecurityController extends AppController
         $this->usersRepository = new UsersRepository();
     }
 
-    public function signin()
+    public function api_login()
     {
         $response = new PostFormResponse();
 
@@ -49,7 +49,7 @@ class SecurityController extends AppController
         $response->send();
     }
 
-    public function signup()
+    public function api_register()
     {
         $response = new PostFormResponse();
 
@@ -106,7 +106,7 @@ class SecurityController extends AppController
         }
     }
 
-    public function forgot_password()
+    public function api_forgot_password()
     {
         $response = new JsonResponse();
         $response->setError('Ta opcja nie jest jeszcze dostępna', 501);

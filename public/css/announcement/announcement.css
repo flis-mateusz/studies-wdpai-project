@@ -1,5 +1,6 @@
 main {
-    gap: 10px;
+    gap: 3px;
+    position: relative;
 }
 
 main>section {
@@ -10,9 +11,10 @@ main>section {
 .announcement-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-end;
     gap: 10px;
     align-self: stretch;
+    margin-bottom: 5px;
 }
 
 .announcement-header>div {
@@ -25,18 +27,26 @@ main>section {
 .announcement-header>div:first-child>span:first-child {
     font-size: 2em;
     font-weight: 700;
+    line-height: 100%;
 }
 
 .announcement-header>div:first-child>span:last-child {
     color: #999393;
-    font-size: 0.7em;
+    font-size: 0.8em;
     padding-top: 15px;
 }
 
 .announcement-report {
     width: max-content;
-    cursor: pointer;
     color: #F27E7E;
+}
+
+.announcement-report.action-report {
+    cursor: pointer;
+}
+
+.announcement-report:not(.hidden)~.announcement-report {
+    display: none;
 }
 
 .announcement-report span {
@@ -118,9 +128,6 @@ main>section {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: white;
-    border-radius: 50%;
-    padding: 5px;
     position: absolute;
     top: 20px;
     right: 20px;
@@ -128,6 +135,15 @@ main>section {
 
 .about-pet .like i {
     font-size: 2em;
+}
+
+.about-pet .like i::before {
+    content: 'favorite_border';
+}
+
+.about-pet .like i.liked::before {
+    content: 'favorite';
+    color: #ff6666;
 }
 
 .about-pet .photo {
@@ -204,6 +220,24 @@ main>section {
     display: none;
 }
 
+main section.prompt {
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+    background-color: antiquewhite;
+}
+
+.api-output {
+    width: 100%;
+    display: flex;
+    justify-content: right;
+}
+
+.api-output span {
+    width: 100%;
+    text-align: right;
+}
+
 @media screen and (max-width: 640px) {
     .announcement {
         flex-direction: column-reverse;
@@ -275,6 +309,10 @@ main>section {
     .about-pet .info>div.badges {
         justify-content: flex-start;
         padding: 10px 0px;
+    }
+
+    .announcement-header .main-button {
+        width: 100%;
     }
 }
 

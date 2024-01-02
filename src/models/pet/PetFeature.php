@@ -1,6 +1,6 @@
 <?php
 
-class AnimalFeature
+class PetFeature
 {
     private $id;
     private $name;

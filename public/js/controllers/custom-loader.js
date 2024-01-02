@@ -43,6 +43,10 @@ class CustomContentLoaderController {
         return new Promise(resolve => setTimeout(resolve, time, value));
     }
 
+    timeWait(time = 700, value = null) {
+        return new Promise(resolve => setTimeout(resolve, time, value));
+    }
+
     reset() {
         this.loader.classList.remove('success');
         this.loader.classList.remove('minimize');

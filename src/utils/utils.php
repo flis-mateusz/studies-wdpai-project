@@ -25,7 +25,7 @@ function isEmpty($var)
     if (is_string($var)) {
         return trim($var) === '';
     }
-    if (is_array($var)){
+    if (is_array($var)) {
         return empty($var);
     }
 }
@@ -79,4 +79,32 @@ function redirect($url, $permanent = false)
 {
     header('Location: ' . $url, true, $permanent ? 301 : 302);
     exit();
+}
+
+function formatTimeUnits($age, $unit)
+{
+    $ageDescription = '';
+
+    switch ($unit) {
+        case 'year':
+            if ($age == 1) {
+                $ageDescription = '1 rok';
+            } elseif ($age % 10 == 2 || $age % 10 == 3 || $age % 10 == 4) {
+                $ageDescription = "$age lata";
+            } else {
+                $ageDescription = "$age lat";
+            }
+            break;
+        case 'month':
+            $ageDescription = ($age == 1) ? '1 miesiąc' : "$age miesięcy";
+            break;
+        case 'day':
+            $ageDescription = ($age == 1) ? '1 dzień' : "$age dni";
+            break;
+        default:
+            $ageDescription = null;
+            break;
+    }
+
+    return $ageDescription;
 }

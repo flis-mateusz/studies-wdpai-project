@@ -14,22 +14,26 @@ class User implements \JsonSerializable
 
     public function __construct(
         ?int $id,
-        string $email,
-        string $password,
+        ?string $email,
+        ?string $password,
         ?string $created_at,
         string $name,
         string $surname,
         ?string $avatar_name,
-        ?string $phone,
+        ?string $phone = null,
         ?bool $is_admin = false
     ) {
         $this->id = $id;
         $this->email = $email;
         $this->password = $password;
 
-        $dateTime = new DateTime($created_at ? $created_at : 'now');
-        $dateTime->setTimezone(new DateTimeZone('UTC'));
-        $this->created_at = $dateTime;
+        if ($created_at) {
+            $dateTime = new DateTime($created_at);
+            $dateTime->setTimezone(new DateTimeZone('UTC'));
+            $this->created_at = $dateTime;
+        } else {
+            $this->created_at = null;
+        }
 
         $this->name = $name;
         $this->surname = $surname;
@@ -68,7 +72,7 @@ class User implements \JsonSerializable
         $this->password = $password;
     }
 
-    public function getCreatedAt(): DateTime
+    public function getCreatedAt(): ?DateTime
     {
         return $this->created_at;
     }

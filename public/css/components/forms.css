@@ -32,20 +32,6 @@ form div:has(> input.invalid)>label>span::before {
     max-width: 25px;
 }
 
-form span.input-error {
-    text-align: center;
-    font-size: 0.8em;
-    color: #ff3333;
-    max-height: 0px;
-    overflow: hidden;
-    transition-duration: 350ms;
-    transition-property: max-height;
-}
-
-form span.input-error.visible {
-    max-height: 60px;
-}
-
 form.with-loader {
     transition-duration: 250ms;
     max-height: 700px;

@@ -1,8 +1,7 @@
 <?php
 
-require_once 'User.php';
-require_once 'AnimalType.php';
-require_once 'AnimalFeature.php';
+require_once __DIR__ . '/../pet/PetType.php';
+require_once __DIR__ . '/../pet/PetFeature.php';
 
 class AnnouncementDetail
 {
@@ -66,6 +65,14 @@ class AnnouncementDetail
         return $this->price;
     }
 
+    public function getFormattedPrice(): string
+    {
+        if (!$this->price) {
+            return 'Oddam za darmo';
+        }
+        return $this->price . ' zł';
+    }
+
     public function setPrice(float $price): void
     {
         $this->price = $price;
@@ -96,6 +103,21 @@ class AnnouncementDetail
         return $this->gender;
     }
 
+    public function getFormattedGender(): string
+    {
+        switch ($this->gender) {
+            case 'male':
+                return 'On';
+                break;
+            case 'female':
+                return 'Ona';
+                break;
+            default:
+                return 'Nieznana';
+                break;
+        }
+    }
+
     public function setGender(string $gender): void
     {
         $this->gender = $gender;
@@ -104,6 +126,11 @@ class AnnouncementDetail
     public function getAvatarName(): ?string
     {
         return $this->avatarName;
+    }
+
+    public function getAvatarUrl(): ?string
+    {
+        return $this->avatarName ? '/public/images/uploads/' . $this->avatarName : null;
     }
 
     public function setAvatarName(string $avatarName): void
@@ -121,6 +148,14 @@ class AnnouncementDetail
         return $this->kind;
     }
 
+    public function getFormattedKind(): string
+    {
+        if (!$this->kind) {
+            return 'Nieznany';
+        }
+        return $this->kind;
+    }
+
     public function setKind(string $kind): void
     {
         $this->kind = $kind;
@@ -131,80 +166,26 @@ class AnnouncementDetail
         return $this->ageType;
     }
 
+    public function getFormattedAge(): string
+    {
+        if (!$this->ageType) {
+            return 'Wiek nieznany';
+        }
+        return formatTimeUnits($this->age, $this->ageType);
+    }
+
     public function setAgeType(string $ageType): void
     {
         $this->ageType = $ageType;
     }
 
-    public function addFeature(AnimalFeature $feature): void
+    public function addFeature(PetFeature $feature): void
     {
         array_push($this->features, $feature);
     }
-}
 
-class Announcement
-{
-    private $announcement_id;
-    private AnimalType $type;
-    private User $user;
-    private bool $accepted;
-    private AnnouncementDetail $details;
-
-    public function __construct(
-        ?int $announcement_id,
-        AnimalType $type,
-        ?User $user,
-        ?string $kind,
-        bool $accepted,
-        string $name,
-        string $locality,
-        ?int $price,
-        string $description,
-        ?string $age,
-        ?string $age_type,
-        string $gender,
-        ?string $avatarName,
-        array $features
-    ) {
-        $this->announcement_id = $announcement_id;
-        $this->type = $type;
-        $this->user = $user;
-        $this->accepted = $accepted;
-        $this->details = new AnnouncementDetail($name, $locality, $price, $description, $age, $age_type, $gender, $avatarName, $kind, $features);
-    }
-
-    public function getId(): int
+    public function setFeatures(array $features): void
     {
-        return $this->announcement_id;
-    }
-
-    public function setId(int $announcement_id): void
-    {
-        $this->announcement_id = $announcement_id;
-    }
-
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
-    public function getDetails(): AnnouncementDetail
-    {
-        return $this->details;
-    }
-
-    public function getType(): AnimalType
-    {
-        return $this->type;
-    }
-
-    public function isAccepted(): bool
-    {
-        return $this->accepted;
-    }
-
-    public function setAccepted(bool $accepted): void
-    {
-        $this->accepted = $accepted;
+        $this->features = $features;
     }
 }
