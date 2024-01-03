@@ -23,7 +23,7 @@ class PetFeature
         return $this->name;
     }
 
-    public function getValue(): bool
+    public function getValue(): bool | null
     {
         return $this->value;
     }

@@ -6,10 +6,12 @@ require_once __DIR__ . '/Component.php';
 class AttachmentDragDrop extends Component
 {
     private $inputName;
+    private $initialPhoto;
 
-    public function __construct($inputName)
+    public function __construct($inputName, $initialPhoto = null)
     {
         $this->inputName = $inputName;
+        $this->initialPhoto = $initialPhoto;
     }
 
     public static function initialize()
@@ -20,6 +22,8 @@ class AttachmentDragDrop extends Component
     public function render()
     {
         $id = uniqid();
+        $initialPhoto = $this->initialPhoto ? '<img src="' . $this->initialPhoto . '"/>' : null;
+
         echo <<<HTML
         <div class="attachment-dropdown">
             <input type="file" class="main-input" name="$this->inputName" id="$id" accept="image/*">
@@ -30,7 +34,9 @@ class AttachmentDragDrop extends Component
                 </div>
                 <span class="animated-hidden-span error-output"></span>
             </label>
-            <div class="attachment-preview"></div>
+            <div class="attachment-preview">
+                $initialPhoto
+            </div>
         </div>
     HTML;
     }

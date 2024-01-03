@@ -3,7 +3,7 @@
 require_once __DIR__ . '/ResourceManager.php';
 require_once __DIR__ . '/Component.php';
 
-class PanelSideNav extends Component
+class ProfilePanelSideNav extends Component
 {
     private User $user;
     private string $uri;

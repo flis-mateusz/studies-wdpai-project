@@ -352,6 +352,7 @@ class AnnouncementsRepository extends Repository
         $features = $stmt->fetchAll(PDO::FETCH_ASSOC);
         foreach ($features as $feature) {
             $result[] = new PetFeature($feature['feature_id'], $feature['feature_name'], $feature['value']);
+            Logger::debug(json_encode($feature['value']));
         }
         return $result;
     }

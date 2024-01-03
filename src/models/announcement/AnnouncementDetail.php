@@ -188,4 +188,19 @@ class AnnouncementDetail
     {
         $this->features = $features;
     }
+
+    public static function featuresToAssociativeArray(array $features): array
+    {
+        $result = [];
+        foreach ($features as $feature) {
+            /**
+             * @var PetFeature $feature 
+             */
+            $result[$feature->getId()] = [
+                'name' => $feature->getName(),
+                'value' => $feature->getValue(),
+            ];
+        }
+        return $result;
+    }
 }

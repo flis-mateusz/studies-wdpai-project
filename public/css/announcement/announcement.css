@@ -6,6 +6,7 @@ main {
 main>section {
     background: none;
     box-shadow: none;
+    width: 100%;
 }
 
 .announcement-header {

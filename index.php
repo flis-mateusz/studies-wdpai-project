@@ -21,6 +21,7 @@ Router::post('api_profile_edit', 'ProfileController');
 Router::post('api_profile_avatar_delete', 'ProfileController');
 
 Router::get('add', 'AnnouncementController');
+Router::get('edit', 'AnnouncementController');
 Router::get('announcement', 'AnnouncementController');
 Router::post('api_add', 'AnnouncementController');
 Router::post('api_announcement_like', 'AnnouncementController');

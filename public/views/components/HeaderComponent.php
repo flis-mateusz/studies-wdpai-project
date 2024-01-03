@@ -33,7 +33,7 @@ class HeaderComponent extends Component
 
     public function showBackLink()
     {
-        return str_contains($this->uri, 'announcement/') !== false;
+        return str_contains($this->uri, 'announcement/') || str_contains($this->uri, 'edit/') ;
     }
 
     public function showHomePageLink()

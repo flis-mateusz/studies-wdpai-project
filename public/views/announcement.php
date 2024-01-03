@@ -41,26 +41,23 @@ if ($announcement) {
     (new HeaderComponent($viewer))->render();
     ?>
     <main>
-        <?php if (!$announcement) : ?>
-            <section class="prompt"><span>Wybrane ogłoszenie nie jest dostępne</span></section>
-        <?php elseif ($deleted) : ?>
-
+        <?php if ($deleted) : ?>
             <!-- DELETED ANNOUNCEMENT -->
             <?php if ($deleted->getReason() == DeletedAnnouncement::VIOLATION) : ?>
-                <section class="prompt">
+                <section class="tip normal center">
                     <span>Wybrane ogłoszenie zostało usunięte przez administratora </span>
                     <span class="bold"><?= $deleted->getDeletedAt()->format('Y-m-d'); ?></span>
                     <span>ponieważ naruszało nasz regulamin</span>
                 </section>
             <?php else : ?>
-                <section class="prompt"><span>Wybrane ogłoszenie zostało zakończone</span></section>
+                <section class="tip normal center"><span>Wybrane ogłoszenie zostało zakończone</span></section>
             <?php endif; ?>
         <?php elseif ($requiresApproval && !$isOwner && !$isViewerAdmin) : ?>
             <!-- INVISIBLE TO OTHERS UNLESS ACCEPTED -->
-            <section class="prompt"><span>Wybrane ogłoszenie oczekuje na zatwierdzenie, spróbuj ponownie później</span></section>
+            <section class="tip normal center"><span>Wybrane ogłoszenie oczekuje na zatwierdzenie, spróbuj ponownie później</span></section>
         <?php else : ?>
             <?php if ($requiresApproval && !$isViewerAdmin) : ?>
-                <section class="prompt"><span>Twoje ogłoszenie oczekuje na zatwierdzenie, nie jest jeszcze widoczne publicznie</span></section>
+                <section class="tip normal center"><span>Twoje ogłoszenie oczekuje na zatwierdzenie, nie jest jeszcze widoczne publicznie</span></section>
             <?php endif; ?>
 
             <?php (new CustomContentLoader())->render(); ?>

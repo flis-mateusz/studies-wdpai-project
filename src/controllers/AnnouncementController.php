@@ -40,9 +40,34 @@ class AnnouncementController extends AppController
             [
                 'user' => $this->getLoggedUser(),
                 'animalFeatures' => $this->announcemetsRepository->getAnimalFeatures(),
-                'animalTypes' => $this->announcemetsRepository->getAnimalTypes()
+                'animalTypes' => $this->announcemetsRepository->getAnimalTypes(),
+                'announcement' => null,
             ]
         );
+    }
+
+    public function edit($announcementId)
+    {
+        $this->loginRequired();
+
+        $user = $this->getLoggedUser();
+        $announcement = $this->announcemetsRepository->getAnnouncementWithUserContext($announcementId, $user->getId());
+
+        if (!$announcement || $announcement->isDeleted()) {
+            $this->render('errors/404');
+        } else if ($user->getId() !== $announcement->getUser()->getId()) {
+            $this->render('errors/403');
+        } else {
+            $this->render(
+                "announcement_form",
+                [
+                    'user' => $user,
+                    'animalFeatures' => $this->announcemetsRepository->getAnimalFeatures(),
+                    'animalTypes' => $this->announcemetsRepository->getAnimalTypes(),
+                    'announcement' => $announcement
+                ]
+            );
+        }
     }
     // ----------------------------------------------------------------
 
@@ -65,7 +90,7 @@ class AnnouncementController extends AppController
             }, $this->announcemetsRepository->getAnimalTypes())
         ));
         $validator->addField('pet-kind', (new NotEmptyValidation('Podaj gatunek', 0, null))->setCanValueBeEmpty(true));
-        $validator->addField('pet-description', (new MinMaxLengthValidation(null, 'Opis musi mieć więcej niż 50 znaków i mniej niż 2000 znaków', 1, 2000))->setRejectHTMLSpecialChars(true));
+        $validator->addField('pet-description', (new MinMaxLengthValidation(null, 'Opis musi mieć więcej niż 50 znaków i mniej niż 2000 znaków', 50, 2000))->setRejectHTMLSpecialChars(true));
         $validator->addField('pet-price', (new RangeValidation('float', 'Cena musi być dodatnia liczbą',  0, null))->setCanValueBeEmpty(true));
         $validator->addField('pet-characteristics', (new InCheckboxArrayValidation(
             'Błąd wypełniania charakterystyk',

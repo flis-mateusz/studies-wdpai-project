@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @var PanelSideNav $this
+ * @var ProfilePanelSideNav $this
  */
 ?>
 

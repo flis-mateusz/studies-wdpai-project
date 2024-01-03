@@ -1,0 +1,18 @@
+section.coming-soon {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+section.coming-soon svg {
+    width: 100%;
+    max-width: 300px;
+    height: max-content;
+}
+
+section.coming-soon h1 {
+    text-align: center;
+    letter-spacing: 0.5em;
+}

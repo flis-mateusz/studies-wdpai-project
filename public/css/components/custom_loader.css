@@ -86,8 +86,6 @@
     animation: rotate 3s infinite linear;
 }
 
-
-
 .custom-loader .track .mouse {
     position: absolute;
     right: 31px;
@@ -321,6 +319,32 @@
 
 .custom-loader-container.success.minimize .custom-loader {
     height: 130px;
+}
+
+/* COLORS */
+.custom-loader-container.darker .custom-loader .track {
+    border-color: #8d8d8d;
+    border-top-color: transparent;
+}
+
+.custom-loader-container.darker .custom-loader .track .mouse {
+    background: #8d8d8d;
+}
+
+.custom-loader-container.darker .custom-loader .face:before {
+    background: #8d8d8d;
+}
+
+.custom-loader-container.darker .custom-loader .face:after {
+    background: #989898;
+}
+
+.custom-loader-container.darker .custom-loader .face .ears-container:before {
+    border-left-color: #8d8d8d;
+}
+
+.custom-loader-container.darker .custom-loader .face .ears-container:after {
+    border-right-color: #989898;
 }
 
 /* POSITIONS */

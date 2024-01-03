@@ -8,9 +8,10 @@ class AnnouncementAddForm extends FormControllerWithLoader {
         super(formElement, '/api_add');
 
         this.attachmentController = new AttachmentDragDropController(
-            this.form.querySelector('.attachment-dropdown'), 3)
+            this.form.querySelector('.attachment-dropdown'), 1)
 
         this.loader.setupAbsoluteCenteredPOV()
+        this.loader.setupDarker()
 
         // Inputs section
         this.registerInput('pet-name', new NotEmptyValidation('Wprowadź imię zwierzaka'))
@@ -19,20 +20,10 @@ class AnnouncementAddForm extends FormControllerWithLoader {
         this.registerInput('pet-avatar', new NotEmptyValidation('Dodaj zdjęcie zwierzaka'))
         this.registerInput('pet-type', new NotEmptyValidation('Wyszukaj typ zwierzaka'))
         this.registerInput('pet-kind')
-        this.registerInput('pet-description', new InputMinLengthValidation(1, 'Opis powinien zawierać conajmniej 1 znaków'))
+        this.registerInput('pet-description', new InputMinLengthValidation(50, 'Opis powinien zawierać conajmniej 50 znaków'))
         this.registerInput('pet-price')
         this.registerInput('pet-characteristics', null, true)
         this.registerInput('pet-location', new NotEmptyValidation('Podaj lokalizację'))
-    }
-
-    onSuccess() {
-        // TODO
-    }
-
-    handleResponse(data) {
-        if (data.status === 200) {
-            this.onSuccess();
-        }
     }
 }
 

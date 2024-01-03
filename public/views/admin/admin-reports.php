@@ -6,11 +6,13 @@
 
 require_once __DIR__ . '/../components/CustomContentLoader.php';
 require_once __DIR__ . '/../components/HeaderComponent.php';
-require_once __DIR__ . '/../components/PanelSideNav.php';
+require_once __DIR__ . '/../components/ProfilePanelSideNav.php';
+require_once __DIR__ . '/../components/ComingSoon.php';
 
 CustomContentLoader::initialize();
 HeaderComponent::initialize();
-PanelSideNav::initialize();
+ProfilePanelSideNav::initialize();
+ComingSoon::initialize();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -33,9 +35,9 @@ PanelSideNav::initialize();
     (new HeaderComponent($user))->render();
     ?>
     <main>
-        <?php (new PanelSideNav($user))->render(); ?>
+        <?php (new ProfilePanelSideNav($user))->render(); ?>
         <section class="panel">
-            
+            <?php (new ComingSoon())->render(); ?>
         </section>
     </main>
     <footer>

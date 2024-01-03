@@ -7,6 +7,10 @@ class CustomContentLoaderController {
         }
     }
 
+    setupDarker() {
+        this.loader.classList.add('darker');
+    }
+
     setupFixed() {
         this.loader.classList.remove('absolute');
         this.loader.classList.add('fixed');

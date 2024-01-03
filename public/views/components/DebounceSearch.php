@@ -10,14 +10,16 @@ class DebounceSearchComponent extends Component
     private $endpointUrl;
     private $timeout;
     private $preLoadedData;
+    private $initialValue;
 
-    public function __construct($inputName, string $endpointUrl = null, int $timeout = null, $preLoadedData = null)
+    public function __construct($inputName, string $endpointUrl = null, int $timeout = null, $preLoadedData = null, $initialValue = null)
     {
         $this->id = 'deb-sea-' . uniqid();
         $this->inputName = $inputName;
         $this->endpointUrl = $endpointUrl ? "'$endpointUrl'" : 'null';
         $this->timeout = $timeout ? $timeout : 'null';
         $this->preLoadedData = $preLoadedData;
+        $this->initialValue = $initialValue;
     }
 
     public static function initialize()
@@ -30,13 +32,14 @@ class DebounceSearchComponent extends Component
     {
         $inputName = $this->inputName;
         $id = $this->id;
+        $initialValue = $this->initialValue;
 
         echo <<<HTML
         <section class="debonced-search" id="$id">
             <input type="text" class="hidden target-input" name="$inputName">
             <label>
                 <i class="material-icons"></i>
-                <input type="text" class="main-input search-input" placeholder="Wyszukaj" id="$id-input">
+                <input type="text" class="main-input search-input" placeholder="Wyszukaj" id="$id-input" value="$initialValue">
                 
             </label>
             <span class="input-error"></span>

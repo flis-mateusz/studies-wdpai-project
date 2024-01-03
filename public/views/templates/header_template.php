@@ -7,7 +7,7 @@
 
             <?php if ($this->showBackLink()) : ?>
                 <div>
-                    <a href="<?php echo parse_url($_SERVER['HTTP_REFERER'] ?? '/', PHP_URL_PATH); ?>">
+                    <a onclick="history.back()">
                         <i class="material-icons">keyboard_arrow_left</i>
                         <span class="link-text">Wróć</span>
                     </a>

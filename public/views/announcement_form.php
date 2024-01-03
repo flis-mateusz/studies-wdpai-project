@@ -4,6 +4,7 @@
  * @var ?User $user
  * @var ?AnimalFeature[] $animalFeatures
  * @var ?AnimalType[] $animalTypes
+ * @var ?Announcement $announcement
  */
 
 require_once __DIR__ . '/components/HeaderComponent.php';
@@ -17,7 +18,13 @@ AttachmentDragDrop::initialize();
 CustomContentLoader::initialize();
 DebounceSearchComponent::initialize();
 
-$petTypeSearch = new DebounceSearchComponent('pet-type', null, null, json_encode($animalTypes));
+$petTypeSearch = new DebounceSearchComponent(
+    'pet-type',
+    null,
+    null,
+    json_encode($animalTypes),
+    $announcement ? $announcement->getType()->getName() : null
+);
 ?>
 
 <!DOCTYPE html>
@@ -29,8 +36,8 @@ $petTypeSearch = new DebounceSearchComponent('pet-type', null, null, json_encode
     <link rel="stylesheet" href="/public/css/main.css">
     <link rel="stylesheet" href="/public/css/components/forms.css">
     <link rel="stylesheet" href="/public/css/components/custom-radio.css">
-    <link rel="stylesheet" href="/public/css/announcement/announcement_add.css">
-    <script type="module" src="/public/js/announcement_add.js" defer></script>
+    <link rel="stylesheet" href="/public/css/announcement/announcement_form.css">
+    <script type="module" src="/public/js/announcement_form.js" defer></script>
     <?php
     ResourceManager::appendResources();
     ?>
@@ -54,7 +61,7 @@ $petTypeSearch = new DebounceSearchComponent('pet-type', null, null, json_encode
                         odpowiedni
                         moment na nadanie imienia</div>
                     <div>
-                        <input type="text" class="main-input" name="pet-name">
+                        <input type="text" class="main-input" name="pet-name" value="<?= $announcement ? $announcement->getDetails()->getName() : null; ?>">
                     </div>
                 </div>
                 <div class="field">
@@ -64,11 +71,11 @@ $petTypeSearch = new DebounceSearchComponent('pet-type', null, null, json_encode
                         puste</div>
                     <div>
                         <div class="input-with-select input-related">
-                            <input type="number" min="1" class="main-input" name="pet-age">
+                            <input type="number" min="1" class="main-input" name="pet-age" value="<?= $announcement ? $announcement->getDetails()->getAge() : null; ?>">
                             <select name="pet-age-type">
-                                <option value="day">dni</option>
-                                <option value="month" selected>miesięcy</option>
-                                <option value="year">lat</option>
+                                <option value="day" <?= $announcement && $announcement->getDetails()->getAgeType() == 'day' ? 'selected' : null; ?>>dni</option>
+                                <option value="month" <?= !$announcement || $announcement->getDetails()->getAgeType() == 'month' ? 'selected' : null; ?>>miesięcy</option>
+                                <option value="year" <?= $announcement && $announcement->getDetails()->getAgeType() == 'year' ? 'selected' : null; ?>>lat</option>
                             </select>
                         </div>
                         <span class="input-error"></span>
@@ -77,20 +84,23 @@ $petTypeSearch = new DebounceSearchComponent('pet-type', null, null, json_encode
                 <div class="field">
                     <div>Płeć</div>
                     <div class="toggle row">
-                        <input type="radio" name="pet-gender" value="male" id="pet-gender-male" checked="checked" />
+                        <input type="radio" name="pet-gender" value="male" id="pet-gender-male" <?= !$announcement || $announcement->getDetails()->getGender() == 'male' ? 'checked' : null; ?> />
                         <label for="pet-gender-male">On</label>
-                        <input type="radio" name="pet-gender" value="female" id="pet-gender-female" />
+                        <input type="radio" name="pet-gender" value="female" id="pet-gender-female" <?= $announcement && $announcement->getDetails()->getGender() == 'female' ? 'selected' : null; ?> />
                         <label for="pet-gender-female">Ona</label>
                     </div>
                     <span class="input-error"></span>
                 </div>
+                <?php if ($announcement) : ?>
+                    <input type="number" class="hidden" name="announcement-id" value="<?= $announcement->getId(); ?>" />
+                <?php endif; ?>
             </fieldset>
             <fieldset class="scroll-to">
                 <div class="field">
                     <div>Zdjęcie*</div>
                     <div class="info">Dodaj zdjęcie w formacie jpg, jped, png lub gif</div>
                     <?php
-                    (new AttachmentDragDrop('pet-avatar'))->render();
+                    (new AttachmentDragDrop('pet-avatar', $announcement ? $announcement->getDetails()->getAvatarUrl() : null))->render();
                     ?>
                     <span class="input-error"></span>
                     <div class="tip">
@@ -113,7 +123,7 @@ $petTypeSearch = new DebounceSearchComponent('pet-type', null, null, json_encode
                     <div>Gatunek</div>
                     <div class="info">Jeśli nie znasz gatunku, pozostaw to pole puste</div>
                     <div>
-                        <input type="text" class="main-input" id="pet-kind" name="pet-kind">
+                        <input type="text" class="main-input" id="pet-kind" name="pet-kind" value="<?= $announcement ? $announcement->getDetails()->getKind() : null; ?>">
                     </div>
                 </div>
             </fieldset>
@@ -123,7 +133,7 @@ $petTypeSearch = new DebounceSearchComponent('pet-type', null, null, json_encode
                     <div class="info">Zaznacz tylko te pola, które dotyczą zwierzaka oraz co do których masz absolutną pewność</div>
                 </div>
                 <?php
-                (new AnimalFeatures($animalFeatures))->render();
+                (new AnimalFeatures($animalFeatures, $announcement ? $announcement->getDetails()->getFeatures() : null))->render();
                 ?>
                 <span class="input-error pet-characteristics"></span>
             </fieldset>
@@ -133,14 +143,13 @@ $petTypeSearch = new DebounceSearchComponent('pet-type', null, null, json_encode
                     <div class="info">Podaj szczegółowe informacje o zwierzaku, a unikniesz pytań od zainteresowanych
                     </div>
                     <div>
-                        <textarea name="pet-description" id="pet-description" cols="30" rows="5" class="main-input" maxlength="2000" minlength="1"></textarea>
+                        <textarea name="pet-description" id="pet-description" cols="30" rows="5" class="main-input" maxlength="2000" minlength="1"><?= $announcement ? $announcement->getDetails()->getDescription() : null; ?></textarea>
                         <div class="counter">
                             <span class="input-error font-inherit"></span>
                             <div>
-                                <span class="current">0</span><span>/ 2000</span>
+                                <span class="current"><?= $announcement ? strlen($announcement->getDetails()->getDescription()) : '0'; ?></span><span>/ 2000</span>
                             </div>
                         </div>
-
                     </div>
                     <div class="tip">
                         <span>Dokładny i rzetelny opis statystycznie zwiększa szansę na adopcję zwierzaka</span>
@@ -152,20 +161,25 @@ $petTypeSearch = new DebounceSearchComponent('pet-type', null, null, json_encode
                     <div>Lokalizacja*</div>
                     <div class="info">Wpisz miasto, w którym zwykle zwierzak przebywa</div>
                     <div>
-                        <input type="text" class="main-input" name="pet-location">
+                        <input type="text" class="main-input" name="pet-location" value="<?= $announcement ? $announcement->getDetails()->getLocality() : null; ?>">
                     </div>
                 </div>
                 <div class="field">
                     <div>Cena</div>
                     <div class="info">Jeśli chcesz oddać zwierzaka za darmo pozostaw to pole puste</div>
                     <div>
-                        <input type="number" class="main-input" min='0' name="pet-price">
+                        <input type="number" class="main-input" min='0' name="pet-price" value="<?= $announcement ? $announcement->getDetails()->getPrice() : null; ?>">
                     </div>
                 </div>
             </fieldset>
             <span class="form-output"></span>
+            <?php if ($announcement) : ?>
+                <div class="tip reversed right">
+                    <span>Ogłoszenie będzie musiało przejść ponowną weryfikację</span>
+                </div>
+            <?php endif; ?>
             <div>
-                <input type="submit" value="Dodaj ogłoszenie" class="main-button">
+                <input type="submit" value="<?= $announcement ? 'Edytuj ogłoszenie' : 'Dodaj ogłoszenie'; ?>" class="main-button">
             </div>
         </form>
     </main>
