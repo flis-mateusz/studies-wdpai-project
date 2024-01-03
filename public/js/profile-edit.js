@@ -4,7 +4,7 @@ import { FetchController } from './controllers/fetch-controller.js';
 
 class ProfileEditForm extends FormControllerWithLoader {
     constructor(formElement) {
-        super(formElement, '/profile_edit');
+        super(formElement, '/api_profile_edit');
 
         this.initializeUIElements();
         this.initializeAvatarHandlers();

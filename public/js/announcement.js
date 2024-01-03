@@ -9,6 +9,7 @@ class Announcement {
         this.loader = new CustomContentLoaderController();
         this.loader.setupAbsoluteCenteredPOV()
         this.output = document.querySelector('span.input-error');
+        this.refferer = document.referrer;
 
         this.actionApprove = document.querySelector('.action-approve')
         this.actionApprove?.addEventListener('click', this.approve.bind(this))
@@ -36,10 +37,6 @@ class Announcement {
     }
 
     handleResponse(data) {
-        if (data.data?.redirect_url) {
-            window.location.href = data.data.redirect_url
-            return
-        }
         switch (data.data) {
             case 'approved':
                 this.actionApprove.classList.add('hidden');
@@ -55,6 +52,10 @@ class Announcement {
                 break;
         }
         this.loader.completeLoadingAsync().then(() => {
+            if (data.data?.redirect_url) {
+                window.location.href = data.data.redirect_url
+                return
+            }
             this.loader.hide()
         })
     }
@@ -66,7 +67,7 @@ class Announcement {
 
     async performAction(apiEndpoint, method = 'post') {
         await this.beforeSend();
-        new FetchController(apiEndpoint)[method]({ 'id': this.id })
+        new FetchController(apiEndpoint)[method]({ 'id': this.id, 'referrer': this.refferer ? this.refferer : null })
             .then(data => this.handleResponse(data))
             .catch(error => this.handleError(error));
     }

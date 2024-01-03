@@ -157,6 +157,7 @@ class AnnouncementController extends AppController
         $this->loginRequired();
 
         $response = new JsonResponse();
+        $data = $this->getPOSTData();
         $id = $this->getPostAnnouncementId();
 
         $currentUser = $this->getLoggedUser();
@@ -178,9 +179,12 @@ class AnnouncementController extends AppController
             $response->setError('Wystąpił wewnętrzny błąd, spróbuj ponownie później', 500);
         }
         if ($adminId) {
-            $response->setData(['redirect_url' => '/panel-announcements']);
+            $response->setData(['redirect_url' => '/admin_approval']);
+        } else if (isset($data['refferer']) && $data['refferer']) {
+            $refferer = ValidationStrategy::sanitizeOnly($data['refferer']);
+            $response->setData(['redirect_url' => parse_url($refferer, PHP_URL_PATH)]);
         } else {
-            $response->setData(['redirect_url' => '/profile-announcements']);
+            $response->setData(['redirect_url' => '/my_announcements']);
         }
         $response->send();
     }
@@ -213,7 +217,7 @@ class AnnouncementController extends AppController
         $currentUser = $this->getLoggedUser();
         $announcement = $this->announcemetsRepository->getAnnouncementWithUserContext($id, $currentUser->getId(), false);
 
-        if (!$announcement || $announcement->isDeleted()) {
+        if (!$announcement || $announcement->isDeleted() || !$announcement->isAccepted()) {
             $response->setError('Ogłoszenie nie istnieje lub zostało usunięte', 400);
             $response->send();
         } else if ($currentUser->getId() == $announcement->getUser()->getId()) {
@@ -242,7 +246,7 @@ class AnnouncementController extends AppController
         $id = $this->getPostAnnouncementId();
         $currentUser = $this->getLoggedUser();
         $announcement = $this->announcemetsRepository->getAnnouncementWithUserContext($id, $currentUser->getId(), false);
-        if (!$announcement || $announcement->isDeleted()) {
+        if (!$announcement || $announcement->isDeleted() || !$announcement->isAccepted()) {
             $response->setError('Ogłoszenie nie istnieje lub zostało usunięte', 404);
             $response->send();
         }
@@ -272,7 +276,7 @@ class AnnouncementController extends AppController
 
     private function getPostAnnouncementId(): ?int
     {
-        $data = $this->getJsonData();
+        $data = $this->getPOSTData();
         if (!isset($data['id']) || !is_numeric($data['id'])) {
             $response = new JsonResponse();
             $response->setError('Nieprawidłowy identyfikator ogłoszenia', 400);

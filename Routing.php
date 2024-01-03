@@ -5,6 +5,8 @@ require_once 'src/controllers/ProfileController.php';
 require_once 'src/controllers/AnnouncementController.php';
 require_once 'src/controllers/SecurityController.php';
 require_once 'src/controllers/SearchController.php';
+require_once 'src/controllers/SupportController.php';
+require_once 'src/controllers/AdminPanelController.php';
 
 class Router
 {

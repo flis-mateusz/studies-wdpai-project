@@ -67,7 +67,7 @@ class AppController
         }
     }
 
-    protected function getJsonData()
+    protected function getPOSTData()
     {
         $json = file_get_contents('php://input');
         $data = json_decode($json, true);

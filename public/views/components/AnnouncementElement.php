@@ -27,10 +27,13 @@ class AnnouncementElement extends Component
         $price = $this->announcement->getDetails()->getFormattedPrice();
         $age_type = $this->announcement->getDetails()->getFormattedAge();
         $avatarUrl = $this->announcement->getDetails()->getAvatarUrl();
+        $awaitingElement = $this->announcement->isAccepted() ? null : '<div class="awaiting"><span>Oczekuje weryfikacji</span></div>';
+        $additionalClass = $this->announcement->isAccepted() ? null : 'awaiting';
 
         echo <<<HTML
-        <a class="announcement" href="/announcement/$id">
+        <a class="announcement $additionalClass" href="/announcement/$id">
         <div class="announcement-image" style='background-image: url($avatarUrl);'></div>
+        $awaitingElement
         <div class="announcement-data">
             <div class="announcement-detail">
                 <div class="flex-center gap-10">

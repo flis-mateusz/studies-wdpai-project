@@ -22,7 +22,7 @@ class SearchController extends AppController
 
         $response = new PostFormResponse();
 
-        $validator = new PostDataValidator($this->getJsonData());
+        $validator = new PostDataValidator($this->getPOSTData());
         $validator->addField('search', new SanitizeOnly());
         if (!$validator->validate()) {
             $errors = $validator->getErrors();

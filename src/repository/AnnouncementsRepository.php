@@ -132,11 +132,11 @@ class AnnouncementsRepository extends Repository
         return $announcement;
     }
 
-    public function getAnnouncements($limit = 5)
+    public function getAnnouncements($limit = 5, User $user = null)
     {
         $connection = $this->database->connect();
         try {
-            $stmt = $connection->prepare('
+            $sql = '
             SELECT announcements.*, announcement_detail.*, animal_types.*, user_detail.avatar_name, user_detail.name, user_detail.surname, users.phone
             FROM announcements
             NATURAL JOIN announcement_detail
@@ -144,10 +144,31 @@ class AnnouncementsRepository extends Repository
             JOIN users on announcements.user_id = users.user_id
             JOIN user_detail on users.user_id = user_detail.user_id
             LEFT JOIN deleted_announcements on announcements.announcement_id = deleted_announcements.announcement_id
-            WHERE announcements.accepted = true AND deleted_announcements.delete_id IS NULL
-            ORDER BY announcements.created_at DESC
-            LIMIT ?');
-            $stmt->execute([$limit]);
+            WHERE deleted_announcements.delete_id IS NULL';
+
+            $params = [];
+
+            if ($user === null) {
+                $sql .= ' AND announcements.accepted = true';
+            } else {
+                $sql .= ' AND users.user_id = ?';
+                $params[] = $user->getId();
+            }
+
+            // Sortowanie - jeśli jest podany użytkownik, najpierw pokazuje accepted = true
+            if ($user !== null) {
+                $sql .= ' ORDER BY announcements.accepted DESC, announcements.created_at DESC';
+            } else {
+                $sql .= ' ORDER BY announcements.created_at DESC';
+            }
+
+            if ($limit > 0) {
+                $sql .= ' LIMIT ?';
+                $params[] = $limit;
+            }
+
+            $stmt = $connection->prepare($sql);
+            $stmt->execute($params);
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             $announcements = [];
@@ -155,6 +176,26 @@ class AnnouncementsRepository extends Repository
                 $announcements[] = $this->createAnnouncementFromResult($result);
             }
             return $announcements;
+        } catch (Exception $e) {
+            error_log($e);
+            throw $e;
+        }
+    }
+
+    public function getUsersFavoriteCount(User $user)
+    {
+        $connection = $this->database->connect();
+        try {
+            $stmt = $connection->prepare('
+            SELECT count(announcements.announcement_id)
+            FROM announcements
+            LEFT JOIN announcement_likes on announcements.announcement_id = announcement_likes.announcement_id
+            LEFT JOIN deleted_announcements on announcements.announcement_id = deleted_announcements.announcement_id
+            WHERE announcements.accepted=true AND deleted_announcements.delete_id IS NULL AND announcement_likes.user_id = ?');
+            $stmt->execute([$user->getId()]);
+            $count = $stmt->fetchColumn();
+            return $count;
+            
         } catch (Exception $e) {
             error_log($e);
             throw $e;

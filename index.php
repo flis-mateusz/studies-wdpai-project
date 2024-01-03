@@ -16,7 +16,8 @@ Router::post('api_forgot_password', 'SecurityController');
 Router::get('signout', 'SecurityController');
 
 Router::get('profile', 'ProfileController');
-Router::post('profile_edit', 'ProfileController');
+Router::post('my_announcements', 'ProfileController');
+Router::post('api_profile_edit', 'ProfileController');
 Router::post('api_profile_avatar_delete', 'ProfileController');
 
 Router::get('add', 'AnnouncementController');
@@ -27,7 +28,14 @@ Router::post('api_announcement_delete', 'AnnouncementController');
 Router::post('api_announcement_approve', 'AnnouncementController');
 Router::post('api_announcement_report', 'AnnouncementController');
 
-
 Router::get('query_animal_types', 'SearchController');
+
+Router::get('support', 'SupportController');
+
+Router::get('admin_approval', 'AdminPanelController');
+Router::get('admin_reports', 'AdminPanelController');
+Router::get('admin_users', 'AdminPanelController');
+Router::get('admin_pet_types', 'AdminPanelController');
+Router::get('admin_pet_features', 'AdminPanelController');
 
 Router::run($path);

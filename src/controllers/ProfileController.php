@@ -4,6 +4,7 @@ require_once 'AppController.php';
 require_once __DIR__ . '/../models/announcement/Announcement.php';
 require_once __DIR__ . '/../managers/AttachmentManager.php';
 require_once __DIR__ . '/../repository/UsersRepository.php';
+require_once __DIR__ . '/../repository/AnnouncementsRepository.php';
 require_once __DIR__ . '/../responses/PostFormResponse.php';
 require_once __DIR__ . '/../utils/logger.php';
 require_once __DIR__ . '/../validation/PostDataValidator.php';
@@ -11,6 +12,7 @@ require_once __DIR__ . '/../validation/PostDataValidator.php';
 class ProfileController extends AppController
 {
     private $usersRepository;
+    private $announcementsRepository;
 
     public function __construct()
     {
@@ -18,15 +20,23 @@ class ProfileController extends AppController
 
         $this->loginRequired();
         $this->usersRepository = new UsersRepository();
+        $this->announcementsRepository = new AnnouncementsRepository();
     }
 
     public function profile()
     {
-        Logger::debug($this->getLoggedUser());
         $this->render("profile", ['user' => $this->getLoggedUser()]);
     }
 
-    public function profile_edit()
+    public function my_announcements()
+    {
+        $this->render("my-announcemets", [
+            'announcements' => $this->announcementsRepository->getAnnouncements(0, $this->getLoggedUser()),
+            'user' => $this->getLoggedUser()
+        ]);
+    }
+
+    public function api_profile_edit()
     {
         // VALIDATION
         $validator = new PostDataValidator($_POST);

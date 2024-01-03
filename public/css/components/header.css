@@ -48,7 +48,8 @@ header>nav>div.submenu>div>a:has(.link-text)>.link-text {
     display: none;
 }
 
-header a {
+header a,
+.sidenav a:not(.main-button) {
     font-size: 0.9em;
     cursor: pointer;
     text-decoration: none;

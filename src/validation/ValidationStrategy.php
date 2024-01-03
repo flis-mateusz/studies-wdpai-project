@@ -240,5 +240,10 @@ abstract class ValidationStrategy
         return $this;
     }
 
+    static public function sanitizeOnly(mixed $value){
+        $sanitizer = new self('Sanitization error');
+        return $sanitizer->sanitize($value);
+    }
+
     abstract public function validate($value): bool;
 }

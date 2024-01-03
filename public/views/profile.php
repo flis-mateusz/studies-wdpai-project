@@ -6,9 +6,11 @@
 
 require_once __DIR__ . '/components/CustomContentLoader.php';
 require_once __DIR__ . '/components/HeaderComponent.php';
+require_once __DIR__ . '/components/PanelSideNav.php';
 
 CustomContentLoader::initialize();
 HeaderComponent::initialize();
+PanelSideNav::initialize();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -32,55 +34,7 @@ HeaderComponent::initialize();
     (new HeaderComponent($user))->render();
     ?>
     <main>
-        <section class="sidenav">
-            <div class="nav-expander">
-                <input class="menu-button" type="checkbox" id="sidenav-button" />
-                <label class="menu-icon" for="sidenav-button">
-                    <i class="material-icons">keyboard_arrow_right</i>
-                </label>
-            </div>
-            <div>
-                <div>
-                    <i class="material-icons">folder_open</i>
-                    <span>Moje ogłoszenia</span>
-                </div>
-                <div class="active">
-                    <i class="material-icons">mode_edit</i>
-                    <span>Edycja profilu</span>
-                </div>
-                <div>
-                    <i class="material-icons">help_outline</i>
-                    <span>Pomoc</span>
-                </div>
-                <span>Panel administratora</span>
-                <div>
-                    <i class="material-icons">streetview</i>
-                    <span>Ogłoszenia do akceptacji</span>
-                </div>
-                <div>
-                    <i class="material-icons">verified_user</i>
-                    <span>Zgłoszenia</span>
-                </div>
-                <div>
-                    <i class="material-icons">supervisor_account</i>
-                    <span>Użytkownicy</span>
-                </div>
-                <div>
-                    <i class="material-icons">toc</i>
-                    <span>Rasy</span>
-                </div>
-                <div>
-                    <i class="material-icons">toc</i>
-                    <span>Cechy zwierząt</span>
-                </div>
-            </div>
-            <div>
-                <a class="main-button">
-                    <i class="material-icons">exit_to_app</i>
-                    <span>Wyloguj</span>
-                </a>
-            </div>
-        </section>
+        <?php (new PanelSideNav($user))->render(); ?>
         <section class="panel">
             <form id="profile-edit-form" class="with-absolute-loader">
                 <div>

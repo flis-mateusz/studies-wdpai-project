@@ -88,7 +88,7 @@ AnnouncementElement::initialize();
             <section>
                 <?php if (isset($announcements) && !isEmpty($announcements)) : ?>
                     <span>Ostatnie dodane ogłoszenia</span>
-                    <section class="announcements-list">
+                    <section class="announcements-list cut">
                         <?php
                         foreach ($announcements as $announcement) {
                             (new AnnouncementElement($announcement))->render();
@@ -100,7 +100,7 @@ AnnouncementElement::initialize();
             <section>
                 <?php if (isset($observedAnnouncements) && !isEmpty($observedAnnouncements)) : ?>
                     <span>Obserwowane ogłoszenia</span>
-                    <section class="announcements-list">
+                    <section class="announcements-list cut">
                         <?php
                         foreach ($observedAnnouncements as $announcement) {
                             (new AnnouncementElement($announcement))->render();
