@@ -6,61 +6,23 @@ require_once __DIR__ . '/Component.php';
 class AnnouncementElement extends Component
 {
     private Announcement $announcement;
+    private bool $withUserInfo;
 
-    public function __construct($announcement)
+    public function __construct($announcement, $withUserInfo = false)
     {
         $this->announcement = $announcement;
+        $this->withUserInfo = $withUserInfo;
     }
 
     public static function initialize()
     {
-        ResourceManager::addStyle('/public/css/components/custom_loader.css');
         ResourceManager::addStyle('/public/css/announcement/announcement_element.css');
     }
 
     public function render()
     {
-        $id = $this->announcement->getId();
-        $name = $this->announcement->getDetails()->getName();
-        $kind = $this->announcement->getDetails()->getKind();
-        $location = $this->announcement->getDetails()->getLocality();
-        $price = $this->announcement->getDetails()->getFormattedPrice();
-        $age_type = $this->announcement->getDetails()->getFormattedAge();
-        $avatarUrl = $this->announcement->getDetails()->getAvatarUrl();
-        $awaitingElement = $this->announcement->isAccepted() ? null : '<div class="awaiting"><span>Oczekuje weryfikacji</span></div>';
-        $additionalClass = $this->announcement->isAccepted() ? null : 'awaiting';
-
-        echo <<<HTML
-        <a class="announcement $additionalClass" href="/announcement/$id">
-        <div class="announcement-image" style='background-image: url($avatarUrl);'></div>
-        $awaitingElement
-        <div class="announcement-data">
-            <div class="announcement-detail">
-                <div class="flex-center gap-10">
-                    <div class="announcement-avatar" style='background-image: url($avatarUrl);'></div>
-                    <div class="announcement-name">
-                        <div>$name</div>
-                        <div>$kind</div>
-                    </div>
-                </div>
-                <div class="flex-center gap-5">
-                    <i class="material-icons">location_on</i>
-                    <span>$location</span>
-                </div>
-            </div>
-            <hr>
-            <div class="announcement-price">
-                <div class="flex-center gap-5">
-                    <i class="material-icons">date_range</i>
-                    <span>$age_type</span>
-                </div>
-                <div class="flex-center gap-5">
-                    <i class="material-icons">account_balance_wallet</i>
-                    <span>$price</span>
-                </div>
-            </div>
-        </div>
-    </a>
-    HTML;
+        ob_start();
+        include __DIR__ . '/../templates/announcement_element_template.php';
+        echo ob_get_clean();
     }
 }

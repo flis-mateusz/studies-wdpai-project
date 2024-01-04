@@ -109,7 +109,7 @@ $requiresApproval = !$announcement->isAccepted();
             <section class="announcement <?= $requiresApproval && !$viewer->isAdmin() ? ' blur' : null ?>">
                 <div class="about-pet">
                     <?php if (!$isOwner) : ?>
-                        <div class="like"><i class="material-icons icon-button action-like <?= $announcement->isUserFavourite() ? 'liked' : null ?>"></i></div>
+                        <div class="like"><i class="material-icons icon-button action-like <?= $announcement->isUserFavourite() ? 'liked' : null ?><?= $requiresApproval ? ' hidden' : null ?>"></i></div>
                     <?php endif; ?>
 
                     <div class="photo" style="background-image: url('<?= $announcement->getDetails()->getAvatarUrl(); ?>');"></div>

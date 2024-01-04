@@ -1,11 +1,11 @@
 <?php
 
 require_once 'AppController.php';
-require_once __DIR__ . '/../repository/UsersRepository.php';
+require_once __DIR__ . '/../repository/AdminRepository.php';
 
 class AdminPanelController extends AppController
 {
-    private $usersRepository;
+    private $adminRepository;
     private $requiredVars;
 
     public function __construct()
@@ -13,14 +13,15 @@ class AdminPanelController extends AppController
         parent::__construct();
 
         $this->adminPrivilegesRequired();
-        $this->usersRepository = new UsersRepository();
+        $this->adminRepository = new AdminRepository();
+
 
         $this->requiredVars = ['user' => $this->getLoggedUser()];
     }
 
     public function admin_approval()
     {
-        $this->render('admin/admin-approval', [...$this->requiredVars]);
+        $this->render('admin/admin-approval', [...$this->requiredVars, 'announcements' => $this->adminRepository->getAnnouncementsToApprove()]);
     }
 
     public function admin_reports()
@@ -38,5 +39,38 @@ class AdminPanelController extends AppController
     public function admin_pet_features()
     {
         $this->render('admin/admin-pet-features', [...$this->requiredVars]);
+    }
+
+    // --------------------- ACTIONS ---------------------------
+    public function api_announcement_approve()
+    {
+        $response = new JsonResponse();
+        $data = $this->getPOSTData();
+        $id = $this->getPostAnnouncementId();
+
+        try {
+            $this->adminRepository->AnnouncementApprove($id);
+        } catch (Exception $e) {
+            error_log($e);
+            $response->setError('Wystąpił wewnętrzny błąd, spróbuj ponownie później', 500);
+            $response->send();
+        }
+        if (isset($data['refferer']) && $data['refferer']) {
+            $refferer = ValidationStrategy::sanitizeOnly($data['refferer']);
+            $response->setData(['redirect_url' => parse_url($refferer, PHP_URL_PATH)]);
+        }
+        $response->setData('approved');
+        $response->send();
+    }
+
+    private function getPostAnnouncementId(): ?int
+    {
+        $data = $this->getPOSTData();
+        if (!isset($data['id']) || !is_numeric($data['id'])) {
+            $response = new JsonResponse();
+            $response->setError('Nieprawidłowy identyfikator ogłoszenia', 400);
+            $response->send();
+        }
+        return $data['id'];
     }
 }

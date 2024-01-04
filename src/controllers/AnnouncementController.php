@@ -243,24 +243,6 @@ class AnnouncementController extends AppController
         $response->send();
     }
 
-    public function api_announcement_approve()
-    {
-        $this->adminPrivilegesRequired();
-
-        $response = new JsonResponse();
-        $id = $this->getPostAnnouncementId();
-
-        try {
-            $this->announcemetsRepository->approve($id);
-        } catch (Exception $e) {
-            error_log($e);
-            $response->setError('Wystąpił wewnętrzny błąd, spróbuj ponownie później', 500);
-            $response->send();
-        }
-        $response->setData('approved');
-        $response->send();
-    }
-
     public function api_announcement_report()
     {
         $this->loginRequired();

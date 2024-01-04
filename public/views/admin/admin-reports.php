@@ -26,7 +26,7 @@ ComingSoon::initialize();
     ResourceManager::appendResources();
     ?>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <title>Ogłoszenia do akceptacji</title>
+    <title>Zgłoszenia</title>
 </head>
 
 <body>

@@ -2,15 +2,18 @@
 
 /**
  * @var User $user
+ * @var ?Announcement[] $announcements
  */
 
 require_once __DIR__ . '/../components/CustomContentLoader.php';
 require_once __DIR__ . '/../components/HeaderComponent.php';
 require_once __DIR__ . '/../components/SideNavLayout.php';
+require_once __DIR__ . '/../components/AnnouncementElement.php';
 
 CustomContentLoader::initialize();
 HeaderComponent::initialize();
 SideNavLayout::initialize();
+AnnouncementElement::initialize();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,7 +37,17 @@ SideNavLayout::initialize();
     <main>
         <?php (new SideNavLayout($user))->render(); ?>
         <section class="panel">
-            
+        <?php if (isset($announcements) && !isEmpty($announcements)) : ?>
+                <section class="announcements-list fit">
+                    <?php
+                    foreach ($announcements as $announcement) {
+                        (new AnnouncementElement($announcement, true))->render();
+                    }
+                    ?>
+                </section>
+            <?php else : ?>
+                <span>Brak ogłoszeń do akceptacji</span>
+            <?php endif; ?>
         </section>
     </main>
     <footer>

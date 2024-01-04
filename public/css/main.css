@@ -158,6 +158,10 @@ span.bolder {
     color: inherit;
 }
 
+a.main-button {
+    text-decoration: none;
+}
+
 .avatar {
     width: 58px;
     height: 58px;

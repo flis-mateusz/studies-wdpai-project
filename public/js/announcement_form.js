@@ -11,7 +11,6 @@ class AnnouncementAddForm extends FormControllerWithLoader {
             this.form.querySelector('.attachment-dropdown'), 1)
 
         this.loader.setupAbsoluteCenteredPOV()
-        this.loader.setupDarker()
 
         // Inputs section
         this.registerInput('pet-name', new NotEmptyValidation('Wprowadź imię zwierzaka'))

@@ -7,10 +7,12 @@
 require_once __DIR__ . '/../components/CustomContentLoader.php';
 require_once __DIR__ . '/../components/HeaderComponent.php';
 require_once __DIR__ . '/../components/SideNavLayout.php';
+require_once __DIR__ . '/../components/ComingSoon.php';
 
 CustomContentLoader::initialize();
 HeaderComponent::initialize();
 SideNavLayout::initialize();
+ComingSoon::initialize();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,7 +26,7 @@ SideNavLayout::initialize();
     ResourceManager::appendResources();
     ?>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <title>Ogłoszenia do akceptacji</title>
+    <title>Rodzaje zwierząt</title>
 </head>
 
 <body>
@@ -34,7 +36,7 @@ SideNavLayout::initialize();
     <main>
         <?php (new SideNavLayout($user))->render(); ?>
         <section class="panel">
-            
+            <?php (new ComingSoon())->render(); ?>
         </section>
     </main>
     <footer>

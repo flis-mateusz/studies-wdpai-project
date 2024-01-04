@@ -26,7 +26,7 @@
         <?php endif; ?>
     </div>
     <div>
-        <a class="main-button">
+        <a href='/signout' class="main-button">
             <i class="material-icons">exit_to_app</i>
             <span>Wyloguj</span>
         </a>

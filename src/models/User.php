@@ -52,7 +52,7 @@ class User implements \JsonSerializable
         $this->id = $id;
     }
 
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
         return $this->email;
     }

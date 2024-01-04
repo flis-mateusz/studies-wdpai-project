@@ -164,7 +164,7 @@ class AnnouncementsRepository extends Repository
             return null;
         }
 
-        $announcement = AnnouncementWithUserContext::createFromAnnouncement($this->createAnnouncementFromResult($result));
+        $announcement = AnnouncementWithUserContext::createFromAnnouncement(self::createAnnouncementFromResult($result));
 
         if ($includeFeatures) {
             $announcement->getDetails()->setFeatures($this->getAnnouncementFeatures($announcement->getDetails()->getId()));
@@ -282,27 +282,6 @@ class AnnouncementsRepository extends Repository
         }
     }
 
-    public function DEPRECATEDgetAnnouncementReports($announcementId)
-    {
-        $connection = $this->database->connect();
-        try {
-            $stmt = $connection->prepare('
-                SELECT announcement_report.* FROM announcement_report WHERE announcement_report.announcement_id =? 
-            ');
-            $stmt->execute([$announcementId]);
-            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            $reports = [];
-            foreach ($results as $result) {
-                $reports[] = new AnnouncementReport(...$result);
-            }
-            return $reports;
-        } catch (Exception $e) {
-            error_log($e);
-            throw $e;
-        }
-    }
-
     public function delete(int $id, ?int $admin_id = null)
     {
         $connection = $this->database->connect();
@@ -324,22 +303,6 @@ class AnnouncementsRepository extends Repository
             return $delete_id;
         } catch (Exception $e) {
             $connection->rollback();
-            error_log($e);
-            throw $e;
-        }
-    }
-
-    public function approve(int $id)
-    {
-        $connection = $this->database->connect();
-        try {
-            $stmt = $connection->prepare('
-                UPDATE announcements
-                SET accepted = true
-                WHERE announcement_id =?');
-            $stmt->execute([$id]);
-            return true;
-        } catch (Exception $e) {
             error_log($e);
             throw $e;
         }
@@ -457,18 +420,18 @@ class AnnouncementsRepository extends Repository
     {
         return new User(
             $result['user_id'],
-            null,
+            isset($result['email']) ? $result['email'] : null,
             null,
             null,
             $result['name'],
             $result['surname'],
             $result['avatar_name'],
-            $result['phone'],
+            isset($result['phone']) ? $result['phone'] : null,
             null
         );
     }
 
-    private function createAnnouncementFromResult($result)
+    public static function createAnnouncementFromResult($result)
     {
         $announcementDetails = new AnnouncementDetail(
             $result['announcement_detail_id'],

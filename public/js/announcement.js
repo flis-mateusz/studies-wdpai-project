@@ -9,7 +9,7 @@ class Announcement {
         this.loader = new CustomContentLoaderController();
         this.loader.setupAbsoluteCenteredPOV()
         this.output = document.querySelector('span.input-error');
-        this.refferer = document.referrer;
+        this.referrer = document.referrer;
 
         this.actionApprove = document.querySelector('.action-approve')
         this.actionApprove?.addEventListener('click', this.approve.bind(this))
@@ -19,6 +19,8 @@ class Announcement {
         document.querySelector('.action-delete')?.addEventListener('click', this.delete.bind(this))
         this.actionLike = document.querySelector('.action-like')
         this.actionLike?.addEventListener('click', this.like.bind(this))
+
+        console.log(document.referrer);
     }
 
     showOutput(text) {
@@ -35,11 +37,15 @@ class Announcement {
         this.hideOutput();
         await this.loader.timeWait(300);
     }
-
+    
     handleResponse(data) {
         switch (data.data) {
             case 'approved':
                 this.actionApprove.classList.add('hidden');
+                this.actionLike?.classList.remove('hidden')
+                if (document.referrer.includes('/admin_approval')) {
+                    history.back()
+                }
                 break;
             case 'reported':
                 this.actionReport.classList.add('hidden');
@@ -67,7 +73,7 @@ class Announcement {
 
     async performAction(apiEndpoint, method = 'post') {
         await this.beforeSend();
-        new FetchController(apiEndpoint)[method]({ 'id': this.id, 'referrer': this.refferer ? this.refferer : null })
+        new FetchController(apiEndpoint)[method]({ 'id': this.id, 'referrer': this.referrer ? this.referrer : null })
             .then(data => this.handleResponse(data))
             .catch(error => this.handleError(error));
     }
