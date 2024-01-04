@@ -67,9 +67,9 @@ class ProfileController extends AppController
         $phone = $data['edit-phone'];
         $password = $data['edit-password'];
 
-        if ($fliesValidator->getFieldValue('edit-avatar')) {
+        if ($fliesValidator->getFile('edit-avatar')) {
             try {
-                $avatarName = $fliesValidator->getFieldValue('edit-avatar')->save();
+                $avatarName = $fliesValidator->getFile('edit-avatar')->save();
             } catch (Exception $e) {
                 error_log($e);
                 $response->setError('Wystąpił błąd zapisu zdjęcia, spróbuj ponownie', 500)->send();

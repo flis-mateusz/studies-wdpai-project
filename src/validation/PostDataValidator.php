@@ -91,7 +91,7 @@ class PostDataValidator
         return $this->errors;
     }
 
-    public function getFieldValue($fieldName)
+    public function getFile($fieldName)
     {
         return $this->data[$fieldName] ?? null;
     }

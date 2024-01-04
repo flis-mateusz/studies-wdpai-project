@@ -136,7 +136,7 @@ class AnnouncementController extends AppController
             (new PostFormResponse($filesValidator->getErrors()))->send();
         }
         try {
-            $newImage = $filesValidator->getFieldValue('pet-avatar');
+            $newImage = $filesValidator->getFile('pet-avatar');
             if ($newImage) {
                 $avatarName = $newImage->save();
             } else {

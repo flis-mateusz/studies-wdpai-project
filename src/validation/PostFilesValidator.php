@@ -64,8 +64,8 @@ class PostFilesValidator
         return $this->files;
     }
 
-    public function getFieldValue($fieldName): null | AttachmentManager
+    public function getFile($fieldName): null | AttachmentManager
     {
-        return $this->fields[$fieldName] ?? null;
+        return $this->files[$fieldName] ?? null;
     }
 }
