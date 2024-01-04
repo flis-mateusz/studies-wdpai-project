@@ -60,10 +60,16 @@ class AppController
     {
         $this->loginRequired();
         $currentUser = $this->getLoggedUser();
-        if (!$currentUser->isAdmin()) {
+        if ($currentUser->isAdmin()) {
+            return;
+        }
+
+        if ($this->isPost()) {
             $response = new JsonResponse();
             $response->setError('Nie masz uprawnień do wykonania tej operacji', 403);
             $response->send();
+        } else {
+            $this->exitWithError(403);
         }
     }
 
@@ -77,8 +83,13 @@ class AppController
             $response->setError('Wystąpił wewnętrzny błąd, spróbuj ponownie', 500);
             $response->send();
         }
-
         return $data;
+    }
+
+    protected function exitWithError($errorCode)
+    {
+        $this->render('errors/' . $errorCode);
+        exit($errorCode);
     }
 
     protected function isGet(): bool

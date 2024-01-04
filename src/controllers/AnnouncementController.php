@@ -2,10 +2,10 @@
 
 require_once 'AppController.php';
 require_once __DIR__ . '/../repository/AnnouncementsRepository.php';
-require_once __DIR__ . '/../managers/AttachmentManager.php';
 require_once __DIR__ . '/../responses/PostFormResponse.php';
 require_once __DIR__ . '/../utils/logger.php';
 require_once __DIR__ . '/../validation/PostDataValidator.php';
+require_once __DIR__ . '/../validation/PostFilesValidator.php';
 
 
 class AnnouncementController extends AppController
@@ -20,14 +20,20 @@ class AnnouncementController extends AppController
     }
 
     // --------------------- RENDERS ---------------------------
-    public function announcement($id)
+    public function announcement($announcementId)
     {
-        $currentUser = $this->getLoggedUser();
+        $user = $this->getLoggedUser();
+        $announcement = $this->announcemetsRepository->getAnnouncementWithUserContext($announcementId, $user ? $user->getId() : null);
+        
+        if (!$announcement) {
+            $this->exitWithError(404);
+        }
+
         $this->render(
             "announcement",
             [
-                'viewer' => $this->getLoggedUser(),
-                'announcement' => $this->announcemetsRepository->getAnnouncementWithUserContext($id, $currentUser ? $currentUser->getId() : null),
+                'viewer' => $user,
+                'announcement' => $announcement,
             ]
         );
     }
@@ -54,9 +60,9 @@ class AnnouncementController extends AppController
         $announcement = $this->announcemetsRepository->getAnnouncementWithUserContext($announcementId, $user->getId());
 
         if (!$announcement || $announcement->isDeleted()) {
-            $this->render('errors/404');
+            $this->exitWithError(404);
         } else if ($user->getId() !== $announcement->getUser()->getId()) {
-            $this->render('errors/403');
+            $this->exitWithError(403);
         } else {
             $this->render(
                 "announcement_form",
@@ -75,10 +81,12 @@ class AnnouncementController extends AppController
     public function api_add()
     {
         $this->loginRequired();
+        $response = new JsonResponse();
         //
         // VALIDATION
         //
         $validator = new PostDataValidator($_POST);
+        $validator->addField('announcement-id', (new NumberValidation(''))->setCanValueBeEmpty(true));
         $validator->addField('pet-name', new NotEmptyValidation('Wprowadź imię zwierzaka'));
         $validator->addField('pet-age', (new RangeValidation('int', 'Wiek musi być dodatnią liczbą całkowitą', 1, null))->setCanValueBeEmpty(true));
         $validator->addField('pet-age-type', new InArrayValidation('Wybrana opcja nie jest dostępna', ['day', 'month', 'year']));
@@ -105,8 +113,40 @@ class AnnouncementController extends AppController
         }
         $data = $validator->getSanitizedData();
         //
+        // EDITOR VALIDATION
+        //
+        $existingAnnouncement = null;
+        if ($data['announcement-id']) {
+            $existingAnnouncement = $this->announcemetsRepository->getAnnouncementWithUserContext($data['announcement-id'], $this->getLoggedUser()->getId());
+            if (!$existingAnnouncement || $existingAnnouncement->isDeleted()) {
+                (new JsonResponse())->setError('Ogłoszenie nie istnieje lub zostało usunięte', 404)->send();
+            } else if ($this->getLoggedUser()->getId() !== $existingAnnouncement->getUser()->getId()) {
+                (new JsonResponse())->setError('Nie masz uprawnień do edycji tego ogłoszenia', 403)->send();
+            }
+        }
+        //
+        // END VALIDATION
+        //
+        //
         // SECOND VALIDATION
         //
+        $filesValidator = new PostFilesValidator($_FILES);
+        $filesValidator->addField('pet-avatar', 'Dodaj zdjęcie zwierzaka', $existingAnnouncement ? false : true);
+        if (!$filesValidator->validate()) {
+            (new PostFormResponse($filesValidator->getErrors()))->send();
+        }
+        try {
+            $newImage = $filesValidator->getFieldValue('pet-avatar');
+            if ($newImage) {
+                $avatarName = $newImage->save();
+            } else {
+                $avatarName = $existingAnnouncement->getDetails()->getAvatarName();
+            }
+        } catch (Exception $e) {
+            error_log($e);
+            $response->setError('Wystąpił błąd zapisu załącznika, spróbuj ponownie', 500)->send();
+        }
+
         $animalFeaturesValues = [];
         foreach ($data['pet-characteristics'] ?? [] as $id => $value) {
             $animalFeaturesValues[] = $value;
@@ -122,16 +162,15 @@ class AnnouncementController extends AppController
         // END VALIDATION
         //
 
-        $response = new JsonResponse();
-
         $animalFeatures = [];
-        foreach ($_POST['pet-characteristics'] ?? [] as $id => $value) {
+        foreach ($data['pet-characteristics'] ?? [] as $id => $value) {
             if ($value != 0) {
                 $animalFeatures[] = new PetFeature($id, null, $value);
             }
         }
 
         $announcementDetail = new AnnouncementDetail(
+            $existingAnnouncement ? $existingAnnouncement->getDetails()->getId() : null,
             $data['pet-name'],
             $data['pet-location'],
             $data['pet-price'],
@@ -139,13 +178,13 @@ class AnnouncementController extends AppController
             $data['pet-age'],
             $data['pet-age'] ? $data['pet-age-type'] : null,
             $data['pet-gender'],
-            null,
+            $avatarName,
             $data['pet-kind'],
             $animalFeatures
         );
 
         $announcement = new Announcement(
-            null,
+            $existingAnnouncement ? $existingAnnouncement->getId() : null,
             new PetType($data['pet-type'], null),
             $this->getLoggedUser(),
             $announcementDetail,
@@ -153,24 +192,14 @@ class AnnouncementController extends AppController
             null
         );
 
-        $avatar = new AttachmentManager($_FILES['pet-avatar']);
-        if ($avatar->is_uploaded()) {
-            try {
-                $avatarName = $avatar->save();
-            } catch (Exception $e) {
-                Logger::debug('Upload exception: ' . $e->getMessage());
-                $response->setError('Wystąpił błąd zapisu awataru, spróbuj ponownie', 500);
-                $response->send();
-            }
-            $announcement->getDetails()->setAvatarName($avatarName);
-        } else {
-            $response->setError('Nie przesłano awatara', 400);
-        }
-
         try {
-            $this->announcemetsRepository->addAnnouncement($announcement);
+            if ($existingAnnouncement) {
+                $this->announcemetsRepository->updateAnnouncement($announcement);
+            } else {
+                $this->announcemetsRepository->addAnnouncement($announcement);
+            }
         } catch (Exception $e) {
-            $response->setError('Wystąpił wewnętrzny błąd, spróbuj ponownie później', 500);
+            $response->setError('Wystąpił wewnętrzny błąd, spróbuj ponownie później', 500)->send();
         }
 
         $response->setData(['redirect_url' => '/announcement/' . $announcement->getId()]);

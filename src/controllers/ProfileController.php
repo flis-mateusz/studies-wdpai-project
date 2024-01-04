@@ -8,6 +8,7 @@ require_once __DIR__ . '/../repository/AnnouncementsRepository.php';
 require_once __DIR__ . '/../responses/PostFormResponse.php';
 require_once __DIR__ . '/../utils/logger.php';
 require_once __DIR__ . '/../validation/PostDataValidator.php';
+require_once __DIR__ . '/../validation/PostFilesValidator.php';
 
 class ProfileController extends AppController
 {
@@ -46,10 +47,15 @@ class ProfileController extends AppController
         $validator->addField('edit-password', (new PasswordValidation())->setCanValueBeEmpty(true)->setSantization(false));
         $validator->addField('edit-repassword', (new AreValuesSameValidation('Hasła różnią się', 'edit-password')));
         if (!$validator->validate()) {
-            $errors = $validator->getErrors();
-            (new PostFormResponse($errors))->send();
+            (new PostFormResponse($validator->getErrors()))->send();
         }
         $data = $validator->getSanitizedData();
+
+        $fliesValidator = new PostFilesValidator($_FILES);
+        $fliesValidator->addField('edit-avatar', null, false);
+        if (!$fliesValidator->validate()) {
+            (new PostFormResponse($fliesValidator->getErrors()))->send();
+        }
         // END VALIDATION
 
         // PROFILE EDIT
@@ -61,14 +67,12 @@ class ProfileController extends AppController
         $phone = $data['edit-phone'];
         $password = $data['edit-password'];
 
-        $avatar = new AttachmentManager($_FILES['edit-avatar']);
-        if ($avatar->is_uploaded()) {
+        if ($fliesValidator->getFieldValue('edit-avatar')) {
             try {
-                $avatarName = $avatar->save();
+                $avatarName = $fliesValidator->getFieldValue('edit-avatar')->save();
             } catch (Exception $e) {
-                Logger::debug('Upload exception: ' . $e->getMessage());
-                $response->setError($e->getMessage(), 500);
-                $response->send();
+                error_log($e);
+                $response->setError('Wystąpił błąd zapisu zdjęcia, spróbuj ponownie', 500)->send();
             }
             if ($user->getAvatarName()) {
                 AttachmentManager::delete($user->getAvatarName());
@@ -92,8 +96,7 @@ class ProfileController extends AppController
         } catch (PhoneExistsException $e) {
             $response->addErrorField('edit-phone', $e->getMessage(), 409);
         } catch (Exception $e) {
-            $response->setError('Wystąpił wewnętrzny błąd, spróbuj ponownie później', 500);
-            $response->send();
+            $response->setError('Wystąpił wewnętrzny błąd, spróbuj ponownie później', 500)->send();
         }
 
         $response->send();

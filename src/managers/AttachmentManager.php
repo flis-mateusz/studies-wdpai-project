@@ -13,19 +13,16 @@ class AttachmentManager
     public function __construct($attachment)
     {
         $this->attachment = $attachment;
-        Logger::debug($this->attachment);
     }
 
     public function save()
     {
-        if (!$this->is_uploaded()) {
+        if (!$this->isUploaded()) {
             throw new InvalidArgumentException('Plik nie został przesłany');
         }
         $this->validate();
 
         $new_file_name = uniqid() . '.' . pathinfo($this->attachment['name'], PATHINFO_EXTENSION);
-
-
 
         if (!move_uploaded_file($this->attachment['tmp_name'], dirname(__DIR__) . self::UPLOAD_DIRECTORY . $new_file_name)) {
             throw new Error('Błąd podczas przesyłania pliku');
@@ -33,7 +30,7 @@ class AttachmentManager
         return $new_file_name;
     }
 
-    public function is_uploaded()
+    public function isUploaded()
     {
 
         return is_uploaded_file($this->attachment['tmp_name']);
@@ -44,11 +41,9 @@ class AttachmentManager
         if ($this->attachment['size'] > self::MAX_FILE_SIZE) {
             throw new InvalidArgumentException('Plik jest za duży');
         }
-
         if (!isset($this->attachment['type']) || !in_array($this->attachment['type'], self::SUPPORTED_TYPES)) {
-            throw new InvalidArgumentException('Plik o tym rozrzeczeniu nie jest obsługiwany');
+            throw new InvalidArgumentException('Plik o tym rozszerzeniu nie jest obsługiwany');
         }
-
         return true;
     }
 

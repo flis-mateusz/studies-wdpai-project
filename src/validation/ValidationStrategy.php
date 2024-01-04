@@ -128,8 +128,13 @@ class SanitizeOnly extends ValidationStrategy
     }
 }
 
-
-
+class NumberValidation extends ValidationStrategy
+{
+    public function validate($value): bool
+    {
+        return is_numeric($value);
+    }
+}
 
 class RangeValidation extends ValidationStrategy
 {
@@ -176,7 +181,7 @@ abstract class ValidationStrategy
         if (!$this->santization) {
             return $value;
         }
-        
+
         if (is_array($value)) {
             return array_map([$this, 'sanitize'], $value);
         }
@@ -240,7 +245,8 @@ abstract class ValidationStrategy
         return $this;
     }
 
-    static public function sanitizeOnly(mixed $value){
+    static public function sanitizeOnly(mixed $value)
+    {
         $sanitizer = new self('Sanitization error');
         return $sanitizer->sanitize($value);
     }

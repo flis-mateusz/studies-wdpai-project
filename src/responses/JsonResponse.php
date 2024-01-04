@@ -25,6 +25,7 @@ class JsonResponse
     {
         $this->status_code = $status_code;
         $this->error = $data;
+        return $this;
     }
 
     public function setStatusCode($status_code)
@@ -50,6 +51,6 @@ class JsonResponse
         }
 
         echo json_encode($response);
-        exit;
+        exit($this->status_code);
     }
 }

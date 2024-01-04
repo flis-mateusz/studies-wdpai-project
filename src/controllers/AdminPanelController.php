@@ -6,7 +6,7 @@ require_once __DIR__ . '/../repository/UsersRepository.php';
 class AdminPanelController extends AppController
 {
     private $usersRepository;
-    private $reuiredVars;
+    private $requiredVars;
 
     public function __construct()
     {
@@ -15,28 +15,28 @@ class AdminPanelController extends AppController
         $this->adminPrivilegesRequired();
         $this->usersRepository = new UsersRepository();
 
-        $this->reuiredVars = ['user' => $this->getLoggedUser()];
+        $this->requiredVars = ['user' => $this->getLoggedUser()];
     }
 
     public function admin_approval()
     {
-        $this->render('admin/admin-approval', [...$this->reuiredVars]);
+        $this->render('admin/admin-approval', [...$this->requiredVars]);
     }
 
     public function admin_reports()
     {
-        $this->render('admin/admin-reports', [...$this->reuiredVars]);
+        $this->render('admin/admin-reports', [...$this->requiredVars]);
     }
     public function admin_users()
     {
-        $this->render('admin/admin-users', [...$this->reuiredVars]);
+        $this->render('admin/admin-users', [...$this->requiredVars]);
     }
     public function admin_pet_types()
     {
-        $this->render('admin/admin-pet-types', [...$this->reuiredVars]);
+        $this->render('admin/admin-pet-types', [...$this->requiredVars]);
     }
     public function admin_pet_features()
     {
-        $this->render('admin/admin-pet-features', [...$this->reuiredVars]);
+        $this->render('admin/admin-pet-features', [...$this->requiredVars]);
     }
 }

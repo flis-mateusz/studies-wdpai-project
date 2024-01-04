@@ -70,7 +70,6 @@ class FormController {
         }
         
         const responseData = error.response.data;
-        console.log(error.response)
         if (responseData?.invalidFields) {
             for (const [key, message] of Object.entries(responseData.invalidFields)) {
                 if (this.inputs[key]) {

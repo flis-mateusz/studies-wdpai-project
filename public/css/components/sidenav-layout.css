@@ -1,3 +1,44 @@
+main {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 20px;
+    position: relative;
+}
+
+.panel {
+    width: 70%;
+    padding: 30px;
+    position: relative;
+}
+
+.panel>form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.panel>form>div {
+    display: flex;
+    justify-content: space-between;
+    gap: 25px;
+}
+
+.panel>form section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+}
+
+.panel>form section>div {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    width: 300px;
+}
+
 .sidenav,
 .sidenav>div {
     display: flex;
@@ -64,6 +105,7 @@
     box-shadow: 0px 3.5px 40px 0px rgba(0, 0, 0, 0.08);
     border-radius: 20px;
     cursor: pointer;
+    background-color: white;
 }
 
 .nav-expander .menu-icon {
@@ -83,8 +125,33 @@
 }
 
 @media screen and (max-width: 850px) {
+    main {
+        background: none !important;
+    }
+
     .panel {
         margin-top: 60px;
+        width: 100%;
+        background: none;
+        box-shadow: none;
+        padding: 5px;
+    }
+
+    .panel form {
+        flex-direction: column;
+    }
+
+    .panel form>div {
+        width: 100%;
+        flex-direction: column-reverse;
+    }
+
+    .panel form>div>section {
+        width: 100%;
+        align-items: center;
+    }
+
+    .panel form>div>section>div {
         width: 100%;
     }
 
@@ -103,6 +170,10 @@
         transform: translateX(0);
         padding-top: 60px;
         z-index: 2;
+    }
+
+    .sidenav:not(:has(#sidenav-button:checked)) {
+        box-shadow: none;
     }
 
     .sidenav:has(#sidenav-button:checked) .nav-expander {
@@ -127,5 +198,15 @@
 
     body:has(#sidenav-button:checked) header {
         position: unset !important;
+    }
+}
+
+@media screen and (max-width: 1100px) {
+    header {
+        padding: 15px 20px !important;
+    }
+
+    main {
+        padding: 15px 20px !important;
     }
 }

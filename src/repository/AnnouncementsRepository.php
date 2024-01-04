@@ -10,10 +10,6 @@ require_once __DIR__ . '/../models/announcement/AnnouncementReport.php';
 
 class AnnouncementsRepository extends Repository
 {
-    public function insertAnnouncement(Announcement $announcement)
-    {
-    }
-
     public function addAnnouncement(Announcement $announcement)
     {
         $connection = $this->database->connect();
@@ -56,16 +52,73 @@ class AnnouncementsRepository extends Repository
             if (!$announcement_detail_id) {
                 throw new Exception();
             }
+            $announcement->getDetails()->setId($announcement_detail_id);
 
             foreach ($announcement->getDetails()->getFeatures() as $feature) {
                 $stmt = $connection->prepare('
-                INSERT INTO announcement_animal_features (feature_id, value, announcement_id)
+                INSERT INTO announcement_animal_features (feature_id, value, announcement_detail_id)
                 VALUES (?,?,?)');
 
                 $stmt->execute([
                     $feature->getId(),
                     json_encode($feature->getValue()),
-                    $announcement_id,
+                    $announcement_detail_id,
+                ]);
+            }
+
+            $connection->commit();
+            return true;
+        } catch (Exception $e) {
+            $connection->rollback();
+            error_log($e);
+            throw $e;
+        }
+    }
+
+    public function updateAnnouncement(Announcement $announcement)
+    {
+        $connection = $this->database->connect();
+        try {
+            $connection->beginTransaction();
+
+            $stmt = $connection->prepare('
+            UPDATE announcements
+            SET type_id = ?, accepted = false
+            WHERE announcement_id = ?;');
+            $stmt->execute([
+                $announcement->getType()->getId(),
+                $announcement->getId()
+            ]);
+
+            $stmt = $connection->prepare('
+            UPDATE announcement_detail
+            SET pet_name = ?, pet_locality = ?, pet_price = ?, pet_description = ?, pet_age = ?, pet_age_type = ?, pet_gender = ?, pet_avatar_name = ?, pet_kind = ?
+            WHERE announcement_id = ?;');
+            $stmt->execute([
+                $announcement->getDetails()->getName(),
+                $announcement->getDetails()->getLocality(),
+                $announcement->getDetails()->getPrice(),
+                $announcement->getDetails()->getDescription(),
+                $announcement->getDetails()->getAge(),
+                $announcement->getDetails()->getAgeType(),
+                $announcement->getDetails()->getGender(),
+                $announcement->getDetails()->getAvatarName(),
+                $announcement->getDetails()->getKind(),
+                $announcement->getId()
+            ]);
+
+            $stmt = $connection->prepare('
+            DELETE FROM announcement_animal_features WHERE announcement_detail_id = ?');
+            $stmt->execute([$announcement->getDetails()->getId()]);
+
+            foreach ($announcement->getDetails()->getFeatures() as $feature) {
+                $stmt = $connection->prepare('
+                INSERT INTO announcement_animal_features (feature_id, value, announcement_detail_id)
+                VALUES (?,?,?)');
+                $stmt->execute([
+                    $feature->getId(),
+                    json_encode($feature->getValue()),
+                    $announcement->getDetails()->getId(),
                 ]);
             }
 
@@ -114,7 +167,7 @@ class AnnouncementsRepository extends Repository
         $announcement = AnnouncementWithUserContext::createFromAnnouncement($this->createAnnouncementFromResult($result));
 
         if ($includeFeatures) {
-            $announcement->getDetails()->setFeatures($this->getAnnouncementFeatures($announcement->getId()));
+            $announcement->getDetails()->setFeatures($this->getAnnouncementFeatures($announcement->getDetails()->getId()));
         }
 
         if ($result['deleted_at']) {
@@ -195,7 +248,6 @@ class AnnouncementsRepository extends Repository
             $stmt->execute([$user->getId()]);
             $count = $stmt->fetchColumn();
             return $count;
-            
         } catch (Exception $e) {
             error_log($e);
             throw $e;
@@ -338,21 +390,20 @@ class AnnouncementsRepository extends Repository
         }
     }
 
-    public function getAnnouncementFeatures($announcementId)
+    public function getAnnouncementFeatures($announcementDetailId)
     {
         $connection = $this->database->connect();
         $stmt = $connection->prepare('
         SELECT animal_features.*, announcement_animal_features.value
         FROM announcement_animal_features
         NATURAL JOIN animal_features
-        WHERE announcement_id = ?');
-        $stmt->execute([$announcementId]);
+        WHERE announcement_detail_id = ?');
+        $stmt->execute([$announcementDetailId]);
 
         $result = [];
         $features = $stmt->fetchAll(PDO::FETCH_ASSOC);
         foreach ($features as $feature) {
             $result[] = new PetFeature($feature['feature_id'], $feature['feature_name'], $feature['value']);
-            Logger::debug(json_encode($feature['value']));
         }
         return $result;
     }
@@ -420,6 +471,7 @@ class AnnouncementsRepository extends Repository
     private function createAnnouncementFromResult($result)
     {
         $announcementDetails = new AnnouncementDetail(
+            $result['announcement_detail_id'],
             $result['pet_name'],
             $result['pet_locality'],
             $result['pet_price'],

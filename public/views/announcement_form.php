@@ -57,18 +57,14 @@ $petTypeSearch = new DebounceSearchComponent(
             <fieldset class="scroll-to">
                 <div class="field">
                     <div>Imię*</div>
-                    <div class="info">Jeśli Twój zwierzak reaguje na konkretne imię, podaj je. W przeciwnym wypadku to
-                        odpowiedni
-                        moment na nadanie imienia</div>
+                    <div class="info">Jeśli Twój zwierzak reaguje na konkretne imię, podaj je. W przeciwnym wypadku to odpowiedni moment na nadanie imienia</div>
                     <div>
                         <input type="text" class="main-input" name="pet-name" value="<?= $announcement ? $announcement->getDetails()->getName() : null; ?>">
                     </div>
                 </div>
                 <div class="field">
                     <div>Wiek</div>
-                    <div class="info">Postaraj się oszacować wiek zwierzęcia. Jeśli nie jesteś w stanie tego zrobić,
-                        pozostaw to pole
-                        puste</div>
+                    <div class="info">Postaraj się oszacować wiek zwierzęcia. Jeśli nie jesteś w stanie tego zrobić, pozostaw to pole puste</div>
                     <div>
                         <div class="input-with-select input-related">
                             <input type="number" min="1" class="main-input" name="pet-age" value="<?= $announcement ? $announcement->getDetails()->getAge() : null; ?>">
@@ -86,7 +82,7 @@ $petTypeSearch = new DebounceSearchComponent(
                     <div class="toggle row">
                         <input type="radio" name="pet-gender" value="male" id="pet-gender-male" <?= !$announcement || $announcement->getDetails()->getGender() == 'male' ? 'checked' : null; ?> />
                         <label for="pet-gender-male">On</label>
-                        <input type="radio" name="pet-gender" value="female" id="pet-gender-female" <?= $announcement && $announcement->getDetails()->getGender() == 'female' ? 'selected' : null; ?> />
+                        <input type="radio" name="pet-gender" value="female" id="pet-gender-female" <?= $announcement && $announcement->getDetails()->getGender() == 'female' ? 'checked' : null; ?> />
                         <label for="pet-gender-female">Ona</label>
                     </div>
                     <span class="input-error"></span>
@@ -129,7 +125,7 @@ $petTypeSearch = new DebounceSearchComponent(
             </fieldset>
             <fieldset class="scroll-to">
                 <div class="field">
-                    <div>Cechy*</div>
+                    <div>Cechy</div>
                     <div class="info">Zaznacz tylko te pola, które dotyczą zwierzaka oraz co do których masz absolutną pewność</div>
                 </div>
                 <?php

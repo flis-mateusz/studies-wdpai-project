@@ -3,7 +3,7 @@
 require_once __DIR__ . '/ResourceManager.php';
 require_once __DIR__ . '/Component.php';
 
-class ProfilePanelSideNav extends Component
+class SideNavLayout extends Component
 {
     private User $user;
     private string $uri;
@@ -16,7 +16,7 @@ class ProfilePanelSideNav extends Component
 
     public static function initialize()
     {
-        ResourceManager::addStyle('/public/css/components/sidenav.css');
+        ResourceManager::addStyle('/public/css/components/sidenav-layout.css');
     }
 
     public function URIEquals($value) {
@@ -33,7 +33,7 @@ class ProfilePanelSideNav extends Component
     public function render()
     {
         ob_start();
-        include __DIR__ . '/../templates/sidenav_template.php';
+        include __DIR__ . '/../templates/sidenav_layout_template.php';
         echo ob_get_clean();
     }
 }

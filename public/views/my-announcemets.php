@@ -6,12 +6,12 @@
 
 require_once __DIR__ . '/components/CustomContentLoader.php';
 require_once __DIR__ . '/components/HeaderComponent.php';
-require_once __DIR__ . '/components/ProfilePanelSideNav.php';
+require_once __DIR__ . '/components/SideNavLayout.php';
 require_once __DIR__ . '/components/AnnouncementElement.php';
 
 CustomContentLoader::initialize();
 HeaderComponent::initialize();
-ProfilePanelSideNav::initialize();
+SideNavLayout::initialize();
 AnnouncementElement::initialize();
 ?>
 <!DOCTYPE html>
@@ -21,7 +21,6 @@ AnnouncementElement::initialize();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/public/css/main.css">
-    <link rel="stylesheet" href="/public/css/profile/profile-edit.css">
     <link rel="stylesheet" href="/public/css/components/forms.css">
     <?php
     ResourceManager::appendResources();
@@ -35,7 +34,7 @@ AnnouncementElement::initialize();
     (new HeaderComponent($user))->render();
     ?>
     <main>
-        <?php (new ProfilePanelSideNav($user))->render(); ?>
+        <?php (new SideNavLayout($user))->render(); ?>
         <section class="panel">
             <?php if (isset($announcements) && !isEmpty($announcements)) : ?>
                 <section class="announcements-list fit">

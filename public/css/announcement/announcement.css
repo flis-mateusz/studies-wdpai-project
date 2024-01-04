@@ -139,6 +139,7 @@ main>section {
 }
 
 .about-pet .like i::before {
+    padding-top: 5px;
     content: 'favorite_border';
 }
 

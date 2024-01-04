@@ -8,7 +8,6 @@ class Announcement {
 
         this.loader = new CustomContentLoaderController();
         this.loader.setupAbsoluteCenteredPOV()
-        this.loader.setupDarker()
         this.output = document.querySelector('span.input-error');
         this.refferer = document.referrer;
 

@@ -5,6 +5,7 @@ require_once __DIR__ . '/../pet/PetFeature.php';
 
 class AnnouncementDetail
 {
+    private $id;
     private $name;
     private $locality;
     private $price;
@@ -17,6 +18,7 @@ class AnnouncementDetail
     private array $features;
 
     public function __construct(
+        ?int $id,
         string $name,
         string $locality,
         ?float $price,
@@ -28,6 +30,7 @@ class AnnouncementDetail
         ?string $kind,
         array $features
     ) {
+        $this->id = $id;
         $this->name = $name;
         $this->locality = $locality;
         $this->price = $price;
@@ -38,6 +41,16 @@ class AnnouncementDetail
         $this->avatarName = $avatarName;
         $this->kind = $kind;
         $this->features = $features;
+    }
+
+    public function getId():?int
+    {
+        return $this->id;
+    }
+
+    public function setId(int $id): void
+    {
+        $this->id = $id;
     }
 
     public function getName(): string

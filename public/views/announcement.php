@@ -2,7 +2,7 @@
 
 /**
  * @var ?User $viewer
- * @var ?AnnouncementWithUserContext $announcement
+ * @var AnnouncementWithUserContext $announcement
  */
 
 require_once __DIR__ . '/components/HeaderComponent.php';
@@ -11,13 +11,11 @@ require_once __DIR__ . '/components/CustomContentLoader.php';
 HeaderComponent::initialize();
 CustomContentLoader::initialize();
 
-if ($announcement) {
-    $owner = $announcement->getUser();
-    $isOwner = $viewer && $announcement && $viewer->getId() === $owner->getId();
-    $isViewerAdmin = $viewer && $viewer->isAdmin();
-    $deleted = $announcement->getDeleted();
-    $requiresApproval = $announcement && !$announcement->isAccepted();
-}
+$owner = $announcement->getUser();
+$isOwner = $viewer && $viewer->getId() === $owner->getId();
+$isViewerAdmin = $viewer && $viewer->isAdmin();
+$deleted = $announcement->getDeleted();
+$requiresApproval = !$announcement->isAccepted();
 ?>
 
 <!DOCTYPE html>
@@ -118,8 +116,12 @@ if ($announcement) {
                     <div class="info">
                         <div>
                             <div>
+                                <span>Typ</span>
+                                <span class="capitalize"><?= $announcement->getType()->getName(); ?></span>
+                            </div>
+                            <div>
                                 <span>Gatunek</span>
-                                <span><?= $announcement->getDetails()->getFormattedKind(); ?></span>
+                                <span class="capitalize"><?= $announcement->getDetails()->getFormattedKind(); ?></span>
                             </div>
                             <div>
                                 <span>Płeć</span>

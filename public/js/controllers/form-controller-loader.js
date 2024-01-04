@@ -13,7 +13,13 @@ class FormControllerWithLoader extends FormController {
     }
 
     handleResponse(data) {
-        this.loader.completeLoadingAsync().then(redirectToTargetOrDefault)
+        this.loader.completeLoadingAsync().then(() => {
+            if (data.data?.redirect_url) {
+                window.location.href = data.data.redirect_url;
+                return;
+            }
+            redirectToTargetOrDefault()
+        })
     }
 
     handleError(error) {

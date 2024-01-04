@@ -16,15 +16,18 @@ class PostFormResponse extends JsonResponse
         }
     }
 
-    public function addErrorField($fieldName, $errorMessage, $statusCode=400)
+    public function addErrorField($fieldName, $errorMessage, $statusCode = 400)
     {
         $this->setStatusCode($statusCode);
         $this->errorFields[$fieldName] = $errorMessage;
+        return $this;
     }
 
-    public function setErrorFields(array $errorFields) {
+    public function setErrorFields(array $errorFields)
+    {
         $this->setStatusCode(400);
         $this->errorFields = $errorFields;
+        return $this;
     }
 
     public function send()

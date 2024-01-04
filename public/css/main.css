@@ -347,6 +347,10 @@ span.input-error.not-hidden {
     max-height: unset;
 }
 
+.capitalize {
+    text-transform: capitalize;
+}
+
 @media screen and (max-width: 1100px) {
 
     span,
