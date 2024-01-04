@@ -355,6 +355,27 @@ span.input-error.not-hidden {
     text-transform: capitalize;
 }
 
+.gallery {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    background-color: #000000d4;
+    border-radius: 0;
+    padding: 0 20px;
+}
+
+.gallery img {
+    max-width: 100% !important;
+    max-height: 80vh !important;
+    border-radius: 0 !important;
+}
+
 @media screen and (max-width: 1100px) {
 
     span,

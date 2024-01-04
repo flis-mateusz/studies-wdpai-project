@@ -1,6 +1,5 @@
 import FormControllerWithLoader from './controllers/form-controller-loader.js';
 import { InputMinLengthValidation, NotEmptyValidation } from './validation/ValidationStrategy.js'
-import { FetchController } from './controllers/fetch-controller.js';
 import AttachmentDragDropController from './controllers/attachment-drop-controller.js';
 
 class AnnouncementAddForm extends FormControllerWithLoader {
@@ -10,7 +9,7 @@ class AnnouncementAddForm extends FormControllerWithLoader {
         this.attachmentController = new AttachmentDragDropController(
             this.form.querySelector('.attachment-dropdown'), 1)
 
-        this.loader.setupAbsoluteCenteredPOV()
+        this.loader.setupFixed()
 
         // Inputs section
         this.registerInput('pet-name', new NotEmptyValidation('Wprowadź imię zwierzaka'))

@@ -69,7 +69,8 @@ main>section {
     height: max-content;
     position: sticky;
     top: 5px;
-    max-width: 420px;
+    max-width: 370px;
+    min-width: 220px;
 }
 
 .about-user>div {
@@ -111,11 +112,11 @@ main>section {
 .about-pet {
     width: 70%;
     position: relative;
+    flex: 1;
 }
 
 .about-user,
 .about-pet {
-    flex: 1 0 0;
     border-radius: 12px;
     background: #FFF;
     border-radius: 20px;
@@ -152,9 +153,10 @@ main>section {
     width: 100%;
     height: 50vh;
     border-radius: 20px;
-    background: url('/public/images/2.jpg');
+    background: url('/public/images/image-placeholder.svg');
     background-position: center;
     background-size: cover;
+    cursor: pointer;
 }
 
 .about-pet .info {
@@ -187,35 +189,39 @@ main>section {
 
 .about-pet .info>div:first-child>div>span:last-child {
     color: #5438A6;
+    text-align: right;
 }
 
-.about-pet .info>div.badges {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    align-content: center;
+.about-pet div.badges {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
 }
 
-.about-pet .info>div.badges>div {
+.about-pet div.badges>div {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     gap: 5px;
     font-size: 0.9em;
 }
 
-.about-pet .info>div.badges i {
+.about-pet div.badges>div span {
+    text-align: left;
+}
+
+.about-pet div.badges i {
     color: #6361E8;
 }
 
-.about-pet .info>div.badges>div.not-ok i {
+.about-pet div.badges>div.not-ok i {
     color: #ca3b3b;
 }
 
 .about-pet .description {
     padding: 0px 20px 20px 20px;
     font-size: 0.9em;
+    word-wrap: break-word;
+    text-align: justify;
 }
 
 .announcement .resp-only {
@@ -240,6 +246,13 @@ main section.prompt {
     text-align: right;
 }
 
+
+@media screen and (max-width: 1650px) {
+    .about-pet div.badges {
+        grid-template-columns: 1fr;
+    }
+}
+
 @media screen and (max-width: 640px) {
     .announcement {
         flex-direction: column-reverse;
@@ -255,7 +268,7 @@ main section.prompt {
     }
 
     .about-user {
-        position: sticky;
+        position: unset;
         top: 80px;
         padding: 15px;
         max-width: unset;
@@ -308,9 +321,8 @@ main section.prompt {
         border-top: 1px solid lightgrey;
     }
 
-    .about-pet .info>div.badges {
-        justify-content: flex-start;
-        padding: 10px 0px;
+    .about-pet div.badges {
+        grid-template-columns: 1fr 1fr;
     }
 
     .announcement-header .main-button {
@@ -326,6 +338,12 @@ main section.prompt {
 
     .about-user .name {
         text-align: center;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .about-pet div.badges {
+        grid-template-columns: 1fr;
     }
 }
 

@@ -81,6 +81,10 @@ a.announcement span {
     text-transform: capitalize;
 }
 
+.announcement-data span {
+    text-align: left;
+}
+
 .announcement-detail,
 .announcement-user {
     display: flex;
@@ -197,7 +201,8 @@ a.announcement span {
         flex-direction: column;
     }
 
-    .announcement-detail, .announcement-user {
+    .announcement-detail,
+    .announcement-user {
         flex-direction: column;
         align-items: flex-start;
         gap: 10px;

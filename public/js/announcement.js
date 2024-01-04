@@ -1,5 +1,6 @@
 import CustomContentLoaderController from './controllers/custom-loader.js';
 import { FetchController } from './controllers/fetch-controller.js';
+import GalleryTransformerController from './controllers/gallery-transformer.js';
 import { redirectToTargetOrDefault } from './utils.js'
 
 class Announcement {
@@ -20,7 +21,7 @@ class Announcement {
         this.actionLike = document.querySelector('.action-like')
         this.actionLike?.addEventListener('click', this.like.bind(this))
 
-        console.log(document.referrer);
+        this.galleryController = new GalleryTransformerController('div.photo');
     }
 
     showOutput(text) {
@@ -37,7 +38,7 @@ class Announcement {
         this.hideOutput();
         await this.loader.timeWait(300);
     }
-    
+
     handleResponse(data) {
         switch (data.data) {
             case 'approved':

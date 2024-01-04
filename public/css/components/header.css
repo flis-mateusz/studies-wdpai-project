@@ -7,6 +7,7 @@ header {
     background: var(--neutral-0, #FFF);
     transition-duration: 100ms;
     z-index: 97;
+    position: sticky;
 }
 
 header>nav {
@@ -55,6 +56,7 @@ header a,
     text-decoration: none;
     color: inherit;
     padding: 5px 15px;
+    display: flex;
 }
 
 header a>span {
@@ -146,6 +148,9 @@ header .menu-button:checked~.menu-icon .navicon:after {
 
 .menu-dropdown {
     position: relative;
+}
+
+.menu-dropdown.user {
     padding: 0px 15px;
 }
 
@@ -238,7 +243,7 @@ header .menu-button:checked~.menu-icon .navicon:after {
     }
 
     .menu-dropdown {
-        padding: 0px;
+        padding: 0px !important;
     }
 
     .menu-dropdown-content {

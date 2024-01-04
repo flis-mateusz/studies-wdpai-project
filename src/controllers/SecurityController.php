@@ -89,8 +89,6 @@ class SecurityController extends AppController
         }
 
         if ($new_user) {
-            Logger::debug($new_user);
-            Logger::debug($user);
             $this->getSession()->setUserID($user->getId());
         }
         $response->send();

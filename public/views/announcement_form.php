@@ -33,7 +33,7 @@ $petTypeSearch = new DebounceSearchComponent(
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/public/css/main.css">
+    <link rel="stylesheet" href="/public/css/common.css">
     <link rel="stylesheet" href="/public/css/components/forms.css">
     <link rel="stylesheet" href="/public/css/components/custom-radio.css">
     <link rel="stylesheet" href="/public/css/announcement/announcement_form.css">

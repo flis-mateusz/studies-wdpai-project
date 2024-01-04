@@ -194,12 +194,16 @@ class AnnouncementController extends AppController
 
         try {
             if ($existingAnnouncement) {
-                $this->announcemetsRepository->updateAnnouncement($announcement);
+                $this->announcemetsRepository->updateAnnouncement($announcement);              
             } else {
                 $this->announcemetsRepository->addAnnouncement($announcement);
             }
         } catch (Exception $e) {
             $response->setError('Wystąpił wewnętrzny błąd, spróbuj ponownie później', 500)->send();
+        }
+
+        if ($newImage && $existingAnnouncement) {
+            AttachmentManager::delete($existingAnnouncement->getDetails()->getAvatarName());
         }
 
         $response->setData(['redirect_url' => '/announcement/' . $announcement->getId()]);

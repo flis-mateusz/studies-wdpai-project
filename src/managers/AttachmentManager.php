@@ -7,7 +7,7 @@ class AttachmentManager
     private $attachment;
 
     const MAX_FILE_SIZE = 1024 * 1024 * 5;
-    const SUPPORTED_TYPES = ['image/png', 'image/jpeg'];
+    const SUPPORTED_TYPES = ['image/png', 'image/jpeg', 'image/jpg'];
     const UPLOAD_DIRECTORY = '/../public/images/uploads/';
 
     public function __construct($attachment)
@@ -49,10 +49,15 @@ class AttachmentManager
 
     public static function delete($fileName): bool
     {
-        $path = dirname(__DIR__). self::UPLOAD_DIRECTORY. $fileName;
-        if (file_exists($path)) {
-            return unlink($path);
+        try {
+            $path = dirname(__DIR__) . self::UPLOAD_DIRECTORY . $fileName;
+            if (file_exists($path)) {
+                return unlink($path);
+            }
+            return true;
+        } catch (Exception $e) {
+            error_log($e);
+            return false;
         }
-        return true;
     }
 }

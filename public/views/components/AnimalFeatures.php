@@ -14,7 +14,6 @@ class AnimalFeatures
         $this->initialValues = [];
         if ($initialValues) {
             $this->initialValues = AnnouncementDetail::featuresToAssociativeArray($initialValues);
-            Logger::debug($this->initialValues);
         }
     }
 

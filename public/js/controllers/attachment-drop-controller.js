@@ -7,21 +7,21 @@ class AttachmentDragDropController {
         this.preview = this.dropArea.querySelector('.attachment-preview')
 
             ;['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-                this.dropArea.addEventListener(eventName, this.preventDefaults.bind(this))
-                document.addEventListener(eventName, this.preventDefaults.bind(this))
+                this.dropArea.addEventListener(eventName, this.preventDefaults)
+                document.addEventListener(eventName, this.preventDefaults)
             })
 
             ;['dragenter', 'dragover'].forEach(eventName => {
-                this.dropArea.addEventListener(eventName, this.highlight.bind(this))
+                this.dropArea.addEventListener(eventName, this.highlight)
             })
 
             ;['dragleave', 'drop'].forEach(eventName => {
-                this.dropArea.addEventListener(eventName, this.unhighlight.bind(this))
+                this.dropArea.addEventListener(eventName, this.unhighlight)
             })
 
         this.output = this.dropArea.querySelector('span.error-output')
-        this.input.addEventListener('change', this.hanleInputChange.bind(this))
-        this.dropArea.addEventListener('drop', this.handleDrop.bind(this))
+        this.input.addEventListener('change', this.hanleInputChange)
+        this.dropArea.addEventListener('drop', this.handleDrop)
     }
 
     preventDefaults(e) {
@@ -29,15 +29,15 @@ class AttachmentDragDropController {
         e.stopPropagation()
     }
 
-    highlight(e) {
+    highlight = (e) => {
         this.dropArea.classList.add('active')
     }
 
-    unhighlight(e) {
+    unhighlight = (e) => {
         this.dropArea.classList.remove('active')
     }
 
-    handleDrop(e) {
+    handleDrop = (e) => {
         if (e.dataTransfer.files.length > this.allowedAmount) {
             this.handleError('Możesz przesłać maksymalnie ' + this.allowedAmount + ' plików')
             return
@@ -47,16 +47,28 @@ class AttachmentDragDropController {
 
     handleFilesUploaded(files) {
         this.output.classList.remove('visible')
-        this.input.files = files
         this.preview.classList.remove('active')
         this.preview.innerHTML = ''
 
+        const dataTransfer = new DataTransfer();
+        let invalidFilesCount = 0;
+
         Array.from(files).forEach(file => {
-            this.handlePreview(file)
-        })
+            if (this.validateFile(file)) {
+                this.handlePreview(file);
+                dataTransfer.items.add(file);
+            } else {
+                invalidFilesCount++;
+            }
+        });
+        if (invalidFilesCount > 0) {
+            this.handleError('Nieprawidłowe pliki: ' + invalidFilesCount)
+        }
+
+        this.input.files = dataTransfer.files
     }
 
-    hanleInputChange(e) {
+    hanleInputChange = (e) => {
         this.handleFilesUploaded(e.target.files)
     }
 
@@ -79,6 +91,15 @@ class AttachmentDragDropController {
     handleError(e) {
         this.output.innerText = e
         this.output.classList.add('visible')
+    }
+
+    validateFile(file) {
+        const validTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+        if (validTypes.includes(file.type)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 
