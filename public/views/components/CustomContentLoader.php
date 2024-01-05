@@ -7,7 +7,7 @@ class CustomContentLoader extends Component
 {
     public static function initialize()
     {
-        ResourceManager::addStyle('/public/css/components/custom_loader.css');
+        ResourceManager::addStyle('/public/css/components/custom-loader.css');
     }
 
     public function render()

@@ -6,11 +6,11 @@
 
 require_once __DIR__ . '/components/CustomContentLoader.php';
 require_once __DIR__ . '/components/HeaderComponent.php';
-require_once __DIR__ . '/components/SideNavLayout.php';
+require_once __DIR__ . '/components/PanelSidenav.php';
 
 CustomContentLoader::initialize();
 HeaderComponent::initialize();
-SideNavLayout::initialize();
+PanelSidenav::initialize();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,7 +34,7 @@ SideNavLayout::initialize();
     (new HeaderComponent($user))->render();
     ?>
     <main>
-        <?php (new SideNavLayout($user))->render(); ?>
+        <?php (new PanelSidenav($user))->render(); ?>
         <section class="panel">
             <form id="profile-edit-form" class="with-absolute-loader">
                 <div>

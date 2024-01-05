@@ -11,20 +11,26 @@ require_once __DIR__ . '/components/HeaderComponent.php';
 require_once __DIR__ . '/components/AttachmentDragDrop.php';
 require_once __DIR__ . '/components/CustomContentLoader.php';
 require_once __DIR__ . '/components/AnimalFeatures.php';
-require_once __DIR__ . '/components/DebounceSearch.php';
+require_once __DIR__ . '/components/DebounceSelectSearch.php';
 
 HeaderComponent::initialize();
 AttachmentDragDrop::initialize();
 CustomContentLoader::initialize();
-DebounceSearchComponent::initialize();
+DebounceSelectSearchComponent::initialize();
 
-$petTypeSearch = new DebounceSearchComponent(
+$petTypeSearch = new DebounceSelectSearchComponent(
     'pet-type',
     null,
     null,
     json_encode($animalTypes),
     $announcement ? $announcement->getType()->getName() : null
 );
+
+// $petTypeSearch = new DebounceSelectSearchComponent(
+//     'pet-type',
+//     '/query_animal_types',
+//     500,
+// );
 ?>
 
 <!DOCTYPE html>

@@ -376,6 +376,36 @@ span.input-error.not-hidden {
     border-radius: 0 !important;
 }
 
+.icon-input {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.icon-input input {
+    padding-left: calc(1em + 30px);
+    width: 100%;
+}
+
+.icon-input.two input {
+    padding-right: calc(1em + 30px);
+}
+
+.icon-input i {
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+    color: silver;
+}
+
+.icon-input i:last-child {
+    left: unset;
+    right: 15px;
+    cursor: pointer;
+}
+
 @media screen and (max-width: 1100px) {
 
     span,

@@ -1,33 +1,19 @@
 import { FetchController } from './fetch-controller.js';
 
 class DebounceSearchController {
-    constructor(id, url, timeout, preLoadedData) {
-        this.setupElements(id);
-        this.url = url;
+    constructor(id, timeout) {
+        this.parentElement = document.querySelector(`#${id}`);
+        this.inputElement = this.parentElement.querySelector('input.search-input');
         this.timeout = timeout;
-        this.preLoadedData = preLoadedData;
-        this.fetchController = new FetchController(this.url);
-        this.debounceSearch = this.debounce(this.search.bind(this), this.timeout);
 
+        this.debounceSearch = this.debounce(this.#update, this.timeout);
         this.addEventListeners();
 
-        if (this.preLoadedData) {
-            this.displayResults(this.preLoadedData);
-        }
+        this.observers = [];
     }
 
-    setupElements(id) {
-        this.element = document.querySelector(`#${id}`);
-        this.outputElement = this.element.querySelector('.search-results');
-        this.targetInputElement = this.element.querySelector('input.target-input');
-        this.inputSearchElement = this.element.querySelector('input.search-input');
-    }
-
-    addEventListeners() {
-        this.inputSearchElement.addEventListener('keyup', (e) => {
-            this.resetSearch();
-            this.debounceSearch(e);
-        });
+    addObserver(observer) {
+        this.observers.push(observer);
     }
 
     debounce(func, delay) {
@@ -40,23 +26,63 @@ class DebounceSearchController {
         };
     }
 
+    addEventListeners() {
+        this.inputElement.addEventListener('keyup', (e) => {
+            this.onInput();
+            this.debounceSearch(e);
+        });
+    }
+
+    #update = async () => {
+        let query = this.inputElement.value.toLowerCase().trim();
+        this.parentElement.classList.add('loading');
+
+        await this.#search(query);
+
+        this.parentElement.classList.remove('loading');
+    }
+
+    async #search(query) {
+        for (let observer of this.observers) {
+            await observer(query)
+        }
+    }
+
+    onInput() { }
+}
+
+class DebounceSelectSearchController extends DebounceSearchController {
+    constructor(id, url, timeout, preLoadedData) {
+        super(id, timeout);
+        this.url = url;
+        this.setupElements(id);
+        this.preLoadedData = preLoadedData;
+        this.fetchController = new FetchController(this.url);
+        if (this.preLoadedData) {
+            this.displayResults(this.preLoadedData);
+        }
+        this.observers.push(this.search.bind(this));
+    }
+
+    setupElements(id) {
+        this.outputElement = this.parentElement.querySelector('.search-results');
+        this.targetInputElement = this.parentElement.querySelector('input.target-input');
+    }
+
     displayResults(data) {
         this.outputElement.innerHTML = '';
         data?.forEach(item => this.createResultItem(item));
     }
 
     createResultItem(object) {
-        for (let key in object) {
-            if (object.hasOwnProperty(key)) {
-                let value = object[key];
-                this.matchAndDisplayResult(key, value);
-                this.appendResultElement(key, value);
-            }
+        for (let [key, value] of Object.entries(object)) {
+            this.matchAndDisplayResult(key, value);
+            this.appendResultElement(key, value);
         }
     }
 
     matchAndDisplayResult(key, value) {
-        if (value.toLowerCase().trim() === this.inputSearchElement.value.toLowerCase().trim()) {
+        if (value.toLowerCase().trim() === this.inputElement.value.toLowerCase().trim()) {
             this.handleOptionSelect(key, value);
         }
     }
@@ -71,17 +97,20 @@ class DebounceSearchController {
         });
     }
 
-    async search() {
-        let query = this.inputSearchElement.value.toLowerCase().trim();
-        this.element.classList.add('loading');
+    async fetchSearchResults(query) {
+        await this.fetchController.post({ 'search': query })
+            .then((data) => {
+                this.displayResults(data.data)
+            })
+            .catch();
+    }
 
+    async search(query) {
         if (!this.url) {
             this.filterLocalData(query);
         } else {
             await this.fetchSearchResults(query);
         }
-
-        this.element.classList.remove('loading');
     }
 
     filterLocalData(query) {
@@ -94,29 +123,24 @@ class DebounceSearchController {
         });
     }
 
-    async fetchSearchResults(query) {
-        const data = await this.fetchController.post({ 'search': query });
-        this.displayResults(data.data);
-    }
-
     handleOptionSelect(optionId, optionName) {
         this.setTargetInputValue(optionId);
-        this.inputSearchElement.value = optionName;
+        this.inputElement.value = optionName;
         this.targetInputElement.dispatchEvent(new Event('change'));
-        this.element.classList.add('selected');
-        this.inputSearchElement.classList.add('valid');
+        this.parentElement.classList.add('selected');
+        this.inputElement.classList.add('valid');
     }
 
     setTargetInputValue(value) {
         this.targetInputElement.value = value;
     }
 
-    resetSearch() {
+    onInput() {
         this.setTargetInputValue('');
         this.targetInputElement.dispatchEvent(new Event('change'));
-        this.element.classList.remove('selected');
-        this.inputSearchElement.classList.remove('valid');
+        this.parentElement.classList.remove('selected');
+        this.inputElement.classList.remove('valid');
     }
 }
 
-export default DebounceSearchController;
+export { DebounceSearchController, DebounceSelectSearchController };

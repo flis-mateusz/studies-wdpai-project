@@ -24,4 +24,9 @@ class DefaultController extends AppController
     {
         $this->render("login");
     }
+
+    public function help()
+    {
+        $this->render("help", ['user' => $this->getLoggedUser()]);
+    }
 }

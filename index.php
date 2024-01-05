@@ -9,6 +9,7 @@ Router::get('', 'DefaultController');
 Router::get('index', 'DefaultController');
 Router::get('dashboard', 'DefaultController');
 Router::get('login', 'DefaultController');
+Router::get('help', 'DefaultController');
 
 Router::post('api_login', 'SecurityController');
 Router::post('api_register', 'SecurityController');
@@ -23,6 +24,7 @@ Router::post('api_profile_avatar_delete', 'ProfileController');
 Router::get('add', 'AnnouncementController');
 Router::get('edit', 'AnnouncementController');
 Router::get('announcement', 'AnnouncementController');
+Router::get('announcements', 'AnnouncementController');
 Router::post('api_add', 'AnnouncementController');
 Router::post('api_announcement_like', 'AnnouncementController');
 Router::post('api_announcement_delete', 'AnnouncementController');

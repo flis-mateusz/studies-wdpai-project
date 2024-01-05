@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @var SideNavLayout $this
+ * @var PanelSidenav $this
  */
 ?>
 

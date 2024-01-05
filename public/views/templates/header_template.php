@@ -26,7 +26,7 @@
                     <?php echo $this->renderNavLink('/', 'Strona główna'); ?>
                 <?php endif; ?>
                 <?php echo $this->renderNavLink('/announcements', 'Ogłoszenia'); ?>
-                <?php echo $this->renderNavLink('/contact', 'Kontakt'); ?>
+                <?php echo $this->renderNavLink('/help', 'Kontakt'); ?>
             </div>
         </div>
 

@@ -6,12 +6,12 @@
 
 require_once __DIR__ . '/components/CustomContentLoader.php';
 require_once __DIR__ . '/components/HeaderComponent.php';
-require_once __DIR__ . '/components/SideNavLayout.php';
+require_once __DIR__ . '/components/PanelSidenav.php';
 require_once __DIR__ . '/components/AnnouncementElement.php';
 
 CustomContentLoader::initialize();
 HeaderComponent::initialize();
-SideNavLayout::initialize();
+PanelSidenav::initialize();
 AnnouncementElement::initialize();
 ?>
 <!DOCTYPE html>
@@ -34,7 +34,7 @@ AnnouncementElement::initialize();
     (new HeaderComponent($user))->render();
     ?>
     <main>
-        <?php (new SideNavLayout($user))->render(); ?>
+        <?php (new PanelSidenav($user))->render(); ?>
         <section class="panel">
             <?php if (isset($announcements) && !isEmpty($announcements)) : ?>
                 <section class="announcements-list fit">

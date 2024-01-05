@@ -3,7 +3,7 @@
 require_once __DIR__ . '/ResourceManager.php';
 require_once __DIR__ . '/Component.php';
 
-class DebounceSearchComponent extends Component
+class DebounceSelectSearchComponent extends Component
 {
     private $id;
     private $inputName;
@@ -37,10 +37,9 @@ class DebounceSearchComponent extends Component
         echo <<<HTML
         <section class="debonced-search" id="$id">
             <input type="text" class="hidden target-input" name="$inputName">
-            <label>
+            <label class="icon-input">
                 <i class="material-icons"></i>
                 <input type="text" class="main-input search-input" placeholder="Wyszukaj" id="$id-input" value="$initialValue">
-                
             </label>
             <span class="input-error"></span>
             <div class="search-results">
@@ -58,9 +57,9 @@ class DebounceSearchComponent extends Component
 
         echo <<<HTML
         <script type="module">
-            import DebounceSearchController from '/public/js/controllers/debounce-search-controller.js';
+            import { DebounceSelectSearchController } from '/public/js/controllers/debounce-search-controller.js';
 
-            new DebounceSearchController('$id', $endpointUrl, $timeout, JSON.parse($preLoadedData));
+            new DebounceSelectSearchController('$id', $endpointUrl, $timeout, JSON.parse($preLoadedData));
         </script>
         HTML;
     }

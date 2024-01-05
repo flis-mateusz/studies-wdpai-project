@@ -4,6 +4,8 @@ section.coming-soon {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background: unset !important;
+    box-shadow: unset !important;
 }
 
 section.coming-soon svg {

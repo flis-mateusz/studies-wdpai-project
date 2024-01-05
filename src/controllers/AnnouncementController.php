@@ -20,11 +20,16 @@ class AnnouncementController extends AppController
     }
 
     // --------------------- RENDERS ---------------------------
+    public function announcements()
+    {
+        $this->render('announcements', ['user' => $this->getLoggedUser()]);
+    }
+
     public function announcement($announcementId)
     {
         $user = $this->getLoggedUser();
         $announcement = $this->announcemetsRepository->getAnnouncementWithUserContext($announcementId, $user ? $user->getId() : null);
-        
+
         if (!$announcement) {
             $this->exitWithError(404);
         }
@@ -194,7 +199,7 @@ class AnnouncementController extends AppController
 
         try {
             if ($existingAnnouncement) {
-                $this->announcemetsRepository->updateAnnouncement($announcement);              
+                $this->announcemetsRepository->updateAnnouncement($announcement);
             } else {
                 $this->announcemetsRepository->addAnnouncement($announcement);
             }
