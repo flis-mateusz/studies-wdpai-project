@@ -73,7 +73,7 @@ main section.welcome>div:first-child {
     flex: 1 0 0;
 }
 
-.search-label>i {
+.search-label i {
     position: absolute;
     top: 50%;
     left: 20px;
@@ -81,8 +81,13 @@ main section.welcome>div:first-child {
     color: silver;
 }
 
-.search-label>input {
+.search-label input {
     padding-left: calc(1em + 30px + 8px);
+    width: 100%;
+}
+
+.search-label form {
+    width: 100%;
 }
 
 .search-predefined a {

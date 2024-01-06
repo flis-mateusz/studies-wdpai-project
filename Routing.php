@@ -29,7 +29,7 @@ class Router
         $action = $urlParts[0];
         
         if (!array_key_exists($action, self::$routes)) {
-            die("Wrong url!");
+            $action = 'e404';
         }
 
         $controller = self::$routes[$action];

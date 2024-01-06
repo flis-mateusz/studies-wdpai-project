@@ -10,6 +10,7 @@ Router::get('index', 'DefaultController');
 Router::get('dashboard', 'DefaultController');
 Router::get('login', 'DefaultController');
 Router::get('help', 'DefaultController');
+Router::get('e404', 'DefaultController');
 
 Router::post('api_login', 'SecurityController');
 Router::post('api_register', 'SecurityController');

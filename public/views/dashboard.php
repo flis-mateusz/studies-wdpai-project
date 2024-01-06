@@ -57,7 +57,11 @@ AnnouncementElement::initialize();
         <section class="search">
             <label class="search-label">
                 <i class="material-icons">search</i>
-                <input type="text" class="main-input" placeholder="Szukaj według rasy, gatunku, miasta">
+                <form action='/announcements' autocomplete="off">
+                    <input type="text" style="display:none">
+                    <input type="text" name='search' class="main-input" placeholder="Szukaj według gatunku, miasta, opisu">
+                    <input type="submit" style="display:none">
+                </form>
             </label>
             <div class="search-predefined">
                 <a class="main-button" href="/announcements?<?= $catType ? 'types=' . $catType->getId() . '' : null; ?>">

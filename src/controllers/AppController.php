@@ -37,7 +37,7 @@ class AppController
         return $this->sessionController;
     }
 
-    protected function loginRequired($isApi=false): void
+    protected function loginRequired($isApi = false): void
     {
         if ($this->getSession()->isLoggedIn()) {
             return;
@@ -88,7 +88,7 @@ class AppController
 
     protected function exitWithError($errorCode)
     {
-        $this->render('errors/' . $errorCode);
+        $this->render('errors/400', ['errorCode' => $errorCode, 'user' => $this->getLoggedUser()]);
         exit($errorCode);
     }
 

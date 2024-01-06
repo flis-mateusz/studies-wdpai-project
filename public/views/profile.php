@@ -36,7 +36,7 @@ PanelSidenav::initialize();
     <main>
         <?php (new PanelSidenav($user))->render(); ?>
         <section class="panel">
-            <form id="profile-edit-form" class="with-absolute-loader">
+            <form id="profile-edit-form" class="with-absolute-loader" autocomplete="off">
                 <div>
                     <section>
                         <div>

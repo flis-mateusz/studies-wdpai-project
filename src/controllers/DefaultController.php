@@ -39,4 +39,9 @@ class DefaultController extends AppController
     {
         $this->render("help", ['user' => $this->getLoggedUser()]);
     }
+
+    public function e404()
+    {
+        $this->exitWithError(404);
+    }
 }
