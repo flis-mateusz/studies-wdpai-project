@@ -31,6 +31,7 @@ Router::post('api_announcement_delete', 'AnnouncementController');
 Router::post('api_announcement_report', 'AnnouncementController');
 
 Router::get('query_animal_types', 'SearchController');
+Router::post('query_announcements', 'SearchController');
 
 Router::get('support', 'SupportController');
 

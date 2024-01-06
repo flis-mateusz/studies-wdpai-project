@@ -37,7 +37,7 @@ class AppController
         return $this->sessionController;
     }
 
-    protected function loginRequired(): void
+    protected function loginRequired($isApi=false): void
     {
         if ($this->getSession()->isLoggedIn()) {
             return;
@@ -46,7 +46,7 @@ class AppController
         $refererPath = $this->isPost() && isset($_SERVER['HTTP_REFERER']) ? parse_url($_SERVER['HTTP_REFERER'], PHP_URL_PATH) : '/';
         $redirectUrl = '/login?required&redirect_url=' . urlencode($this->isPost() ? $refererPath : $_SERVER['REQUEST_URI']);
 
-        if ($this->isPost()) {
+        if ($this->isPost() || $isApi) {
             $response = new JsonResponse();
             $response->setError('Nie jesteś zalogowany', 401);
             $response->setData(['redirect_url' => $redirectUrl]);

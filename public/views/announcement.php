@@ -117,7 +117,7 @@ $requiresApproval = !$announcement->isAccepted();
                         <div>
                             <div>
                                 <span>Typ</span>
-                                <span class="capitalize"><?= $announcement->getType()->getName(); ?></span>
+                                <span class="capitalize"><?= $announcement->getType()->getName() ? $announcement->getType()->getName() : '<span class="italic">Typ usunięty</span>'; ?></span>
                             </div>
                             <div>
                                 <span>Gatunek</span>

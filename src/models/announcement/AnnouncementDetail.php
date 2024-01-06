@@ -1,7 +1,7 @@
 <?php
 
-require_once __DIR__ . '/../pet/PetType.php';
-require_once __DIR__ . '/../pet/PetFeature.php';
+require_once __DIR__ . '/../animal/AnimalType.php';
+require_once __DIR__ . '/../animal/AnimalFeature.php';
 
 class AnnouncementDetail
 {
@@ -16,6 +16,7 @@ class AnnouncementDetail
     private $avatarName;
     private $kind;
     private array $features;
+    private array $likesIds;
 
     public function __construct(
         ?int $id,
@@ -41,9 +42,10 @@ class AnnouncementDetail
         $this->avatarName = $avatarName;
         $this->kind = $kind;
         $this->features = $features;
+        $this->likesIds = [];
     }
 
-    public function getId():?int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -192,7 +194,7 @@ class AnnouncementDetail
         $this->ageType = $ageType;
     }
 
-    public function addFeature(PetFeature $feature): void
+    public function addFeature(AnimalFeature $feature): void
     {
         array_push($this->features, $feature);
     }
@@ -202,16 +204,41 @@ class AnnouncementDetail
         $this->features = $features;
     }
 
+    public function getLikesIds(): array
+    {
+        return $this->likesIds;
+    }
+    
+    public function setLikesIds(array $likesIds): void
+    {
+        $this->likesIds = $likesIds;
+    }
+
     public static function featuresToAssociativeArray(array $features): array
     {
+        
         $result = [];
         foreach ($features as $feature) {
             /**
-             * @var PetFeature $feature 
+             * @var AnimalFeature $feature 
              */
             $result[$feature->getId()] = [
                 'name' => $feature->getName(),
                 'value' => $feature->getValue(),
+            ];
+        }
+        return $result;
+    }
+
+    public static function typesToAssociativeArray(array $types): array
+    {
+        $result = [];
+        foreach ($types as $type) {
+            /**
+             * @var AnimalType $type 
+             */
+            $result[$type->getId()] = [
+                'name' => $type->getName(),
             ];
         }
         return $result;

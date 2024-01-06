@@ -1,0 +1,171 @@
+.animal-features {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 10px;
+    max-height: 500px;
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+.animal-features.min {
+    grid-template-columns: 1fr !important;
+}
+
+.animal-features.min .checkboxes {
+    display: none !important;
+}
+
+.animal-features>div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.animal-features div input {
+    display: none;
+}
+
+div.checkboxes {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    display: none;
+    gap: 5px;
+}
+
+.animal-features>div:hover>div.checkboxes {
+    display: flex;
+}
+
+div.checkboxes label {
+    display: flex;
+    overflow: hidden;
+    user-select: none;
+    cursor: pointer;
+    color: white;
+    border-radius: 20px;
+    padding: 2px 10px;
+    font-size: 0.85em;
+    min-width: 45px;
+    justify-content: center;
+}
+
+div.checkboxes label.yes {
+    background-color: #7b7ac9;
+}
+
+div.checkboxes label.no {
+    background-color: #c56a6a;
+}
+
+div.checkboxes label.not-sure {
+    background-color: rgb(230, 230, 230);
+    color: inherit;
+    display: none;
+    order: -1;
+}
+
+div.checkboxes::before {
+    content: ' lub ';
+    font-size: 0.8em;
+    margin-top: 2px;
+}
+
+.animal-features>div>div:first-child {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex: 1 0 0;
+    gap: 5px;
+    font-size: 0.9em;
+    padding: 2px 0px;
+    user-select: none;
+}
+
+.animal-features.min>div>div:first-child {
+    cursor: pointer;
+}
+
+.animal-features>div>div:first-child::before {
+    font-family: "Material Icons";
+    font-size: 24px;
+}
+
+.animal-features>div:has(input[value="2"]:checked)>div:first-child::before {
+    color: #6361E8;
+    content: "check_circle";
+}
+
+.animal-features>div:has(input[value="1"]:checked)>div:first-child::before {
+    color: #ca3b3b;
+    content: "remove_circle";
+}
+
+.animal-features>div:has(input[value="0"]:checked)>div:first-child::before,
+.animal-features>div:has(input:not(:checked))>div:first-child::before {
+    color: #adadad;
+    content: "help_outline";
+}
+
+.animal-features .checkboxes:has(input[value="0"]:checked)>label.yes,
+.animal-features>div:not(:has(input:checked)) label.yes {
+    order: -1;
+}
+
+div.checkboxes>input[value="2"]:checked~label.yes {
+    display: none;
+}
+
+div.checkboxes>input[value="1"]:checked~label.no {
+    display: none;
+}
+
+div.checkboxes>input[value="0"]:not(:checked)~label.not-sure {
+    order: -1;
+    display: flex;
+}
+
+.animal-features>div:not(:has(input:checked)) label.not-sure {
+    display: none !important;
+}
+
+@media screen and (max-width: 700px) {
+    .animal-features {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .animal-features>div>div:first-child {
+        font-size: 0.9em;
+    }
+
+    div.checkboxes {
+        display: flex;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .animal-features>div {
+        flex-direction: column;
+    }
+
+    div.checkboxes label,
+    div.checkboxes::before {
+        font-size: 0.8em;
+    }
+
+    div.checkboxes::before {
+        margin-top: 0.5px;
+    }
+
+    .animal-features>div>div {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .animal-features>div>div:first-child {
+        font-size: 0.8em;
+    }
+}

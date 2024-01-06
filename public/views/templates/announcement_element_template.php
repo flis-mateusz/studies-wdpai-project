@@ -31,7 +31,7 @@ $showAwaiting = !$this->announcement->isAccepted() && !$this->withUserInfo;
                 <div class="announcement-avatar" style='background-image: url(<?= $this->announcement->getDetails()->getAvatarUrl(); ?>);'></div>
                 <div class="announcement-name">
                     <div><?= $this->announcement->getDetails()->getName(); ?></div>
-                    <div><?= $this->announcement->getType()->getName(); ?></div>
+                    <div><?= $this->announcement->getType()->getName() ? $this->announcement->getType()->getName() : '<span class="italic">Typ usunięty</span>'; ?></div>
                 </div>
             </div>
             <div class="flex-center gap-5">

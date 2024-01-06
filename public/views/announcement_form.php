@@ -10,13 +10,14 @@
 require_once __DIR__ . '/components/HeaderComponent.php';
 require_once __DIR__ . '/components/AttachmentDragDrop.php';
 require_once __DIR__ . '/components/CustomContentLoader.php';
-require_once __DIR__ . '/components/AnimalFeatures.php';
+require_once __DIR__ . '/components/SelectAnimalFeatures.php';
 require_once __DIR__ . '/components/DebounceSelectSearch.php';
 
 HeaderComponent::initialize();
 AttachmentDragDrop::initialize();
 CustomContentLoader::initialize();
 DebounceSelectSearchComponent::initialize();
+SelectAnimalFeatures::initialize();
 
 $petTypeSearch = new DebounceSelectSearchComponent(
     'pet-type',
@@ -135,7 +136,7 @@ $petTypeSearch = new DebounceSelectSearchComponent(
                     <div class="info">Zaznacz tylko te pola, które dotyczą zwierzaka oraz co do których masz absolutną pewność</div>
                 </div>
                 <?php
-                (new AnimalFeatures($animalFeatures, $announcement ? $announcement->getDetails()->getFeatures() : null))->render();
+                (new SelectAnimalFeatures($animalFeatures, $announcement ? $announcement->getDetails()->getFeatures() : null))->render();
                 ?>
                 <span class="input-error pet-characteristics"></span>
             </fieldset>

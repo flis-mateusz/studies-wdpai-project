@@ -1,0 +1,56 @@
+.filter-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    background: #FFF;
+    box-shadow: 0px 3.5px 40px 0px rgba(0, 0, 0, 0.08);
+    padding: 20px;
+    border-radius: 20px;
+}
+
+.filter-container .options {
+    display: flex;
+    flex-direction: column;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.filter-container .label {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.9em;
+    padding: 2px 0px;
+    user-select: none;
+    cursor: pointer;
+}
+
+.filter-container .label::before {
+    font-family: "Material Icons";
+    font-size: 24px;
+    color: #adadad;
+    content: "radio_button_unchecked";
+}
+
+.filter-container .label.yes::before {
+    color: #6361E8;
+    content: "check_circle";
+}
+
+.filter-container .label.no::before {
+    color: #ca3b3b;
+    content: "remove_circle";
+}
+
+@media screen and (max-width: 850px) {
+    .filter-container .options {
+        max-width: 450px;
+    }
+
+    .filter-container {
+        padding: 0px;
+        box-shadow: none;
+    }
+}

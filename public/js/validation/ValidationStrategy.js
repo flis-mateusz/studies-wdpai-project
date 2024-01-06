@@ -1,4 +1,4 @@
-import { isNotEmpty, isEmpty, isEmail, isTwoOrMoreWords, arePasswordsSame, isPasswordStrong, isPhoneNumber, isNumber } from '../utils.js'
+import { isNotEmpty, inRange, isEmpty, isEmail, isTwoOrMoreWords, arePasswordsSame, isPasswordStrong, isPhoneNumber, isNumber } from '../utils.js'
 
 class ValidationStrategy {
     constructor(errorMessage) {
@@ -46,13 +46,14 @@ class NumberValidation extends ValidationStrategy {
     }
 }
 
-class InputMinLengthValidation extends ValidationStrategy {
-    constructor(minLength, errorMessage) {
+class InputLengthValidation extends ValidationStrategy {
+    constructor(minLength, maxLength, errorMessage) {
         super(errorMessage);
         this.minLength = minLength;
+        this.maxLength = maxLength;
     }
     validate(value) {
-        return value.length >= this.minLength;
+        return inRange(value.length, this.minLength, this.maxLength);
     }
 }
 
@@ -94,7 +95,7 @@ export {
     PasswordValidation,
     ArePasswordsSameValidation,
     PhoneNumberValidation,
-    InputMinLengthValidation,
+    InputLengthValidation,
     NumberValidation,
     NoValidation
 };

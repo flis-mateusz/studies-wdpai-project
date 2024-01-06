@@ -45,7 +45,7 @@
                     <div>
                         <?php echo $this->renderNavLink('/add', 'Dodaj ogłoszenie', 'add_circle_outline'); ?>
                         <?php echo $this->renderNavLink('/profile', 'Mój profil', 'account_circle'); ?>
-                        <?php echo $this->renderNavLink('/favorite', 'Obserwowane', 'favorite_border'); ?>
+                        <?php echo $this->renderNavLink('/announcements/?o=favourite-2', 'Obserwowane', 'favorite_border'); ?>
                         <?php echo $this->renderNavLink('/help', 'Pomoc', 'help_outline'); ?>
                         <hr>
                         <?php echo $this->renderNavLink('/signout', 'Wyloguj', 'exit_to_app'); ?>

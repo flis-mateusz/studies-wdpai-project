@@ -8,11 +8,11 @@
       <jdbc-url>jdbc:postgresql://server.lan:5432/wdpai</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="db@server.lan" uuid="6ccecf89-261a-4c55-84a0-275dd78e1681">
+    <data-source source="LOCAL" name="wdpai@localhost" uuid="26b34e47-e6c6-401e-b8d5-3a9820f88e97">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://server.lan:5433/db</jdbc-url>
+      <jdbc-url>jdbc:postgresql://localhost:5432/wdpai</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>

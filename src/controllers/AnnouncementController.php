@@ -2,6 +2,8 @@
 
 require_once 'AppController.php';
 require_once __DIR__ . '/../repository/AnnouncementsRepository.php';
+require_once __DIR__ . '/../repository/AnimalTypesRepository.php';
+require_once __DIR__ . '/../repository/AnimalFeaturesRepository.php';
 require_once __DIR__ . '/../responses/PostFormResponse.php';
 require_once __DIR__ . '/../utils/logger.php';
 require_once __DIR__ . '/../validation/PostDataValidator.php';
@@ -10,29 +12,39 @@ require_once __DIR__ . '/../validation/PostFilesValidator.php';
 
 class AnnouncementController extends AppController
 {
-    private $announcemetsRepository;
+    private $announcementsRepository;
+    private $animalTypesRepository;
+    private $animalFeaturesRepository;
 
     public function __construct()
     {
         parent::__construct();
 
-        $this->announcemetsRepository = new AnnouncementsRepository();
+        $this->announcementsRepository = new AnnouncementsRepository();
+        $this->animalTypesRepository = new AnimalTypesRepository();
+        $this->animalFeaturesRepository = new AnimalFeaturesRepository();
     }
 
     // --------------------- RENDERS ---------------------------
     public function announcements()
     {
-        $this->render('announcements', ['user' => $this->getLoggedUser()]);
+        $this->render('announcements', [
+            'user' => $this->getLoggedUser(),
+            'animalFeatures' => $this->animalFeaturesRepository->getAll(),
+            'animalTypes' => $this->animalTypesRepository->getByPopularity(),
+        ]);
     }
 
     public function announcement($announcementId)
     {
         $user = $this->getLoggedUser();
-        $announcement = $this->announcemetsRepository->getAnnouncementWithUserContext($announcementId, $user ? $user->getId() : null);
+        $announcement = $this->announcementsRepository->getAnnouncementWithUserContext($announcementId, $user ? $user->getId() : null);
 
         if (!$announcement) {
             $this->exitWithError(404);
         }
+
+        $announcement->getDetails()->setFeatures($this->animalFeaturesRepository->getForAnnouncement($announcement->getDetails()->getId()));
 
         $this->render(
             "announcement",
@@ -50,8 +62,8 @@ class AnnouncementController extends AppController
             "announcement_form",
             [
                 'user' => $this->getLoggedUser(),
-                'animalFeatures' => $this->announcemetsRepository->getAnimalFeatures(),
-                'animalTypes' => $this->announcemetsRepository->getAnimalTypes(),
+                'animalFeatures' => $this->animalFeaturesRepository->getAll(),
+                'animalTypes' => $this->animalTypesRepository->getByPopularity(),
                 'announcement' => null,
             ]
         );
@@ -62,19 +74,21 @@ class AnnouncementController extends AppController
         $this->loginRequired();
 
         $user = $this->getLoggedUser();
-        $announcement = $this->announcemetsRepository->getAnnouncementWithUserContext($announcementId, $user->getId());
-
+        $announcement = $this->announcementsRepository->getAnnouncementWithUserContext($announcementId, $user->getId());
+        
         if (!$announcement || $announcement->isDeleted()) {
             $this->exitWithError(404);
         } else if ($user->getId() !== $announcement->getUser()->getId()) {
             $this->exitWithError(403);
         } else {
+            $announcement->getDetails()->setFeatures($this->animalFeaturesRepository->getForAnnouncement($announcement->getDetails()->getId()));
+
             $this->render(
                 "announcement_form",
                 [
                     'user' => $user,
-                    'animalFeatures' => $this->announcemetsRepository->getAnimalFeatures(),
-                    'animalTypes' => $this->announcemetsRepository->getAnimalTypes(),
+                    'animalFeatures' => $this->animalFeaturesRepository->getAll(),
+                    'animalTypes' => $this->animalTypesRepository->getByPopularity(),
                     'announcement' => $announcement
                 ]
             );
@@ -92,7 +106,7 @@ class AnnouncementController extends AppController
         //
         $validator = new PostDataValidator($_POST);
         $validator->addField('announcement-id', (new NumberValidation(''))->setCanValueBeEmpty(true));
-        $validator->addField('pet-name', new NotEmptyValidation('Wprowadź imię zwierzaka'));
+        $validator->addField('pet-name', new MinMaxLengthValidation(null, 'Wprowadź imię zwierzaka', 2, 20));
         $validator->addField('pet-age', (new RangeValidation('int', 'Wiek musi być dodatnią liczbą całkowitą', 1, null))->setCanValueBeEmpty(true));
         $validator->addField('pet-age-type', new InArrayValidation('Wybrana opcja nie jest dostępna', ['day', 'month', 'year']));
         $validator->addField('pet-gender', new InArrayValidation('Wybrana opcja nie jest dostępna', ['male', 'female']));
@@ -100,7 +114,7 @@ class AnnouncementController extends AppController
             'Musisz wybrać typ z listy',
             array_map(function ($animalType) {
                 return $animalType->getId();
-            }, $this->announcemetsRepository->getAnimalTypes())
+            }, $this->animalTypesRepository->getAll())
         ));
         $validator->addField('pet-kind', (new NotEmptyValidation('Podaj gatunek', 0, null))->setCanValueBeEmpty(true));
         $validator->addField('pet-description', (new MinMaxLengthValidation(null, 'Opis musi mieć więcej niż 50 znaków i mniej niż 2000 znaków', 50, 2000))->setRejectHTMLSpecialChars(true));
@@ -109,7 +123,7 @@ class AnnouncementController extends AppController
             'Błąd wypełniania charakterystyk',
             array_map(function ($animalFeature) {
                 return $animalFeature->getId();
-            }, $this->announcemetsRepository->getAnimalFeatures())
+            }, $this->animalFeaturesRepository->getAll())
         ))->setCanValueBeEmpty(true));
         $validator->addField('pet-location', (new NotEmptyValidation('Podaj lokalizację')));
 
@@ -122,7 +136,7 @@ class AnnouncementController extends AppController
         //
         $existingAnnouncement = null;
         if ($data['announcement-id']) {
-            $existingAnnouncement = $this->announcemetsRepository->getAnnouncementWithUserContext($data['announcement-id'], $this->getLoggedUser()->getId());
+            $existingAnnouncement = $this->announcementsRepository->getAnnouncementWithUserContext($data['announcement-id'], $this->getLoggedUser()->getId());
             if (!$existingAnnouncement || $existingAnnouncement->isDeleted()) {
                 (new JsonResponse())->setError('Ogłoszenie nie istnieje lub zostało usunięte', 404)->send();
             } else if ($this->getLoggedUser()->getId() !== $existingAnnouncement->getUser()->getId()) {
@@ -170,7 +184,7 @@ class AnnouncementController extends AppController
         $animalFeatures = [];
         foreach ($data['pet-characteristics'] ?? [] as $id => $value) {
             if ($value != 0) {
-                $animalFeatures[] = new PetFeature($id, null, $value);
+                $animalFeatures[] = new AnimalFeature($id, null, $value);
             }
         }
 
@@ -190,7 +204,7 @@ class AnnouncementController extends AppController
 
         $announcement = new Announcement(
             $existingAnnouncement ? $existingAnnouncement->getId() : null,
-            new PetType($data['pet-type'], null),
+            new AnimalType($data['pet-type'], null),
             $this->getLoggedUser(),
             $announcementDetail,
             false,
@@ -199,9 +213,9 @@ class AnnouncementController extends AppController
 
         try {
             if ($existingAnnouncement) {
-                $this->announcemetsRepository->updateAnnouncement($announcement);
+                $this->announcementsRepository->updateAnnouncement($announcement);
             } else {
-                $this->announcemetsRepository->addAnnouncement($announcement);
+                $this->announcementsRepository->addAnnouncement($announcement);
             }
         } catch (Exception $e) {
             $response->setError('Wystąpił wewnętrzny błąd, spróbuj ponownie później', 500)->send();
@@ -224,7 +238,7 @@ class AnnouncementController extends AppController
         $id = $this->getPostAnnouncementId();
 
         $currentUser = $this->getLoggedUser();
-        $announcement = $this->announcemetsRepository->getAnnouncementWithUserContext($id, null, false);
+        $announcement = $this->announcementsRepository->getAnnouncementWithUserContext($id, null, false);
         $adminId = null;
 
         if (!$announcement || $announcement->isDeleted()) {
@@ -236,7 +250,7 @@ class AnnouncementController extends AppController
         }
 
         try {
-            $this->announcemetsRepository->delete($id, $adminId);
+            $this->announcementsRepository->delete($id, $adminId);
         } catch (Exception $e) {
             error_log($e);
             $response->setError('Wystąpił wewnętrzny błąd, spróbuj ponownie później', 500);
@@ -260,7 +274,7 @@ class AnnouncementController extends AppController
         $id = $this->getPostAnnouncementId();
 
         $currentUser = $this->getLoggedUser();
-        $announcement = $this->announcemetsRepository->getAnnouncementWithUserContext($id, $currentUser->getId(), false);
+        $announcement = $this->announcementsRepository->getAnnouncementWithUserContext($id, $currentUser->getId(), false);
 
         if (!$announcement || $announcement->isDeleted() || !$announcement->isAccepted()) {
             $response->setError('Ogłoszenie nie istnieje lub zostało usunięte', 400);
@@ -274,7 +288,7 @@ class AnnouncementController extends AppController
         }
 
         try {
-            $this->announcemetsRepository->report($currentUser->getId(), $announcement->getId());
+            $this->announcementsRepository->report($currentUser->getId(), $announcement->getId());
         } catch (Exception $e) {
             $response->setError('Wystąpił wewnętrzny błąd, spróbuj ponownie później', 500);
             $response->send();
@@ -290,7 +304,7 @@ class AnnouncementController extends AppController
 
         $id = $this->getPostAnnouncementId();
         $currentUser = $this->getLoggedUser();
-        $announcement = $this->announcemetsRepository->getAnnouncementWithUserContext($id, $currentUser->getId(), false);
+        $announcement = $this->announcementsRepository->getAnnouncementWithUserContext($id, $currentUser->getId(), false);
         if (!$announcement || $announcement->isDeleted() || !$announcement->isAccepted()) {
             $response->setError('Ogłoszenie nie istnieje lub zostało usunięte', 404);
             $response->send();
@@ -298,11 +312,11 @@ class AnnouncementController extends AppController
 
         try {
             if ($announcement->isUserFavourite()) {
-                $this->announcemetsRepository->unlike($currentUser->getId(), $announcement->getId());
+                $this->announcementsRepository->unlike($currentUser->getId(), $announcement->getId());
                 $response->setData('unliked');
                 $response->send();
             } else {
-                $this->announcemetsRepository->like($currentUser->getId(), $announcement->getId());
+                $this->announcementsRepository->like($currentUser->getId(), $announcement->getId());
                 $response->setData('liked');
                 $response->send();
             }
@@ -316,7 +330,7 @@ class AnnouncementController extends AppController
     // ----------------------------------------------------------------
     public function getUsersFavorite($user)
     {
-        return $this->announcemetsRepository->getUsersFavorite($user);
+        return $this->announcementsRepository->getUsersFavorite($user);
     }
 
     private function getPostAnnouncementId(): ?int

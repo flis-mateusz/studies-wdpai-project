@@ -1,14 +1,14 @@
 import { FetchController } from './fetch-controller.js';
+import debounce from './debounce.js';
 
 class DebounceSearchController {
-    constructor(id, timeout) {
+    constructor(id, delay) {
         this.parentElement = document.querySelector(`#${id}`);
         this.inputElement = this.parentElement.querySelector('input.search-input');
-        this.timeout = timeout;
 
-        this.debounceSearch = this.debounce(this.#update, this.timeout);
+        this.debounce = debounce(this.onDebounce, delay);
+
         this.addEventListeners();
-
         this.observers = [];
     }
 
@@ -16,30 +16,18 @@ class DebounceSearchController {
         this.observers.push(observer);
     }
 
-    debounce(func, delay) {
-        let timer;
-        return function (...args) {
-            clearTimeout(timer);
-            timer = setTimeout(() => {
-                func(...args);
-            }, delay);
-        };
-    }
-
     addEventListeners() {
         this.inputElement.addEventListener('keyup', (e) => {
             this.onInput();
-            this.debounceSearch(e);
+            this.debounce(e);
         });
     }
 
-    #update = async () => {
+    onDebounce = async () => {
         let query = this.inputElement.value.toLowerCase().trim();
-        this.parentElement.classList.add('loading');
-
+        this.setLoading(true);
         await this.#search(query);
-
-        this.parentElement.classList.remove('loading');
+        this.setLoading(false);
     }
 
     async #search(query) {
@@ -48,12 +36,24 @@ class DebounceSearchController {
         }
     }
 
+    setInputValue(value) {
+        this.inputElement.value = value;
+    }
+
+    setLoading(value) {
+        if (value) {
+            this.parentElement.classList.add('loading');
+        } else {
+            this.parentElement.classList.remove('loading');
+        }
+    }
+
     onInput() { }
 }
 
 class DebounceSelectSearchController extends DebounceSearchController {
-    constructor(id, url, timeout, preLoadedData) {
-        super(id, timeout);
+    constructor(id, url, delay, preLoadedData) {
+        super(id, delay);
         this.url = url;
         this.setupElements(id);
         this.preLoadedData = preLoadedData;

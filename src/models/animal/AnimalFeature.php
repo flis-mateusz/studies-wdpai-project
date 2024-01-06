@@ -1,6 +1,6 @@
 <?php
 
-class PetFeature
+class AnimalFeature
 {
     private $id;
     private $name;
@@ -18,7 +18,7 @@ class PetFeature
         return $this->id;
     }
 
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }

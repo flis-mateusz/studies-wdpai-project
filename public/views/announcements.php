@@ -3,15 +3,19 @@
 /**
  * @var ?User $user
  * @var ?Announcement[] $announcements
+ * @var ?AnimalFeature[] $animalFeatures
+ * @var ?AnimalType[] $animalTypes
  */
 
 require_once __DIR__ . '/components/CustomContentLoader.php';
 require_once __DIR__ . '/components/HeaderComponent.php';
 require_once __DIR__ . '/components/AnnouncementElement.php';
+require_once __DIR__ . '/components/FilterSelect.php';
 
 CustomContentLoader::initialize();
 HeaderComponent::initialize();
 AnnouncementElement::initialize();
+FilterSelect::initialize();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,6 +27,7 @@ AnnouncementElement::initialize();
     <link rel="stylesheet" href="/public/css/components/forms.css">
     <link rel="stylesheet" href="/public/css/components/panel-sidenav.css">
     <link rel="stylesheet" href="/public/css/announcements-filters.css">
+    <link rel="stylesheet" href="/public/css/announcements.css">
     <script type="module" src="/public/js/announcements.js" defer></script>
     <?php
     ResourceManager::appendResources();
@@ -44,33 +49,31 @@ AnnouncementElement::initialize();
                 </label>
             </div>
             <div>
-
+                <?php
+                (new FilterSelect([$this->user ? ['id' => 'favourite', 'name' => 'Obserwowane'] : null, ['id' => 'price', 'name' => 'Oddam za darmo']], null, 'other'))->render();
+                (new FilterSelect($animalTypes, 'Typy zwierząt', 'animal-types'))->render();
+                (new FilterSelect($animalFeatures, 'Cechy szczególne', 'animal-features'))->render();
+                ?>
             </div>
             <div>
-                <span class="main-button">Szukaj</span>
+                <span class="main-button action-search">Szukaj</span>
             </div>
         </section>
-        <section class="announcements">
+        <section class="panel announcements">
+            <?php
+            (new CustomContentLoader())->render();
+            ?>
             <div id="search">
                 <label class="icon-input two">
                     <i class="material-icons">search</i>
                     <input type="text" class="main-input search-input" placeholder="Wyszukaj">
-                    <i class="material-icons">clear</i>
+                    <i class="material-icons action-clear-search">clear</i>
                 </label>
             </div>
-            <div>
-                <?php if (isset($announcements) && !isEmpty($announcements)) : ?>
-                    <section class="announcements-list fit">
-                        <?php
-                        foreach ($announcements as $announcement) {
-                            (new AnnouncementElement($announcement))->render();
-                        }
-                        ?>
-                    </section>
-                <?php else : ?>
-                    <span>Nie znaleziono ogłoszeń</span>
-                <?php endif; ?>
-            </div>
+            <div class="announcements-container">
+                <span class="api-output">Nie znaleziono ogłoszeń</span>
+                <section class="announcements-list fit">
+                </section>
         </section>
     </main>
     <footer>

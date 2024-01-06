@@ -1,0 +1,64 @@
+.sidenav {
+    max-width: 300px;
+    z-index: 51 !important;
+    background: none;
+    box-shadow: none;
+    padding: 0px;
+}
+
+.announcements {
+    transition-duration: 300ms;
+    padding: 0px;
+    min-height: 450px;
+    background: none;
+    box-shadow: none;
+    position: relative;
+}
+
+.announcements #search {
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.announcements-list {
+    position: relative;
+}
+
+.api-output {
+    text-align: center;
+    font-size: 0.8em;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.api-output.error {
+    color: #ff3333;
+}
+
+@media screen and (max-width: 850px) {
+    .sidenav {
+        background: white;
+        box-shadow: 0px 3.5px 40px 0px rgba(0, 0, 0, 0.08);
+        padding: 20px;
+        border-radius: 20px;
+        max-width: 450px;
+    }
+
+    .sidenav>div {
+        gap: 20px;
+    }
+
+    .announcements {
+        width: 100%;
+        display: block !important;
+    }
+
+    main:has(#sidenav-button:checked)>.panel {
+        display: block;
+    }
+
+    .announcements-list {
+        gap: 10px !important;
+    }
+}

@@ -1,8 +1,8 @@
 <?php
 
 require_once 'Repository.php';
-require_once __DIR__ . '/../models/pet/PetFeature.php';
-require_once __DIR__ . '/../models/pet/PetType.php';
+require_once __DIR__ . '/../models/animal/AnimalFeature.php';
+require_once __DIR__ . '/../models/animal/AnimalType.php';
 require_once __DIR__ . '/../repository/AnnouncementsRepository.php';
 require_once __DIR__ . '/../models/announcement/Announcement.php';
 require_once __DIR__ . '/../models/announcement/AnnouncementReport.php';

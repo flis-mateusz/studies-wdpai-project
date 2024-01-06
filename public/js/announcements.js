@@ -1,13 +1,170 @@
+import CustomContentLoaderController from './controllers/custom-loader.js';
 import { DebounceSearchController } from './controllers/debounce-search-controller.js'
+import { FilterSelectField } from './controllers/filter-select.js'
+import { FetchController } from './controllers/fetch-controller.js';
+import debounce from './controllers/debounce.js';
+
+const FILTER_TYPES = {
+    FEATURES: 'features',
+    TYPES: 'types',
+    SEARCH: 'search',
+    OTHER: 'o',
+};
 
 class AnnouncementsSearch {
     constructor() {
-        this.debounceSearch = new DebounceSearchController('search', 800);
-        this.debounceSearch.addObserver(this.handleDebounceSearch)
+        this.fetchController = new FetchController('/api_test', false);
+        this.debounceSearch = new DebounceSearchController('search', 250);
+        this.loader = new CustomContentLoaderController();
+        this.loader.setupAbsolute();
+        this.debounceSearch.addObserver(this.handleDebounceSearch);
+
+        this.debounce = debounce(this.onDebounce, 500);
+
+        this.filters = {
+            [FILTER_TYPES.FEATURES]: {},
+            [FILTER_TYPES.OTHER]: {},
+            [FILTER_TYPES.TYPES]: new Set(),
+            [FILTER_TYPES.SEARCH]: '',
+        };
+
+        this.initOptions('.options#animal-features .label', this.onAnimalFeatureChange, FILTER_TYPES.FEATURES, false);
+        this.initOptions('.options#animal-types .label', this.onAnimalTypeChange, FILTER_TYPES.TYPES, true);
+        this.initOptions('.options#other .label', this.onOtherChange, FILTER_TYPES.OTHER, false);
+
+        this.outputElement = document.querySelector('.announcements-list');
+        this.outputInfo = document.querySelector('.api-output');
+        document.querySelector('.action-search').addEventListener('click', this.onDebounce);
+        document.querySelector('.action-clear-search').addEventListener('click', ()=>{
+            this.debounceSearch.setInputValue('');
+            this.handleDebounceSearch('')
+        });
     }
-    handleDebounceSearch(query) {
-        console.log(query);
+
+    initOptions(selector, onChange, type, limitedStates) {
+        this[type] = {};
+        document.querySelectorAll(selector).forEach((element) => {
+            let option = new FilterSelectField(element, limitedStates);
+            option.onUpdate = onChange;
+            this[type][option.id] = option;
+        });
+    }
+
+    onAnimalFeatureChange = (id, value) => this.onOptionChange(FILTER_TYPES.FEATURES, id, value);
+    onAnimalTypeChange = (id, value) => this.onOptionChange(FILTER_TYPES.TYPES, id, value);
+    onOtherChange = (id, value) => this.onOptionChange(FILTER_TYPES.OTHER, id, value);
+
+    showOutputInfo(text, error = false) {
+        this.outputInfo.innerText = text;
+        this.outputInfo.classList.toggle('error', error);
+    }
+
+    onDebounce = async () => {
+        this.loader.show();
+        this.showOutputInfo('', false);
+        this.fetchController.abort();
+
+        const params = new URLSearchParams(window.location.search)
+        this.fetchController.setUrl(`/query_announcements?${params.toString()}`);
+        try {
+            const data = await this.fetchController.get();
+            if (!data) {
+                this.appendAnnouncements('');
+                this.showOutputInfo('Nie znaleziono ogłoszeń');
+            } else {
+                this.appendAnnouncements(data)
+            }
+        } catch (error) {
+            this.showOutputInfo(error.message, true);
+        }
+        this.loader.hide();
+    }
+    appendAnnouncements(announcements) {
+        this.outputElement.innerHTML = announcements;
+    }
+
+    updateQueryParams() {
+        this.debounce();
+
+        const searchParams = new URLSearchParams();
+        Object.entries(this.filters).forEach(([type, values]) => {
+            if (type === FILTER_TYPES.SEARCH && values) {
+                searchParams.set(FILTER_TYPES.SEARCH, values);
+            } else if (type === FILTER_TYPES.TYPES && values.size > 0) {
+                searchParams.set(type, Array.from(values).join(';'));
+            } else {
+                const paramString = Object.entries(values)
+                    .map(([id, value]) => `${id}-${value}`)
+                    .join(';');
+                if (paramString) {
+                    searchParams.set(type, paramString);
+                }
+            }
+        });
+
+        window.history.replaceState({}, '', `${window.location.pathname}?${searchParams.toString()}`);
+    }
+
+    onOptionChange = (type, id, value) => {
+        const filterSet = this.filters[type];
+
+        if (type === FILTER_TYPES.TYPES) {
+            if (value == '2' || value == '1') {
+                filterSet.add(id);
+            } else if (value == '0') {
+                filterSet.delete(id);
+            }
+        } else {
+            if (value == '2' || value == '1') {
+                this.filters[type][id] = value;
+            } else if (value == '0') {
+                delete this.filters[type][id];
+            }
+        }
+
+        this.updateQueryParams();
+    }
+
+    setFromURL() {
+        const params = new URLSearchParams(window.location.search);
+
+        Object.values(FILTER_TYPES).forEach(type => {
+            const param = params.get(type);
+            if (!param) return;
+
+            if (type === FILTER_TYPES.SEARCH) {
+                this.filters[type] = param;
+                this.debounceSearch.setInputValue(param);
+            } else {
+                const values = param.split(';');
+                values.forEach(value => {
+                    if (type === FILTER_TYPES.TYPES) {
+                        this.filters[type].add(value);
+                        this[type][value].set(value);
+                    } else {
+                        const [id, val] = value.split('-');
+                        this.filters[type][id] = val;
+                        this.applyOptionFilter(this[type], id, val);
+                    }
+                });
+            }
+        });
+
+        this.onDebounce();
+    }
+
+    applyOptionFilter(filterSet, id, value) {
+        const optionObject = filterSet[id];
+        if (optionObject) {
+            optionObject.set(value);
+        }
+    }
+
+    handleDebounceSearch = (query) => {
+        this.filters[FILTER_TYPES.SEARCH] = query;
+        this.updateQueryParams();
     }
 }
 
-new AnnouncementsSearch();
+const announcementsSearch = new AnnouncementsSearch();
+announcementsSearch.setFromURL();

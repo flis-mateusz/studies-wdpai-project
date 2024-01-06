@@ -1,6 +1,9 @@
 class FetchController {
-    constructor(endpoint) {
+    constructor(endpoint, expectedJson = true) {
         this.endpoint = endpoint;
+        this.expectedJson = expectedJson;
+
+        this.abortController;
     }
 
     /**
@@ -11,9 +14,12 @@ class FetchController {
      */
     async #request(method, data = null) {
         try {
+            this.abortController = new AbortController();
+
             const options = {
                 method: method,
-                headers: {}
+                headers: {},
+                signal: this.abortController.signal,
             };
 
             if (data) {
@@ -34,19 +40,27 @@ class FetchController {
             }
 
             try {
-                return await response.json();
+                return this.expectedJson ? await response.json() : response.text();
             } catch (error) {
                 console.warn('Caught error:', error);
                 throw new TextualError(response.status, 'Błąd podczas parsowania odpowiedzi JSON');
             }
-
         } catch (error) {
             if (error instanceof TextualError || error instanceof JsonObjectError) {
                 throw error;
+            } else if (error.name === 'AbortError') {
+                // throw new TextualError(error.status, 'Anulowano zapytanie');
+                return null;
             } else {
                 console.warn('Caught error:', error);
                 throw new TextualError(error.status, 'Błąd sieciowy lub inny błąd');
             }
+        }
+    }
+
+    abort() {
+        if (this.abortController) {
+            this.abortController.abort();
         }
     }
 
@@ -56,6 +70,10 @@ class FetchController {
 
     async get() {
         return this.#request('GET');
+    }
+
+    setUrl(url) {
+        this.endpoint = url;
     }
 
     /**

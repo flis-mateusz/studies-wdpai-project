@@ -45,6 +45,19 @@ const isTouchDevice = () => {
         (navigator.msMaxTouchPoints > 0));
 }
 
+function inRange(value, min = null, max = null)
+{
+    if (min !== null && max !== null) {
+        return value >= min && value <= max;
+    } else if (min !== null) {
+        return value >= min;
+    } else if (max !== null) {
+        return value <= max;
+    } else {
+        return true;
+    }
+}
+
 const redirectToTargetOrDefault = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const redirectUrl = urlParams.get('redirect_url');
@@ -55,4 +68,4 @@ const redirectToTargetOrDefault = () => {
     }
 }
 
-export { arePasswordsSame, isEmail, isTwoOrMoreWords, isPasswordStrong, redirectToTargetOrDefault, isEmpty, isNotEmpty, isPhoneNumber, isTouchDevice, isNumber };
+export { arePasswordsSame, inRange, isEmail, isTwoOrMoreWords, isPasswordStrong, redirectToTargetOrDefault, isEmpty, isNotEmpty, isPhoneNumber, isTouchDevice, isNumber };

@@ -1,14 +1,14 @@
 <?php
 
 require_once __DIR__ . '/../User.php';
-require_once __DIR__ . '/../pet/PetType.php';
+require_once __DIR__ . '/../animal/AnimalType.php';
 require_once __DIR__ . '/../../utils/utils.php';
 require_once 'AnnouncementDetail.php';
 
 class Announcement
 {
     private ?int $announcement_id;
-    private PetType $type;
+    private AnimalType $type;
     private User $user;
     private AnnouncementDetail $details;
     private bool $accepted;
@@ -17,7 +17,7 @@ class Announcement
 
     public function __construct(
         ?int $announcement_id,
-        PetType $type,
+        AnimalType $type,
         User $user,
         AnnouncementDetail $details,
         bool $accepted,
@@ -61,12 +61,12 @@ class Announcement
         $this->details = $details;
     }
 
-    public function getType(): PetType
+    public function getType(): AnimalType
     {
         return $this->type;
     }
 
-    public function setType(PetType $type): void
+    public function setType(AnimalType $type): void
     {
         $this->type = $type;
     }

@@ -51,7 +51,7 @@ main {
 .sidenav {
     padding: 15px;
     width: 30%;
-    gap: 30px;
+    gap: 10px;
     position: relative;
     transition-duration: 300ms;
     z-index: 1;
@@ -135,6 +135,8 @@ main {
         background: none;
         box-shadow: none;
         padding: 5px;
+        display: flex;
+        justify-content: center;
     }
 
     .panel form {
@@ -192,7 +194,7 @@ main {
         transform: rotate(180deg);
     }
 
-    body:has(#sidenav-button:checked) main>.panel {
+    main:has(#sidenav-button:checked)>.panel {
         display: none;
     }
 

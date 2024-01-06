@@ -1,8 +1,8 @@
 <?php
 
 require_once 'Repository.php';
-require_once __DIR__ . '/../models/pet/PetFeature.php';
-require_once __DIR__ . '/../models/pet/PetType.php';
+require_once __DIR__ . '/../models/animal/AnimalFeature.php';
+require_once __DIR__ . '/../models/animal/AnimalType.php';
 require_once __DIR__ . '/../models/announcement/Announcement.php';
 require_once __DIR__ . '/../models/announcement/AnnouncementWithUserContext.php';
 require_once __DIR__ . '/../models/announcement/DeletedAnnouncement.php';
@@ -32,7 +32,7 @@ class AnnouncementsRepository extends Repository
             $announcement->setId($announcement_id);
 
             $stmt = $connection->prepare('
-            INSERT INTO announcement_detail (announcement_id, pet_name, pet_locality, pet_price, pet_description, pet_age, pet_age_type, pet_gender, pet_avatar_name, pet_kind)
+            INSERT INTO announcement_detail (announcement_id, animal_name, animal_locality, animal_price, animal_description, animal_age, animal_age_type, animal_gender, animal_avatar_name, animal_kind)
             VALUES (?,?,?,?,?,?,?,?,?,?) RETURNING announcement_detail_id;');
 
             $stmt->execute([
@@ -92,7 +92,7 @@ class AnnouncementsRepository extends Repository
 
             $stmt = $connection->prepare('
             UPDATE announcement_detail
-            SET pet_name = ?, pet_locality = ?, pet_price = ?, pet_description = ?, pet_age = ?, pet_age_type = ?, pet_gender = ?, pet_avatar_name = ?, pet_kind = ?
+            SET animal_name = ?, animal_locality = ?, animal_price = ?, animal_description = ?, animal_age = ?, animal_age_type = ?, animal_gender = ?, animal_avatar_name = ?, animal_kind = ?
             WHERE announcement_id = ?;');
             $stmt->execute([
                 $announcement->getDetails()->getName(),
@@ -131,7 +131,7 @@ class AnnouncementsRepository extends Repository
         }
     }
 
-    public function getAnnouncementWithUserContext($id, $userId, $includeFeatures = true)
+    public function getAnnouncementWithUserContext($id, $userId)
     {
         $connection = $this->database->connect();
 
@@ -144,9 +144,9 @@ class AnnouncementsRepository extends Repository
         $sql .= '
         FROM announcements
         NATURAL JOIN announcement_detail
-        NATURAL JOIN animal_types
         JOIN users on announcements.user_id = users.user_id
         JOIN user_detail on users.user_id = user_detail.user_id
+        LEFT JOIN animal_types on announcements.type_id = animal_types.type_id
         LEFT JOIN deleted_announcements on announcements.announcement_id = deleted_announcements.announcement_id';
         if ($userId !== null) {
             $sql .= ' LEFT JOIN announcement_likes on announcements.announcement_id = announcement_likes.announcement_id AND announcement_likes.user_id = :userId';
@@ -165,10 +165,6 @@ class AnnouncementsRepository extends Repository
         }
 
         $announcement = AnnouncementWithUserContext::createFromAnnouncement(self::createAnnouncementFromResult($result));
-
-        if ($includeFeatures) {
-            $announcement->getDetails()->setFeatures($this->getAnnouncementFeatures($announcement->getDetails()->getId()));
-        }
 
         if ($result['deleted_at']) {
             $announcement->setDeleted(new DeletedAnnouncement($result['delete_id'], $result['deleted_at'], $result['violated']));
@@ -193,9 +189,9 @@ class AnnouncementsRepository extends Repository
             SELECT announcements.*, announcement_detail.*, animal_types.*, user_detail.avatar_name, user_detail.name, user_detail.surname, users.phone
             FROM announcements
             NATURAL JOIN announcement_detail
-            NATURAL JOIN animal_types
             JOIN users on announcements.user_id = users.user_id
             JOIN user_detail on users.user_id = user_detail.user_id
+            LEFT JOIN animal_types on announcements.type_id = animal_types.type_id
             LEFT JOIN deleted_announcements on announcements.announcement_id = deleted_announcements.announcement_id
             WHERE deleted_announcements.delete_id IS NULL';
 
@@ -226,6 +222,56 @@ class AnnouncementsRepository extends Repository
 
             $announcements = [];
             foreach ($results as $result) {
+                $announcements[] = $this->createAnnouncementFromResult($result);
+            }
+            return $announcements;
+        } catch (Exception $e) {
+            error_log($e);
+            throw $e;
+        }
+    }
+
+    public function getAnnouncementsToFilter()
+    {
+        try {
+            $connection = $this->database->connect();
+
+            $sql = "
+            SELECT announcements.*, announcement_detail.*, animal_types.*, user_detail.*, users.*,
+            string_agg(announcement_animal_features.feature_id::TEXT || '-' || announcement_animal_features.value::TEXT, ',') AS aggregated_features,
+            string_agg(announcement_likes.user_id::TEXT, ',') as aggregated_likes
+            FROM announcements
+            NATURAL JOIN announcement_detail
+            JOIN users on announcements.user_id = users.user_id
+            JOIN user_detail on users.user_id = user_detail.user_id
+            LEFT JOIN animal_types on announcements.type_id = animal_types.type_id
+            LEFT JOIN announcement_animal_features on announcement_detail.announcement_detail_id = announcement_animal_features.announcement_detail_id
+            LEFT JOIN animal_features on announcement_animal_features.feature_id = animal_features.feature_id
+            LEFT JOIN deleted_announcements on announcements.announcement_id = deleted_announcements.announcement_id
+            LEFT JOIN announcement_likes on announcements.announcement_id = announcement_likes.announcement_id
+            WHERE deleted_announcements.delete_id IS NULL AND announcements.accepted = true
+            GROUP BY announcements.announcement_id, announcement_detail.announcement_detail_id, animal_types.type_id, user_detail.detail_id, users.user_id, announcements.created_at
+            ORDER BY announcements.created_at DESC";
+
+            $stmt = $connection->prepare($sql);
+            $stmt->execute();
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            $announcements = [];
+            foreach ($results as $result) {
+                if (!empty($result['aggregated_features'])) {
+                    $animalFeatures = explode(',', $result['aggregated_features']);
+                    $features = [];
+                    foreach ($animalFeatures as $feature) {
+                        $featureParts = explode('-', $feature);
+                        $features[] = new AnimalFeature($featureParts[0], null, filter_var($featureParts[1], FILTER_VALIDATE_BOOLEAN));
+                    }
+                    $result['animal_features'] = $features;
+                }
+                if (!empty($result['aggregated_likes'])) {
+                    $result['likes'] = explode(',', $result['aggregated_likes']);
+                }
+
                 $announcements[] = $this->createAnnouncementFromResult($result);
             }
             return $announcements;
@@ -353,69 +399,6 @@ class AnnouncementsRepository extends Repository
         }
     }
 
-    public function getAnnouncementFeatures($announcementDetailId)
-    {
-        $connection = $this->database->connect();
-        $stmt = $connection->prepare('
-        SELECT animal_features.*, announcement_animal_features.value
-        FROM announcement_animal_features
-        NATURAL JOIN animal_features
-        WHERE announcement_detail_id = ?');
-        $stmt->execute([$announcementDetailId]);
-
-        $result = [];
-        $features = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        foreach ($features as $feature) {
-            $result[] = new PetFeature($feature['feature_id'], $feature['feature_name'], $feature['value']);
-        }
-        return $result;
-    }
-
-    public function getAnimalFeatures(): array
-    {
-        $result = [];
-        $stmt = $this->database->connect()->prepare('
-            SELECT * FROM animal_features ORDER BY feature_id ASC;
-        ');
-        $stmt->execute();
-        $features = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        foreach ($features as $feature) {
-            $result[] = new PetFeature(
-                $feature['feature_id'],
-                $feature['feature_name'],
-                null
-            );
-        }
-        return $result;
-    }
-
-    public function getAnimalTypes($query = null): array
-    {
-        $result = [];
-
-        $sql = 'SELECT * FROM animal_types';
-        if ($query) {
-            $sql .= ' WHERE type_name LIKE :query';
-        }
-        $sql .= ' ORDER BY type_name ASC;';
-
-        $stmt = $this->database->connect()->prepare($sql);
-        if ($query) {
-            $stmt->bindValue(':query', '%' . $query . '%', PDO::PARAM_STR);
-        }
-        $stmt->execute();
-        $types = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        foreach ($types as $type) {
-            $result[] = new PetType(
-                $type['type_id'],
-                $type['type_name']
-            );
-        }
-
-        return $result;
-    }
-
     private static function createUserFromResult($result)
     {
         return new User(
@@ -435,21 +418,25 @@ class AnnouncementsRepository extends Repository
     {
         $announcementDetails = new AnnouncementDetail(
             $result['announcement_detail_id'],
-            $result['pet_name'],
-            $result['pet_locality'],
-            $result['pet_price'],
-            $result['pet_description'],
-            $result['pet_age'],
-            $result['pet_age_type'],
-            $result['pet_gender'],
-            $result['pet_avatar_name'],
-            $result['pet_kind'],
-            []
+            $result['animal_name'],
+            $result['animal_locality'],
+            $result['animal_price'],
+            $result['animal_description'],
+            $result['animal_age'],
+            $result['animal_age_type'],
+            $result['animal_gender'],
+            $result['animal_avatar_name'],
+            $result['animal_kind'],
+            isset($result['animal_features']) ? $result['animal_features'] : []
         );
+
+        if (isset($result['likes'])) {
+            $announcementDetails->setLikesIds($result['likes']);
+        }
 
         return new Announcement(
             $result['announcement_id'],
-            new PetType($result['type_id'], $result['type_name']),
+            new AnimalType($result['type_id'], $result['type_name']),
             self::createUserFromResult($result),
             $announcementDetails,
             $result['accepted'],
