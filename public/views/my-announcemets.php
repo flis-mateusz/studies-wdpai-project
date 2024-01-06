@@ -37,7 +37,7 @@ AnnouncementElement::initialize();
         <?php (new PanelSidenav($user))->render(); ?>
         <section class="panel">
             <?php if (isset($announcements) && !isEmpty($announcements)) : ?>
-                <section class="announcements-list fit">
+                <section class="panel-elements fit">
                     <?php
                     foreach ($announcements as $announcement) {
                         (new AnnouncementElement($announcement))->render();

@@ -2,6 +2,7 @@
 
 /**
  * @var AnnouncementElement $this
+ * @var UserElement
  */
 
 $showAwaiting = !$this->announcement->isAccepted() && !$this->withUserInfo;
@@ -12,19 +13,7 @@ $showAwaiting = !$this->announcement->isAccepted() && !$this->withUserInfo;
     <?= $showAwaiting ? '<div class="awaiting"><span>Oczekuje na weryfikację</span></div>' : null; ?>
     <div class="announcement-data">
         <?php if ($this->withUserInfo) : ?>
-            <div class="announcement-user">
-                <div class="flex-center gap-10">
-                    <div class="avatar" <?php
-                                        if ($this->announcement->getUser()->getAvatarUrl()) {
-                                            echo 'style="background-image: url(' . $this->announcement->getUser()->getAvatarUrl() . ');"';
-                                        }
-                                        ?>></div>
-                    <div class="announcement-name">
-                        <div><?= $this->announcement->getUser()->getFullName(); ?></div>
-                        <div><?= $this->announcement->getUser()->getEmail(); ?></div>
-                    </div>
-                </div>
-            </div>
+            <?= (new UserElement($this->announcement->getUser(), true))->render();?>
         <?php endif; ?>
         <div class="announcement-detail">
             <div class="flex-center gap-10">

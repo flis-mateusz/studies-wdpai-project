@@ -166,7 +166,7 @@ class AnnouncementDetail
     public function getFormattedKind(): string
     {
         if (!$this->kind) {
-            return 'Nieznany';
+            return '<span class="italic">Nieznany</span>';
         }
         return $this->kind;
     }
@@ -184,7 +184,7 @@ class AnnouncementDetail
     public function getFormattedAge(): string
     {
         if (!$this->ageType) {
-            return 'Wiek nieznany';
+            return '<span class="italic">Wiek nieznany</span>';
         }
         return formatTimeUnits($this->age, $this->ageType);
     }

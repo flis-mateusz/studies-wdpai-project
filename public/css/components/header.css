@@ -3,11 +3,11 @@ header {
     padding: 8px 85px;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid var(--neutral-2, #DEE5ED);
-    background: var(--neutral-0, #FFF);
+    background: #FFF;
     transition-duration: 100ms;
     z-index: 97;
     position: sticky;
+    /* #8fa1ff */
 }
 
 header>nav {
@@ -150,7 +150,7 @@ header .menu-button:checked~.menu-icon .navicon:after {
     position: relative;
 }
 
-.menu-dropdown.user {
+.menu-dropdown.logged-user {
     padding: 0px 15px;
 }
 

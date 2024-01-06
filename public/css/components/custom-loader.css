@@ -377,6 +377,7 @@
 .custom-loader-container:not(.absolute):not(.fixed).hidden {
     padding: 0px;
     max-height: 0px;
+    display: block !important;
 }
 
 .custom-loader-container.absolute.hidden,

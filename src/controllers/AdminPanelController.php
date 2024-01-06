@@ -2,10 +2,13 @@
 
 require_once 'AppController.php';
 require_once __DIR__ . '/../repository/AdminRepository.php';
+require_once __DIR__ . '/../repository/UsersRepository.php';
 
 class AdminPanelController extends AppController
 {
     private $adminRepository;
+    private $usersRepository;
+    
     private $requiredVars;
 
     public function __construct()
@@ -14,7 +17,7 @@ class AdminPanelController extends AppController
 
         $this->adminPrivilegesRequired();
         $this->adminRepository = new AdminRepository();
-
+        $this->usersRepository = new UsersRepository();
 
         $this->requiredVars = ['user' => $this->getLoggedUser()];
     }
@@ -30,7 +33,7 @@ class AdminPanelController extends AppController
     }
     public function admin_users()
     {
-        $this->render('admin/admin-users', [...$this->requiredVars]);
+        $this->render('admin/admin-users', [...$this->requiredVars, 'users' => $this->usersRepository->getAllUsers()]);
     }
     public function admin_pet_types()
     {

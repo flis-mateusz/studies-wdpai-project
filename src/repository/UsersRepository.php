@@ -150,6 +150,30 @@ class UsersRepository extends Repository
         }
     }
 
+    public function getAllUsers(): array
+    {
+        $query = 'SELECT * FROM users NATURAL JOIN user_detail;';
+        $stmt = $this->database->connect()->prepare($query);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        $users = [];
+        foreach ($result as $user) {
+            $users[] = new User(
+                $user['user_id'],
+                $user['email'],
+                $user['password_hash'],
+                $user['created_at'],
+                $user['name'],
+                $user['surname'],
+                $user['avatar_name'],
+                $user['phone'],
+                $user['is_admin'],
+            );
+        }
+        return $users;
+    }
+
     public function removeAvatar(int $userId)
     {
         $stmt = $this->database->connect()->prepare('

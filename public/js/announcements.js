@@ -32,10 +32,10 @@ class AnnouncementsSearch {
         this.initOptions('.options#animal-types .label', this.onAnimalTypeChange, FILTER_TYPES.TYPES, true);
         this.initOptions('.options#other .label', this.onOtherChange, FILTER_TYPES.OTHER, false);
 
-        this.outputElement = document.querySelector('.announcements-list');
+        this.outputElement = document.querySelector('.panel-elements');
         this.outputInfo = document.querySelector('.api-output');
         document.querySelector('.action-search').addEventListener('click', this.onDebounce);
-        document.querySelector('.action-clear-search').addEventListener('click', ()=>{
+        document.querySelector('.action-clear-search').addEventListener('click', () => {
             this.debounceSearch.setInputValue('');
             this.handleDebounceSearch('')
         });
@@ -61,6 +61,10 @@ class AnnouncementsSearch {
 
     onDebounce = async () => {
         this.loader.show();
+        this.loader.timeWait(300).then(this.search)
+    }
+
+    search = async () => {
         this.showOutputInfo('', false);
         this.fetchController.abort();
 
@@ -69,17 +73,17 @@ class AnnouncementsSearch {
         try {
             const data = await this.fetchController.get();
             if (!data) {
-                this.appendAnnouncements('');
+                this.setAnnouncements('');
                 this.showOutputInfo('Nie znaleziono ogłoszeń');
             } else {
-                this.appendAnnouncements(data)
+                this.setAnnouncements(data)
             }
         } catch (error) {
             this.showOutputInfo(error.message, true);
         }
         this.loader.hide();
     }
-    appendAnnouncements(announcements) {
+    setAnnouncements(announcements) {
         this.outputElement.innerHTML = announcements;
     }
 

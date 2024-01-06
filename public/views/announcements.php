@@ -72,7 +72,7 @@ FilterSelect::initialize();
             </div>
             <div class="announcements-container">
                 <span class="api-output">Nie znaleziono ogłoszeń</span>
-                <section class="announcements-list fit">
+                <section class="panel-elements fit">
                 </section>
         </section>
     </main>

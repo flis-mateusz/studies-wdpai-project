@@ -1,0 +1,51 @@
+.panel-elements {
+    gap: 10px;
+}
+
+.user {
+    display: flex;
+    padding: 20px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    font-size: 0.8em;
+    box-shadow: 0px 3.75px 40.21px 0px rgba(0, 0, 0, 0.04);
+    border-radius: 20px;
+    background-color: white;
+}
+
+.user.attached {
+    padding: 0;
+    font-size: inherit;
+    box-shadow: none;
+    margin-bottom: 10px;
+}
+
+.user-info {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.user-data {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+}
+
+.user-data>div:first-child {
+    color: #0D1B34;
+    font-size: 1.2em;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 110%;
+    word-break: break-word;
+}
+
+.user .avatar {
+    cursor: pointer;
+}

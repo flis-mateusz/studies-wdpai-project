@@ -30,7 +30,7 @@
             </div>
         </div>
 
-        <div class="menu-dropdown <?= $this->isLoggedIn() ? 'user' : null; ?>">
+        <div class="menu-dropdown <?= $this->isLoggedIn() ? 'logged-user' : null; ?>">
             <input class="menu-button" type="checkbox" id="menu-button" />
             <label class="menu-icon" for="menu-button"><span class="navicon"></span></label>
 

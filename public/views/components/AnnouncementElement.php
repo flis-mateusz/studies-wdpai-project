@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/ResourceManager.php';
 require_once __DIR__ . '/Component.php';
+require_once __DIR__ . '/UserElement.php';
 
 class AnnouncementElement extends Component
 {
@@ -17,6 +18,7 @@ class AnnouncementElement extends Component
     public static function initialize()
     {
         ResourceManager::addStyle('/public/css/announcement/announcement_element.css');
+        UserElement::initialize();
     }
 
     public function render()

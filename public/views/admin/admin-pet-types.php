@@ -26,7 +26,7 @@ ComingSoon::initialize();
     ResourceManager::appendResources();
     ?>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <title>Rodzaje zwierząt</title>
+    <title>Typy zwierząt</title>
 </head>
 
 <body>
