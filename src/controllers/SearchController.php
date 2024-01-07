@@ -85,15 +85,15 @@ class SearchController extends AppController
             if (!empty($params['search'])) {
                 $searchTerm = mb_strtolower($params['search']);
                 if (
-                    str_contains(mb_strtolower($details->getDescription()), $searchTerm) === false &&
-                    str_contains(mb_strtolower($details->getName()), $searchTerm) === false &&
-                    str_contains(mb_strtolower($details->getLocality()), $searchTerm) === false &&
-                    str_contains(mb_strtolower($announcement->getType()->getName()), $searchTerm) === false
+                    (!$details->getDescription() || str_contains(mb_strtolower($details->getDescription()), $searchTerm) === false) &&
+                    (!$details->getName() || str_contains(mb_strtolower($details->getName()), $searchTerm) === false) &&
+                    (!$details->getLocality() || str_contains(mb_strtolower($details->getLocality()), $searchTerm) === false) &&
+                    (!$details->getKind() || str_contains(mb_strtolower($details->getKind()), $searchTerm) === false) &&
+                    (!$announcement->getType()->getName() || str_contains(mb_strtolower($announcement->getType()->getName()), $searchTerm) === false)
                 ) {
                     return false;
                 }
             }
-
             return true;
         });
     }
