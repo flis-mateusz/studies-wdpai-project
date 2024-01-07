@@ -8,7 +8,7 @@ class FilterSelect extends Component
     private $name;
     private $id;
 
-    public function __construct(array $values, string|null $name, string $id)
+    public function __construct(array $values, string|null $name, string|null $id)
     {
         $this->values = $values;
         $this->name = $name;
