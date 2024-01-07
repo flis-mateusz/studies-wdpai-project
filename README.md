@@ -8,11 +8,12 @@ Welcome to "ZwierzakSzukaDomu" - a dedicated platform for pet adoption. This ser
 1. [Features](#features)
 2. [Technology Stack](#technology-stack)
 3. [Database Design and Structure](#database-design-and-structure)
-4. [Installation](#installation)
-5. [Demo](#demo)
-6. [Usage](#usage)
-7. [Contributing](#contributing)
-8. [License](#license)
+4. [Design Patterns](#design-patterns)
+5. [Installation](#installation)
+6. [Demo](#demo)
+7. [Usage](#usage)
+8. [Contributing](#contributing)
+9. [License](#license)
 
 
 ## Features
@@ -58,6 +59,37 @@ The project includes a comprehensive design and structure for the database, ensu
 2. **Database Schema:**
    - The `script.sql` file contains the SQL commands to create the database structure. It defines tables, relationships, and other database elements.
    - [View Database Script](./script.sql)
+
+
+## Design patterns
+
+1. **MVC (Model-View-Controller)**
+   - Separates the application into Model, View, and Controller components.
+   - **Example**: [models/Announcement.php](./src/models/announcement/Announcement.php), [views/announcement.php](./public/views/announcement.php), [controllers/AnnouncementController.php](./src/controllers/AnnouncementController.php)
+2. **Repository**
+   - Abstracts the data layer, providing a modular structure.
+   - **Example**: [AnnouncementsRepository.php](./src/repository/AnnouncementsRepository.php)
+3. **Strategy**
+   - Allows different validation algorithms to be interchanged.
+   - **Example**: [ValidationStrategy.php](./src/validation/ValidationStrategy.php)
+4. **Observer**
+   - Used for handling events.
+   - **Example**: [debounce-search-controller.js](./public/js/controllers/debounce-search-controller.js#L12)
+5. **State**
+   - Allows an object to alter its behavior when its internal state changes.
+   - **Example**: [filter-select.js](./public/js/controllers/filter-select.js)
+6. **Chain of Responsibility**
+   - Passes requests along a chain of handlers, allowing multiple objects to process the request or pass it on.
+   - **Example**: [fetch-controller.js](./public/js/controllers/fetch-controller.js#L85)
+7. **Template Method**
+   - Defines the skeleton of an algorithm in a method, deferring some steps to subclasses.
+   - **Example**: [form-controller.js](./public/js/controllers/form-controller.js#L128)
+8. **Lazy initialization**
+   - Delays the creation of an object until the first time it is needed.
+   - **Example**: [AppController.php](./src/controllers/AppController.php#L24)
+9. **Decorator**
+   - The Decorator pattern allows behavior to be added to individual objects by placing these objects in special wrapper objects
+   - **Example**: [AnnouncementWithUserContext.php](./src/models/announcement/AnnouncementWithUserContext.php)
 
 
 ## Installation

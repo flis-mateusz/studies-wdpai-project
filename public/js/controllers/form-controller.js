@@ -68,7 +68,7 @@ class FormController {
         if (error.response.error) {
             this.showOutput(error.response.error, true);
         }
-        
+
         const responseData = error.response.data;
         if (responseData?.invalidFields) {
             for (const [key, message] of Object.entries(responseData.invalidFields)) {
@@ -124,10 +124,11 @@ class FormController {
         return isValid;
     }
 
-
     // Methods to be overridden in derived classes
     handleResponse(data) { }
-    handleError(error) { }
+    handleError(error) {
+        console.error(error)
+    }
     beforeSend() { }
     finally() { } // Finally method for cleanup or final actions
 }

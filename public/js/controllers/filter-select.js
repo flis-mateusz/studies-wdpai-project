@@ -5,6 +5,7 @@ class FilterSelectField {
         this.element?.addEventListener('click', this.handleChange);
         this.state = '';
         this.limitedStates = limitedStates;
+        // STATES - 1 - no, 2 - yes, 3 - yes only
     }
 
     get id() {
