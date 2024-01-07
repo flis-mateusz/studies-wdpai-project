@@ -162,7 +162,7 @@ create table announcement_report
             references announcements,
     details         varchar(1000),
     given           timestamp default CURRENT_TIMESTAMP not null,
-    checked         boolean   default false             not null
+    accepted        boolean
 );
 
 alter table announcement_report
@@ -301,5 +301,4 @@ END;
 $$;
 
 alter function delete_full_announcement(integer) owner to admin;
-
 

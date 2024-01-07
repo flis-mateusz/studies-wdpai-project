@@ -17,6 +17,7 @@ class PanelSidenav extends Component
     public static function initialize()
     {
         ResourceManager::addStyle('/public/css/components/panel-sidenav.css');
+        ResourceManager::addStyle('/public/css/components/panel-elements.css');
     }
 
     public function URIEquals($value) {

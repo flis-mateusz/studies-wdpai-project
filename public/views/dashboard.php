@@ -23,6 +23,7 @@ AnnouncementElement::initialize();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/public/css/common.css">
     <link rel="stylesheet" href="/public/css/dashboard.css">
+    <link rel="stylesheet" href="/public/css/components/panel-elements.css">
     <script type="module" src="/public/js/announcement.js" defer></script>
     <?php
     ResourceManager::appendResources();
