@@ -25,6 +25,7 @@ AnnouncementElement::initialize();
     ?>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <title>Ogłoszenia do akceptacji</title>
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
 </head>
 
 <body>
@@ -34,7 +35,7 @@ AnnouncementElement::initialize();
     <main>
         <?php (new PanelSidenav($user))->render(); ?>
         <section class="panel">
-        <?php if (isset($announcements) && !isEmpty($announcements)) : ?>
+            <?php if (isset($announcements) && !isEmpty($announcements)) : ?>
                 <section class="panel-elements fit">
                     <?php
                     foreach ($announcements as $announcement) {
