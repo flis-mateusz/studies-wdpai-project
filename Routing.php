@@ -26,8 +26,13 @@ class Router
 
     public static function run($url)
     {
-        $urlParts = explode("/", $url);
-        $action = $urlParts[0];
+        Logger::debug($url);
+        if ($url) {
+            $urlParts = explode("/", $url);
+            $action = $urlParts[0];
+        } else {
+            $action = '';
+        }
         
         if (!array_key_exists($action, self::$routes)) {
             $action = 'e404';
