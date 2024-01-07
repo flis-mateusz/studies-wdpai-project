@@ -18,7 +18,7 @@ AnnouncementElement::initialize();
 FilterSelect::initialize();
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 
 <head>
     <meta charset="UTF-8">
@@ -64,7 +64,7 @@ FilterSelect::initialize();
             (new CustomContentLoader())->render();
             ?>
             <div id="search">
-                <label class="icon-input two">
+                <label class="icon-input left right">
                     <i class="material-icons">search</i>
                     <input type="text" class="main-input search-input" placeholder="Wyszukaj">
                     <i class="material-icons action-clear-search">clear</i>

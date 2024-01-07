@@ -269,10 +269,15 @@ class AnnouncementsRepository extends Repository
                     $result['animal_features'] = $features;
                 }
                 if (!empty($result['aggregated_likes'])) {
-                    $result['likes'] = explode(',', $result['aggregated_likes']);
+                    $likes = explode(',', $result['aggregated_likes']);
                 }
 
-                $announcements[] = $this->createAnnouncementFromResult($result);
+                $announcement = $this->createAnnouncementFromResult($result);
+                if (isset($likes)) {
+                    $announcement->getDetails()->setLikesIds($likes);
+                }
+
+                $announcements[] = $announcement;
             }
             return $announcements;
         } catch (Exception $e) {
@@ -342,7 +347,7 @@ class AnnouncementsRepository extends Repository
             $delete_id = $stmt->fetchColumn();
 
             $stmt = $connection->prepare('
-            UPDATE announcement_report SET checked=true WHERE announcement_id =?');
+            UPDATE announcement_report SET accepted=true WHERE announcement_id =? AND accepted IS NULL');
             $stmt->execute([$id]);
 
             $connection->commit();
@@ -414,7 +419,7 @@ class AnnouncementsRepository extends Repository
         );
     }
 
-    public static function createAnnouncementFromResult($result)
+    public static function createAnnouncementFromResult($result): Announcement
     {
         $announcementDetails = new AnnouncementDetail(
             $result['announcement_detail_id'],
@@ -429,10 +434,6 @@ class AnnouncementsRepository extends Repository
             $result['animal_kind'],
             isset($result['animal_features']) ? $result['animal_features'] : []
         );
-
-        if (isset($result['likes'])) {
-            $announcementDetails->setLikesIds($result['likes']);
-        }
 
         return new Announcement(
             $result['announcement_id'],

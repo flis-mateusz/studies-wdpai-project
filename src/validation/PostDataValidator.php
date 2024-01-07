@@ -91,6 +91,11 @@ class PostDataValidator
         return $this->errors;
     }
 
+    public function getFirstErrorMessage()
+    {
+        return !empty($this->errors) ? array_values($this->errors)[0] : null;
+    }
+
     public function getFile($fieldName)
     {
         return $this->data[$fieldName] ?? null;

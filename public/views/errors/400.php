@@ -10,7 +10,7 @@ require_once __DIR__ . '/../components/HeaderComponent.php';
 HeaderComponent::initialize();
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 
 <head>
     <meta charset="UTF-8">

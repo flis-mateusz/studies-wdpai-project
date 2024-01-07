@@ -5,12 +5,14 @@ class AnimalFeature
     private $id;
     private $name;
     private $value;
+    private $usageCount;
 
-    public function __construct(int $id, ?string $name, int|bool|null $value)
+    public function __construct(int $id, ?string $name, int|bool|null $value, ?int $usageCount = null)
     {
         $this->id = $id;
         $this->name = $name;
         $this->setValue($value);
+        $this->usageCount = $usageCount;
     }
 
     public function getId(): int
@@ -35,5 +37,10 @@ class AnimalFeature
         } else {
             $this->value = $value;
         }
+    }
+
+    public function getUsageCount():?int
+    {
+        return $this->usageCount;
     }
 }

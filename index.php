@@ -29,7 +29,9 @@ Router::get('announcements', 'AnnouncementController');
 Router::post('api_add', 'AnnouncementController');
 Router::post('api_announcement_like', 'AnnouncementController');
 Router::post('api_announcement_delete', 'AnnouncementController');
-Router::post('api_announcement_report', 'AnnouncementController');
+
+Router::post('api_announcement_report', 'ReportsController');
+Router::post('api_announcement_reject_reports', 'ReportsController');
 
 Router::get('query_animal_types', 'SearchController');
 Router::post('query_announcements', 'SearchController');
@@ -42,5 +44,6 @@ Router::get('admin_users', 'AdminPanelController');
 Router::get('admin_pet_types', 'AdminPanelController');
 Router::get('admin_pet_features', 'AdminPanelController');
 Router::post('api_announcement_approve', 'AdminPanelController');
+Router::post('api_fast_list_update', 'AdminPanelController');
 
 Router::run($path);

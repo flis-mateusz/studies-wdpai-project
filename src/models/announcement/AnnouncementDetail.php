@@ -16,7 +16,10 @@ class AnnouncementDetail
     private $avatarName;
     private $kind;
     private array $features;
+
+    // ADMIN ONLY
     private array $likesIds;
+    private int $reportsCount;
 
     public function __construct(
         ?int $id,
@@ -208,15 +211,25 @@ class AnnouncementDetail
     {
         return $this->likesIds;
     }
-    
+
     public function setLikesIds(array $likesIds): void
     {
         $this->likesIds = $likesIds;
     }
 
+    public function getReportsCount(): ?int
+    {
+        return isset($this->reportsCount) ? $this->reportsCount : null;
+    }
+
+    public function setReportsCount(int $reportsCount): void
+    {
+        $this->reportsCount = $reportsCount;
+    }
+
     public static function featuresToAssociativeArray(array $features): array
     {
-        
+
         $result = [];
         foreach ($features as $feature) {
             /**

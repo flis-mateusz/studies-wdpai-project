@@ -266,6 +266,7 @@ hr {
     background-color: #efeaff;
     padding: 8px 15px;
     border-radius: 10px;
+    flex-wrap: wrap;
 }
 
 .tip.reversed {
@@ -287,6 +288,20 @@ hr {
 .tip span {
     font-size: 0.8em;
     text-align: left;
+}
+
+.tip span:nth-child(2) {
+    width: 100%;
+    text-align: center;
+    font-size: 0.8em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.tip span:nth-child(2) i {
+    font-size: 20px;
 }
 
 .tip::before {
@@ -389,12 +404,12 @@ span.input-error.not-hidden {
     gap: 12px;
 }
 
-.icon-input input {
+.icon-input.left input {
     padding-left: calc(1em + 30px);
     width: 100%;
 }
 
-.icon-input.two input {
+.icon-input.right input {
     padding-right: calc(1em + 30px);
 }
 
@@ -410,6 +425,10 @@ span.input-error.not-hidden {
     left: unset;
     right: 15px;
     cursor: pointer;
+}
+
+i.material-icons {
+    user-select: none;
 }
 
 @media screen and (max-width: 1100px) {

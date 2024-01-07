@@ -19,7 +19,7 @@ $requiresApproval = !$announcement->isAccepted();
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 
 <head>
     <meta charset="UTF-8">
@@ -57,6 +57,12 @@ $requiresApproval = !$announcement->isAccepted();
             <?php if ($requiresApproval && !$isViewerAdmin) : ?>
                 <section class="tip normal center"><span>Twoje ogłoszenie oczekuje na zatwierdzenie, nie jest jeszcze widoczne publicznie</span></section>
             <?php endif; ?>
+            <?php if ($isViewerAdmin && $announcement->getDetails()->getReportsCount()) : ?>
+                <section class="tip normal center tip-reports">
+                    <span>Liczba zgłoszeń ogłoszenia: <?= $announcement->getDetails()->getReportsCount(); ?></span>
+                    <span>Kliknij <i class="material-icons">gavel</i> jeśli ogłoszenie nie narusza regulaminu</span>
+                </section>
+            <?php endif; ?>
 
             <?php (new CustomContentLoader())->render(); ?>
 
@@ -67,7 +73,6 @@ $requiresApproval = !$announcement->isAccepted();
                     <span>dodano <?= $announcement->getCreatedAt()->format('Y-m-d H:i:s'); ?></span>
                 </div>
                 <?php if (!$viewer || !$isViewerAdmin && !$isOwner) : ?>
-
                     <?php if (!$announcement->isReporedByUser()) : ?>
                         <div class="announcement-report action-report">
                             <i class="material-icons">flag</i>
@@ -94,6 +99,10 @@ $requiresApproval = !$announcement->isAccepted();
                         <?php if ($requiresApproval && $isViewerAdmin) : ?>
                             <!-- ADMIN CAN APPROVE -->
                             <i class="material-icons icon-button admin action-approve">assignment_turned_in</i>
+                        <?php endif; ?>
+                        <?php if ($isViewerAdmin && $announcement->getDetails()->getReportsCount()) : ?>
+                            <!-- ADMIN CAN APPROVE -->
+                            <i class="material-icons icon-button admin action-reject-reports">gavel</i>
                         <?php endif; ?>
                         <?php if ($isViewerAdmin && !$isOwner) : ?>
                             <!-- ADMIN CAN DELETE BUT IF HES NOT THE OWNER -->

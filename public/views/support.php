@@ -15,7 +15,7 @@ PanelSidenav::initialize();
 ComingSoon::initialize();
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 
 <head>
     <meta charset="UTF-8">

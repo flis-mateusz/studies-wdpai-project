@@ -32,7 +32,7 @@ class AnimalTypesRepository extends Repository
         return $result;
     }
 
-    public function getByName(string $name):? AnimalType
+    public function getByName(string $name): ?AnimalType
     {
         $result = null;
         $stmt = $this->database->connect()->prepare('
@@ -50,28 +50,50 @@ class AnimalTypesRepository extends Repository
         return $result;
     }
 
-    public function getByPopularity(): array {
+    public function getByPopularity(): array
+    {
         $connection = $this->database->connect();
-    
+
         $sql = '
-        SELECT animal_types.type_id, animal_types.type_name, COUNT(announcements.announcement_id) AS announcement_count
+        SELECT animal_types.type_id, animal_types.type_name, COUNT(announcements.announcement_id) AS usage_count
         FROM animal_types
         LEFT JOIN announcements ON animal_types.type_id = announcements.type_id
         GROUP BY animal_types.type_id
-        ORDER BY announcement_count DESC;';
-    
+        ORDER BY usage_count DESC;';
+
         $stmt = $connection->prepare($sql);
         $stmt->execute();
         $types = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
+
         $result = [];
         foreach ($types as $type) {
             $result[] = new AnimalType(
                 $type['type_id'],
-                $type['type_name']
+                $type['type_name'],
+                $type['usage_count']
             );
         }
-    
+
         return $result;
+    }
+
+    public function add(string $name)
+    {
+        $connection = $this->database->connect();
+        $stmt = $connection->prepare('
+            INSERT INTO animal_types (type_name) VALUES (?)
+        ');
+        $stmt->execute([$name]);
+        return $connection->lastInsertId();
+    }
+
+    public function delete(int $typeId)
+    {
+        $connection = $this->database->connect();
+        $stmt = $connection->prepare('
+            DELETE FROM animal_types WHERE type_id =?
+        ');
+        $stmt->execute([$typeId]);
+        return $stmt->rowCount();
     }
 }

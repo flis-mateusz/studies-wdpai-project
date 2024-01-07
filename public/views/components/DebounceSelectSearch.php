@@ -37,7 +37,7 @@ class DebounceSelectSearchComponent extends Component
         echo <<<HTML
         <section class="debonced-search" id="$id">
             <input type="text" class="hidden target-input" name="$inputName">
-            <label class="icon-input">
+            <label class="icon-input left">
                 <i class="material-icons"></i>
                 <input type="text" class="main-input search-input" placeholder="Wyszukaj" id="$id-input" value="$initialValue">
             </label>

@@ -14,7 +14,7 @@ PanelSidenav::initialize();
 AnnouncementElement::initialize();
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 
 <head>
     <meta charset="UTF-8">

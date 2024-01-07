@@ -18,6 +18,8 @@ class Announcement {
         this.actionReport?.addEventListener('click', this.report.bind(this))
         document.querySelector('.action-edit')?.addEventListener('click', this.edit.bind(this))
         document.querySelector('.action-delete')?.addEventListener('click', this.delete.bind(this))
+        this.actionRejectReports = document.querySelector('.action-reject-reports')
+        this.actionRejectReports?.addEventListener('click', this.rejectReports.bind(this))
         this.actionLike = document.querySelector('.action-like')
         this.actionLike?.addEventListener('click', this.like.bind(this))
 
@@ -53,6 +55,10 @@ class Announcement {
                 break;
             case 'liked':
                 this.actionLike.classList.add('liked');
+                break;
+            case 'reports-rejected':
+                document.querySelector('.tip-reports').classList.add('hidden');
+                this.actionRejectReports.classList.add('hidden');
                 break;
             case 'unliked':
                 this.actionLike.classList.remove('liked');
@@ -98,6 +104,10 @@ class Announcement {
 
     like(e) {
         this.performAction('/api_announcement_like');
+    }
+
+    rejectReports() {
+        this.performAction('/api_announcement_reject_reports');
     }
 }
 

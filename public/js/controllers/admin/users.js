@@ -1,6 +1,5 @@
-import CustomContentLoaderController from '../controllers/custom-loader.js';
-import { FetchController } from '../controllers/fetch-controller.js';
-import GalleryTransformerController from '../controllers/gallery-transformer.js';
+import CustomContentLoaderController from '../custom-loader.js';
+import GalleryTransformerController from '../gallery-transformer.js';
 
 class AdminUsers {
     constructor() {

@@ -4,6 +4,7 @@ require_once 'AppController.php';
 require_once __DIR__ . '/../repository/AnnouncementsRepository.php';
 require_once __DIR__ . '/../repository/AnimalTypesRepository.php';
 require_once __DIR__ . '/../repository/AnimalFeaturesRepository.php';
+require_once __DIR__ . '/../repository/ReportsRepository.php';
 require_once __DIR__ . '/../responses/PostFormResponse.php';
 require_once __DIR__ . '/../utils/logger.php';
 require_once __DIR__ . '/../validation/PostDataValidator.php';
@@ -15,6 +16,7 @@ class AnnouncementController extends AppController
     private $announcementsRepository;
     private $animalTypesRepository;
     private $animalFeaturesRepository;
+    private $reportsRepository;
 
     public function __construct()
     {
@@ -23,6 +25,7 @@ class AnnouncementController extends AppController
         $this->announcementsRepository = new AnnouncementsRepository();
         $this->animalTypesRepository = new AnimalTypesRepository();
         $this->animalFeaturesRepository = new AnimalFeaturesRepository();
+        $this->reportsRepository = new ReportsRepository();
     }
 
     // --------------------- RENDERS ---------------------------
@@ -45,6 +48,11 @@ class AnnouncementController extends AppController
         }
 
         $announcement->getDetails()->setFeatures($this->animalFeaturesRepository->getForAnnouncement($announcement->getDetails()->getId()));
+
+        if ($user && $user->isAdmin()) {
+            $reportsCount = $this->reportsRepository->getAnnouncementReportsCount($announcement->getId());
+            $announcement->getDetails()->setReportsCount($reportsCount);
+        }
 
         $this->render(
             "announcement",
@@ -235,7 +243,7 @@ class AnnouncementController extends AppController
 
         $response = new JsonResponse();
         $data = $this->getPOSTData();
-        $id = $this->getPostAnnouncementId();
+        $id = $this->getPostAnnouncementId($this->getPOSTData());
 
         $currentUser = $this->getLoggedUser();
         $announcement = $this->announcementsRepository->getAnnouncementWithUserContext($id, null, false);
@@ -266,43 +274,12 @@ class AnnouncementController extends AppController
         $response->send();
     }
 
-    public function api_announcement_report()
-    {
-        $this->loginRequired();
-        $response = new JsonResponse();
-
-        $id = $this->getPostAnnouncementId();
-
-        $currentUser = $this->getLoggedUser();
-        $announcement = $this->announcementsRepository->getAnnouncementWithUserContext($id, $currentUser->getId(), false);
-
-        if (!$announcement || $announcement->isDeleted() || !$announcement->isAccepted()) {
-            $response->setError('Ogłoszenie nie istnieje lub zostało usunięte', 400);
-            $response->send();
-        } else if ($currentUser->getId() == $announcement->getUser()->getId()) {
-            $response->setError('Nie możesz zgłosić swojego ogłoszenia', 400);
-            $response->send();
-        } else if ($announcement->isReporedByUser()) {
-            $response->setError('Zgłoszono już to ogłoszenie', 400);
-            $response->send();
-        }
-
-        try {
-            $this->announcementsRepository->report($currentUser->getId(), $announcement->getId());
-        } catch (Exception $e) {
-            $response->setError('Wystąpił wewnętrzny błąd, spróbuj ponownie później', 500);
-            $response->send();
-        }
-        $response->setData('reported');
-        $response->send();
-    }
-
     public function api_announcement_like()
     {
         $this->loginRequired();
         $response = new JsonResponse();
 
-        $id = $this->getPostAnnouncementId();
+        $id = self::getPostAnnouncementId($this->getPOSTData());
         $currentUser = $this->getLoggedUser();
         $announcement = $this->announcementsRepository->getAnnouncementWithUserContext($id, $currentUser->getId(), false);
         if (!$announcement || $announcement->isDeleted() || !$announcement->isAccepted()) {
@@ -333,9 +310,8 @@ class AnnouncementController extends AppController
         return $this->announcementsRepository->getUsersFavorite($user);
     }
 
-    private function getPostAnnouncementId(): ?int
+    public static function getPostAnnouncementId($data): ?int
     {
-        $data = $this->getPOSTData();
         if (!isset($data['id']) || !is_numeric($data['id'])) {
             $response = new JsonResponse();
             $response->setError('Nieprawidłowy identyfikator ogłoszenia', 400);

@@ -16,13 +16,13 @@ PanelSidenav::initialize();
 UserElement::initialize();
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/public/css/common.css">
-    <script type="module" src="/public/js/admin/users.js" defer></script>
+    <script type="module" src="/public/js/controllers/admin/users.js" defer></script>
     <?php
     ResourceManager::appendResources();
     ?>

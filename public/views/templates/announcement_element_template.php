@@ -11,9 +11,10 @@ $showAwaiting = !$this->announcement->isAccepted() && !$this->withUserInfo;
 <a class="announcement <?= $showAwaiting ? 'awaiting' : null; ?>" href="/announcement/<?= $this->announcement->getId(); ?>">
     <div class="announcement-image" style='background-image: url(<?= $this->announcement->getDetails()->getAvatarUrl(); ?>);'></div>
     <?= $showAwaiting ? '<div class="awaiting"><span>Oczekuje na weryfikację</span></div>' : null; ?>
+    <?= $this->announcement->getDetails()->getReportsCount() ? '<div class="awaiting"><span>Liczba zgłoszeń: ' . $this->announcement->getDetails()->getReportsCount() . '</span></div>' : null; ?>
     <div class="announcement-data">
         <?php if ($this->withUserInfo) : ?>
-            <?= (new UserElement($this->announcement->getUser(), true))->render();?>
+            <?= (new UserElement($this->announcement->getUser(), true))->render(); ?>
         <?php endif; ?>
         <div class="announcement-detail">
             <div class="flex-center gap-10">
