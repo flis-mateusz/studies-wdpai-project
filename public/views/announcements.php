@@ -26,6 +26,7 @@ FilterSelect::initialize();
     <link rel="stylesheet" href="/public/css/common.css">
     <link rel="stylesheet" href="/public/css/components/forms.css">
     <link rel="stylesheet" href="/public/css/components/panel-sidenav.css">
+    <link rel="stylesheet" href="/public/css/components/panel-sidenav.css">
     <link rel="stylesheet" href="/public/css/announcements-filters.css">
     <link rel="stylesheet" href="/public/css/announcements.css">
     <script type="module" src="/public/js/announcements.js" defer></script>
