@@ -13,6 +13,7 @@
     background: none;
     box-shadow: none;
     position: relative;
+    flex: 1;
 }
 
 .announcements #search {
