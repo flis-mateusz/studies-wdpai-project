@@ -41,6 +41,11 @@ class AnnouncementsSearch {
         });
     }
 
+    set(type, id, value) {
+        this[type][id].set(value)
+        this.onOptionChange(type, id, value)
+    }
+
     initOptions(selector, onChange, type, limitedStates) {
         this[type] = {};
         document.querySelectorAll(selector).forEach((element) => {
@@ -52,7 +57,41 @@ class AnnouncementsSearch {
 
     onAnimalFeatureChange = (id, value) => this.onOptionChange(FILTER_TYPES.FEATURES, id, value);
     onAnimalTypeChange = (id, value) => this.onOptionChange(FILTER_TYPES.TYPES, id, value);
-    onOtherChange = (id, value) => this.onOptionChange(FILTER_TYPES.OTHER, id, value);
+    onOtherChange = (id, value) => {
+        switch (id) {
+            case 'my':
+                if (value != 0) {
+                    this.set(FILTER_TYPES.OTHER, 'favourite', 0)
+                }
+                break
+            case 'favourite':
+                if (value != 0) {
+                    this.set(FILTER_TYPES.OTHER,'my', 0)
+                }
+                break
+        }
+        this.onOptionChange(FILTER_TYPES.OTHER, id, value)
+    };
+
+    onOptionChange = (type, id, value) => {
+        const filterSet = this.filters[type];
+
+        if (type === FILTER_TYPES.TYPES) {
+            if (value == '2' || value == '1') {
+                filterSet.add(id);
+            } else if (value == '0') {
+                filterSet.delete(id);
+            }
+        } else {
+            if (value == '2' || value == '1') {
+                this.filters[type][id] = value;
+            } else if (value == '0') {
+                delete this.filters[type][id];
+            }
+        }
+
+        this.updateQueryParams();
+    }
 
     showOutputInfo(text, error = false) {
         this.outputInfo.innerText = text;
@@ -107,26 +146,6 @@ class AnnouncementsSearch {
         });
 
         window.history.replaceState({}, '', `${window.location.pathname}?${searchParams.toString()}`);
-    }
-
-    onOptionChange = (type, id, value) => {
-        const filterSet = this.filters[type];
-
-        if (type === FILTER_TYPES.TYPES) {
-            if (value == '2' || value == '1') {
-                filterSet.add(id);
-            } else if (value == '0') {
-                filterSet.delete(id);
-            }
-        } else {
-            if (value == '2' || value == '1') {
-                this.filters[type][id] = value;
-            } else if (value == '0') {
-                delete this.filters[type][id];
-            }
-        }
-
-        this.updateQueryParams();
     }
 
     setFromURL() {

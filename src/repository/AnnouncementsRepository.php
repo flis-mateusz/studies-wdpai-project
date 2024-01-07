@@ -237,21 +237,26 @@ class AnnouncementsRepository extends Repository
             $connection = $this->database->connect();
 
             $sql = "
-            SELECT announcements.*, announcement_detail.*, animal_types.*, user_detail.*, users.*,
-            string_agg(announcement_animal_features.feature_id::TEXT || '-' || announcement_animal_features.value::TEXT, ',') AS aggregated_features,
-            string_agg(announcement_likes.user_id::TEXT, ',') as aggregated_likes
+            SELECT
+            announcements.*,
+            announcement_detail.*,
+            animal_types.*,
+            user_detail.*,
+            users.*,
+            string_agg(DISTINCT announcement_animal_features.feature_id::TEXT || '-' || announcement_animal_features.value::TEXT, ',') AS aggregated_features,
+            string_agg(DISTINCT announcement_likes.user_id::TEXT, ',') as aggregated_likes
             FROM announcements
             NATURAL JOIN announcement_detail
             JOIN users on announcements.user_id = users.user_id
             JOIN user_detail on users.user_id = user_detail.user_id
             LEFT JOIN animal_types on announcements.type_id = animal_types.type_id
             LEFT JOIN announcement_animal_features on announcement_detail.announcement_detail_id = announcement_animal_features.announcement_detail_id
-            LEFT JOIN animal_features on announcement_animal_features.feature_id = animal_features.feature_id
-            LEFT JOIN deleted_announcements on announcements.announcement_id = deleted_announcements.announcement_id
             LEFT JOIN announcement_likes on announcements.announcement_id = announcement_likes.announcement_id
+            LEFT JOIN deleted_announcements on announcements.announcement_id = deleted_announcements.announcement_id
             WHERE deleted_announcements.delete_id IS NULL AND announcements.accepted = true
-            GROUP BY announcements.announcement_id, announcement_detail.announcement_detail_id, animal_types.type_id, user_detail.detail_id, users.user_id, announcements.created_at
-            ORDER BY announcements.created_at DESC";
+            GROUP BY announcements.announcement_id, announcement_detail.announcement_detail_id, animal_types.type_id, user_detail.detail_id, users.user_id
+            ORDER BY announcements.created_at DESC;
+            ";
 
             $stmt = $connection->prepare($sql);
             $stmt->execute();
@@ -268,14 +273,14 @@ class AnnouncementsRepository extends Repository
                     }
                     $result['animal_features'] = $features;
                 }
+
+                $likes = [];
                 if (!empty($result['aggregated_likes'])) {
                     $likes = explode(',', $result['aggregated_likes']);
-                }
+                } 
 
                 $announcement = $this->createAnnouncementFromResult($result);
-                if (isset($likes)) {
-                    $announcement->getDetails()->setLikesIds($likes);
-                }
+                $announcement->getDetails()->setLikesIds($likes);
 
                 $announcements[] = $announcement;
             }

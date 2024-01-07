@@ -59,9 +59,22 @@ class SearchController extends AppController
                             return false;
                         }
                     } else if ($orderField == 'favourite') {
-                        if ($orderDirection == 1 && $this->getLoggedUser() && in_array($this->getLoggedUser()->getId(), $details->getLikesIds())) {
+                        if (
+                            $orderDirection == 1 &&
+                            $this->getLoggedUser() &&
+                            (
+                                in_array($this->getLoggedUser()->getId(), $details->getLikesIds()) ||
+                                $announcement->getUser()->getId() == $this->getLoggedUser()->getId()
+                            )
+                        ) {
                             return false;
                         } elseif ($orderDirection == 2 && $this->getLoggedUser() && !in_array($this->getLoggedUser()->getId(), $details->getLikesIds())) {
+                            return false;
+                        }
+                    } else if ($orderField == 'my') {
+                        if ($orderDirection == 1 && $this->getLoggedUser() && $announcement->getUser()->getId() == $this->getLoggedUser()->getId()) {
+                            return false;
+                        } elseif ($orderDirection == 2 && $this->getLoggedUser() && $announcement->getUser()->getId() != $this->getLoggedUser()->getId()) {
                             return false;
                         }
                     }

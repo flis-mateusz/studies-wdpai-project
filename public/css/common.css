@@ -294,10 +294,6 @@ hr {
     width: 100%;
     text-align: center;
     font-size: 0.8em;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
 }
 
 .tip span:nth-child(2) i {

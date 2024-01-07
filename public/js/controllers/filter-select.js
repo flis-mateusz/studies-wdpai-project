@@ -37,6 +37,14 @@ class FilterSelectField {
         this.changeClass();
     }
 
+    disable() {
+        this.element.classList.add('disabled');
+    }
+    
+    enable() {
+        this.element.classList.remove('disabled');
+    }
+
     onUpdate = (id, value) => { }
 }
 

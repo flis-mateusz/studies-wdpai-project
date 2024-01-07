@@ -281,9 +281,13 @@ class AnnouncementController extends AppController
 
         $id = self::getPostAnnouncementId($this->getPOSTData());
         $currentUser = $this->getLoggedUser();
+
         $announcement = $this->announcementsRepository->getAnnouncementWithUserContext($id, $currentUser->getId(), false);
         if (!$announcement || $announcement->isDeleted() || !$announcement->isAccepted()) {
             $response->setError('Ogłoszenie nie istnieje lub zostało usunięte', 404);
+            $response->send();
+        } else if ($announcement->getUser()->getId() == $currentUser->getId()) {
+            $response->setError('Nie możesz polubić swojego ogłoszenia', 400);
             $response->send();
         }
 

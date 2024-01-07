@@ -52,7 +52,10 @@ FilterSelect::initialize();
             </div>
             <div>
                 <?php
-                (new FilterSelect([$this->user ? ['id' => 'favourite', 'name' => 'Obserwowane'] : null, ['id' => 'price', 'name' => 'Oddam za darmo']], null, 'other'))->render();
+                (new FilterSelect([
+                    ...$this->user ? [['id' => 'my', 'name' => 'Moje ogłoszenia'], ['id' => 'favourite', 'name' => 'Obserwowane']] : null,
+                    ['id' => 'price', 'name' => 'Oddam za darmo']
+                ], null, 'other'))->render();
                 (new FilterSelect($animalTypes, 'Typy zwierząt', 'animal-types'))->render();
                 (new FilterSelect($animalFeatures, 'Cechy szczególne', 'animal-features'))->render();
                 ?>

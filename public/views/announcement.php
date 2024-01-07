@@ -61,7 +61,7 @@ $requiresApproval = !$announcement->isAccepted();
             <?php if ($isViewerAdmin && $announcement->getDetails()->getReportsCount()) : ?>
                 <section class="tip normal center tip-reports">
                     <span>Liczba zgłoszeń ogłoszenia: <?= $announcement->getDetails()->getReportsCount(); ?></span>
-                    <span>Kliknij <i class="material-icons">gavel</i> jeśli ogłoszenie nie narusza regulaminu</span>
+                    <span>Usuń ogłoszenie, lub kliknij <i class="material-icons">gavel</i> jeśli ogłoszenie nie narusza regulaminu</span>
                 </section>
             <?php endif; ?>
 
