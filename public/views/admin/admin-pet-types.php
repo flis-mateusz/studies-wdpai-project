@@ -27,7 +27,7 @@ PanelSidenav::initialize();
     ?>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <title>Typy zwierząt</title>
-    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="/public/images/favicon.ico">
 </head>
 
 <body>

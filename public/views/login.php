@@ -20,7 +20,7 @@ HeaderComponent::initialize();
     ?>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <title>Logowanie</title>
-    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="/public/images/favicon.ico">
 </head>
 
 <body>
