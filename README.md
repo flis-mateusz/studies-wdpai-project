@@ -87,10 +87,7 @@ The project includes a comprehensive design and structure for the database, ensu
 8. **Lazy initialization**
    - Delays the creation of an object until the first time it is needed.
    - **Example**: [AppController.php](./src/controllers/AppController.php#L24)
-9. **Decorator**
-   - The Decorator pattern allows behavior to be added to individual objects by placing these objects in special wrapper objects
-   - **Example**: [AnnouncementWithUserContext.php](./src/models/announcement/AnnouncementWithUserContext.php)
-
+   
 
 ## Installation
 
