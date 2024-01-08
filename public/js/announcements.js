@@ -17,7 +17,7 @@ class AnnouncementsSearch {
         this.debounceSearch = new DebounceSearchController('search', 250);
         this.loader = new CustomContentLoaderController();
         this.loader.setupAbsolute();
-        this.debounceSearch.addObserver(this.handleDebounceSearch);
+        this.debounceSearch.addObserver(this);
 
         this.debounce = debounce(this.onDebounce, 500);
 
@@ -37,7 +37,7 @@ class AnnouncementsSearch {
         document.querySelector('.action-search').addEventListener('click', this.onDebounce);
         document.querySelector('.action-clear-search').addEventListener('click', () => {
             this.debounceSearch.setInputValue('');
-            this.handleDebounceSearch('')
+            this.update('')
         });
     }
 
@@ -183,7 +183,7 @@ class AnnouncementsSearch {
         }
     }
 
-    handleDebounceSearch = (query) => {
+    update = (query) => {
         this.filters[FILTER_TYPES.SEARCH] = query;
         this.updateQueryParams();
     }

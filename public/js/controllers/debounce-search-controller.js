@@ -16,6 +16,16 @@ class DebounceSearchController {
         this.observers.push(observer);
     }
 
+    removeObserver(observer) {
+        this.observers = this.observers.filter(o => o!== observer);
+    }
+
+    async notifyObservers(query) {
+        for (let observer of this.observers) {
+            await observer.update(query);
+        }
+    }
+
     addEventListeners() {
         this.inputElement.addEventListener('keyup', (e) => {
             this.onInput();
@@ -26,14 +36,8 @@ class DebounceSearchController {
     onDebounce = async () => {
         let query = this.inputElement.value.toLowerCase().trim();
         this.setLoading(true);
-        await this.#search(query);
+        await this.notifyObservers(query);
         this.setLoading(false);
-    }
-
-    async #search(query) {
-        for (let observer of this.observers) {
-            await observer(query)
-        }
     }
 
     setInputValue(value) {
