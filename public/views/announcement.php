@@ -59,7 +59,7 @@ $requiresApproval = !$announcement->isAccepted();
                 <section class="tip normal center"><span>Twoje ogłoszenie oczekuje na zatwierdzenie, nie jest jeszcze widoczne publicznie</span></section>
             <?php endif; ?>
             <?php if ($isViewerAdmin && $announcement->getDetails()->getReportsCount()) : ?>
-                <section class="tip normal center tip-reports">
+                <section class="tip normal center tip-reports wrap">
                     <span>Liczba zgłoszeń ogłoszenia: <?= $announcement->getDetails()->getReportsCount(); ?></span>
                     <span>Usuń ogłoszenie, lub kliknij <i class="material-icons">gavel</i> jeśli ogłoszenie nie narusza regulaminu</span>
                 </section>

@@ -252,6 +252,10 @@ hr {
     opacity: 0.5;
 }
 
+.wrap {
+    flex-wrap: wrap;
+}
+
 .italic {
     font-style: italic;
     font-weight: 400;
@@ -266,7 +270,6 @@ hr {
     background-color: #efeaff;
     padding: 8px 15px;
     border-radius: 10px;
-    flex-wrap: wrap;
 }
 
 .tip.reversed {
