@@ -78,13 +78,10 @@ The project includes a comprehensive design and structure for the database, ensu
 5. **State**
    - Allows an object to alter its behavior when its internal state changes.
    - **Example**: [filter-select.js](./public/js/controllers/filter-select.js)
-6. **Chain of Responsibility**
-   - Passes requests along a chain of handlers, allowing multiple objects to process the request or pass it on.
-   - **Example**: [fetch-controller.js](./public/js/controllers/fetch-controller.js#L85)
-7. **Template Method**
+6. **Template Method**
    - Defines the skeleton of an algorithm in a method, deferring some steps to subclasses.
    - **Example**: [form-controller.js](./public/js/controllers/form-controller.js#L128)
-8. **Lazy initialization**
+7. **Lazy initialization**
    - Delays the creation of an object until the first time it is needed.
    - **Example**: [AppController.php](./src/controllers/AppController.php#L24)
    
